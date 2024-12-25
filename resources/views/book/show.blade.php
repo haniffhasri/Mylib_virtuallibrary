@@ -17,7 +17,7 @@
                 @else
                 <p><strong>Status: </strong>Unavailable</p>
             @endif
-            <p><a href="{{ asset('pdfs/' . $book->pdf_path) }}" target="_blank">Download PDF</a></p>
+            <p><a href="{{ asset('pdfs/' . $book->pdf_path) }}" target="_blank">Read PDF</a></p>
         </x-layout>
     @elseif ($usertype == 'user')
         <x-layout>
@@ -33,7 +33,11 @@
                 @else
                 <p><strong>Status: </strong>Unavailable</p>
             @endif
-            <a class="btn btn-primary" href="{{ route('borrow_book', $book->id) }}">Borrow</a>
+            @if($borrow->contains('book_id', $book->id))
+                <p><a href="{{ asset('pdfs/' . $book->pdf_path) }}" target="_blank">Read PDF</a></p>
+                @else
+                <a class="btn btn-primary" href="{{ route('borrow_book', $book->id) }}">Borrow</a>
+            @endif
         </x-layout>
     @endif
 

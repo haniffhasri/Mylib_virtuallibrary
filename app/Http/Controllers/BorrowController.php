@@ -15,6 +15,11 @@ class BorrowController extends Controller
         return view('borrow.index', ['borrow' => $borrowed_book]);
     }
 
+    public function show(){
+        $borrow = Borrow::all();
+        return view('borrow.show');
+    }
+
     public function borrow_book($id){
         $book = Book::find($id);
         $books_id = $book->id;

@@ -20,6 +20,8 @@ Auth::routes();
 
 Route::get('/borrow', [BorrowController::class,'index'])->name('borrow.index');
 
+Route::get('/borrow/show', [BorrowController::class,'show'])->name('borrow.show');
+
 Route::get('/borrow/{id}', [BorrowController::class, 'borrow_book'])->name('borrow_book');
 
 Route::get('/borrow/delete/{id}', [BorrowController::class, 'delete'])->name('book.delete');

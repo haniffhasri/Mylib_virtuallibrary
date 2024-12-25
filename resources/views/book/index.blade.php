@@ -33,7 +33,11 @@
                     <li>
                         <x-card href="{{ route('book.show', $book_item->id) }}">
                             <h3>{{ $book_item->book_title }}</h3>
-                            <a class="btn btn-primary" href="{{ route('borrow_book', $book_item->id) }}">Borrow</a>
+                            @if($borrow->contains('book_id', $book_item->id))
+                                <p><a href="{{ asset('pdfs/' . $book_item->pdf_path) }}" target="_blank">Read PDF</a></p>
+                                @else
+                                <a class="btn btn-primary" href="{{ route('borrow_book', $book_item->id) }}">Borrow</a>
+                            @endif
                         </x-card>
                     </li>
                     @endforeach        

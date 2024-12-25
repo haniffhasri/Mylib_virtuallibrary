@@ -10,14 +10,15 @@ class BookController extends Controller
 {
     public function index(){
         $book = Book::orderBy('created_at','desc')->paginate(10);
-        $borrowed_book = Borrow::with('book')->get();
-        return view('book.index', compact('book'), ["book" => $book, 'borrow' => $borrowed_book]);
+        $borrow = Borrow::with('book')->get();
+        return view('book.index', compact('book', 'borrow'));
     }
     
     public function show($id){
         $book = Book::findOrFail($id);
+        $borrow = Borrow::with('book')->get();
 
-        return view('book.show', compact('book'), ['book'=> $book]);
+        return view('book.show', compact('book', 'borrow'), ['book'=> $book]);
     }
 
 

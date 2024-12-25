@@ -41,25 +41,25 @@
 
 					<li class="sidebar-item active">
 						<a class="sidebar-link" href="{{ route('book.index') }}">
-              <i class="align-middle" data-feather="book"></i> <span class="align-middle">Book</span>
+              <i class="align-middle" data-feather="book"></i> <span class="align-middle">Book List</span>
             </a>
 					</li>
 
-					{{-- <li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('borrow.index') }}">
-              <i class="align-middle" data-feather="user"></i> <span class="align-middle">Borrowed Books</span>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="">
+              <i class="align-middle" data-feather="user"></i> <span class="align-middle">User List</span>
             </a>
-					</li> --}}
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{ route('borrow.show') }}">
+              <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Borrow List</span>
+            </a>
+					</li>
 
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('book.create') }}">
               <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Insert New Book</span>
-            </a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="pages-sign-up.html">
-              <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Sign Up</span>
             </a>
 					</li>
 
