@@ -5,8 +5,8 @@
         {{ session()->get('message') }}
     </div>
     @endif
-    <div>
-        <h2>Borrowed Books</h2>
+    <h2>Borrowed Books</h2>
+    <div class="borrowed-book">
         @foreach($borrow as $borrowed)
                 <li>
                     <x-card href="{{ route('book.show', $borrowed->book_id) }}">

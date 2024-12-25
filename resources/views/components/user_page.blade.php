@@ -57,7 +57,7 @@
             </a>
 					</li> --}}
 
-					<li class="sidebar-item">
+					{{-- <li class="sidebar-item">
 						<a class="sidebar-link" href="pages-sign-up.html">
               <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Sign Up</span>
             </a>
@@ -112,9 +112,9 @@
               <i class="align-middle" data-feather="map"></i> <span class="align-middle">Maps</span>
             </a>
 					</li>
-				</ul>
+				</ul> --}}
 
-				<div class="sidebar-cta">
+				{{-- <div class="sidebar-cta">
 					<div class="sidebar-cta-content">
 						<strong class="d-inline-block mb-2">Upgrade to Pro</strong>
 						<div class="mb-3 text-sm">
@@ -124,7 +124,7 @@
 							<a href="upgrade-to-pro.html" class="btn btn-primary">Upgrade to Pro</a>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 			</div>
 		</nav>
 
@@ -136,7 +136,7 @@
 
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
-						<li class="nav-item dropdown">
+						{{-- <li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
 								<div class="position-relative">
 									<i class="align-middle" data-feather="bell"></i>
@@ -267,7 +267,7 @@
 									<a href="#" class="text-muted">Show all messages</a>
 								</div>
 							</div>
-						</li>
+						</li> --}}
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
 				<i class="align-middle" data-feather="settings"></i>
@@ -320,8 +320,8 @@
 		</div>
 	</div>
 
-	{{-- <script src="{{ asset('adminkit/js/app.js') }}"></script> --}}
-	@vite('resources/js/app.js')
+	<script src="{{ asset('adminkit/js/app.js') }}"></script>
+	{{-- @vite('resources/js/app.js') --}}
 
 </body>
 

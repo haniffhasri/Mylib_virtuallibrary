@@ -9,7 +9,7 @@ use App\Models\Borrow;
 class BookController extends Controller
 {
     public function index(){
-        $book = Book::orderBy('created_at','desc')->paginate(10);
+        $book = Book::orderBy('created_at','desc')->paginate(6);
         $borrow = Borrow::with('book')->get();
         return view('book.index', compact('book', 'borrow'));
     }

@@ -24,7 +24,7 @@ Route::get('/borrow/show', [BorrowController::class,'show'])->name('borrow.show'
 
 Route::get('/borrow/{id}', [BorrowController::class, 'borrow_book'])->name('borrow_book');
 
-Route::get('/borrow/delete/{id}', [BorrowController::class, 'delete'])->name('book.delete');
+Route::delete('/borrow/delete/{id}', [BorrowController::class, 'delete'])->name('borrow.delete');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

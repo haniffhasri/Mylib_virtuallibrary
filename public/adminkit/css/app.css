@@ -4,6 +4,8 @@
  * Copyright 2023 AdminKit
  * Licensed under MIT (https://github.com/adminkit/adminkit/blob/master/LICENSE)
  */
+ @tailwind utilities;
+ 
 :root,
 [data-bs-theme="light"] {
     --bs-blue: #3b7ddd;
@@ -12099,7 +12101,7 @@ body {
 }
 .sidebar,
 .sidebar-content {
-    background: #46090f;
+    background: #222e3c;
     transition: margin-left 0.35s ease-in-out, left 0.35s ease-in-out,
         margin-right 0.35s ease-in-out, right 0.35s ease-in-out;
 }
@@ -12116,7 +12118,7 @@ body {
 }
 .sidebar-link,
 a.sidebar-link {
-    background: #46090f;
+    background: #222e3c;
     border-left: 3px solid transparent;
     color: rgba(233, 236, 239, 0.5);
     cursor: pointer;
@@ -12138,7 +12140,7 @@ a.sidebar-link svg {
     outline: 0;
 }
 .sidebar-link:hover {
-    background: #46090f;
+    background: #222e3c;
     border-left-color: transparent;
 }
 .sidebar-link:hover,
@@ -13379,5 +13381,63 @@ span.flatpickr-weekday {
     position: sticky;
     top: 0;
     width: 260px;
+}
+
+/* borrow-show */
+.borrowed-book {
+    display: flex !important;
+}
+
+.borrowed-book .card {
+    width: 30%;
+}
+
+.borrowed-book li::marker {
+    color: #f5f7fb;
+}
+
+/* borrow table */
+.borrow-table {
+    margin: auto;
+}
+
+.borrow-table,
+.borrow-table th,
+.borrow-table td {
+    border: solid 1px black;
+}
+
+.borrow-table th,
+.borrow-table td {
+    padding: 13px;
+}
+
+.borrow-table th {
+    background-color: #222e3c;
+    color: white;
+    width: 7%;
+}
+
+.borrow-table td {
+    background-color: #86b7ef;
+}
+
+/* book list */
+.book-container-list {
+    padding: 4rem;
+    height: 100%;
+}
+
+.book-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+.book-list li {
+    width: 30%;
+    margin: 1rem;
+}
+
+.book-list li::marker {
+    color: #193549;
 }
 /*# sourceMappingURL=app.css.map*/

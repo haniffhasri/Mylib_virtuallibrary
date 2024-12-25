@@ -16,7 +16,7 @@
 
 	<title>Admin Page</title>
 
-	@vite('resources/css/app.css')
+	<link href="{{ asset('adminkit/css/app.css') }}" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
@@ -63,7 +63,7 @@
             </a>
 					</li>
 
-					<li class="sidebar-header">
+					{{-- <li class="sidebar-header">
 						Tools & Components
 					</li>
 
@@ -124,7 +124,7 @@
 							<a href="upgrade-to-pro.html" class="btn btn-primary">Upgrade to Pro</a>
 						</div>
 					</div>
-				</div>
+				</div> --}}
 			</div>
 		</nav>
 
@@ -136,7 +136,7 @@
 
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
-						<li class="nav-item dropdown">
+						{{-- <li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
 								<div class="position-relative">
 									<i class="align-middle" data-feather="bell"></i>
@@ -267,7 +267,7 @@
 									<a href="#" class="text-muted">Show all messages</a>
 								</div>
 							</div>
-						</li>
+						</li> --}}
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
 				<i class="align-middle" data-feather="settings"></i>
