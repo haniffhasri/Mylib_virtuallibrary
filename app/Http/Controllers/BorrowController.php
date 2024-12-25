@@ -17,7 +17,7 @@ class BorrowController extends Controller
 
     public function show(){
         $borrow = Borrow::all();
-        return view('borrow.show');
+        return view('borrow.show', compact('borrow'));
     }
 
     public function borrow_book($id){

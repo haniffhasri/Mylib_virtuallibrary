@@ -13394,4 +13394,26 @@ span.flatpickr-weekday {
     margin: 1rem;
 }
 
+/* borrow table */
+.borrow-table {
+    margin: auto;
+}
+
+.borrow-table, .borrow-table th, .borrow-table td {
+    border: solid 1px black;
+}
+
+.borrow-table th, .borrow-table td {
+    padding: 13px;
+}
+
+.borrow-table th {
+    background-color: #222e3c;
+    color: white;
+    width: 7%;
+}
+
+.borrow-table td {
+    background-color: #86b7ef;
+}
 /*# sourceMappingURL=app.css.map*/
