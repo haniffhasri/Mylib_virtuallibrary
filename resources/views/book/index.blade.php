@@ -1,3 +1,6 @@
+<style>
+    @tailwind utilities;
+</style>
 @if (Auth::check())
     @php
         $usertype = Auth::user()->usertype;
@@ -7,7 +10,7 @@
         <x-admin_page>
             <div class="book-container-list">
                 <h2>Available Books</h2>
-                <ul class="book-list">
+                <ul class="book-list admin">
                     @foreach ($book as $book_item)
                     <li>
                         <x-card href="{{ route('book.show', $book_item->id) }}">

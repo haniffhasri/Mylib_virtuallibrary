@@ -27,7 +27,7 @@
                                 <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
                     <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="" /> <span style="color:white;">{{ $user->name }}</span>
                   </a>
-                                <div class="dropdown-menu dropdown-menu-end">
+                                <div class="home dropdown-menu dropdown-menu-end">
                                     <a class="dropdown-item" href="{{ route('dashboard') }}"><i class="align-middle me-1" data-feather="user"></i> Dashboard</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{ route('logout') }}">Log out</a>

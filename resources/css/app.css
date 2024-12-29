@@ -11854,6 +11854,14 @@ fieldset:disabled .btn {
     animation-name: dropdownAnimation;
     animation-timing-function: ease;
 }
+.home.dropdown-menu.dropdown-menu-end.show {
+    background-color: #393939;
+}
+.home .dropdown-item:focus, .home .dropdown-item:hover {
+    background-color: #202427;
+    color: white;
+    text-decoration: none;
+}
 @keyframes dropdownAnimation {
     0% {
         opacity: 0;
