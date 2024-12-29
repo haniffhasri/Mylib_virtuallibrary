@@ -39,7 +39,7 @@
             </a>
 					</li>
 
-					<li class="sidebar-item active">
+					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('book.index') }}">
               <i class="align-middle" data-feather="book"></i> <span class="align-middle">Book List</span>
             </a>
@@ -274,7 +274,7 @@
 			  </a>
 
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-				<img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="" /> <span class="text-dark">{{ $user->name }}</span>
+				<span class="text-dark">{{ $user->name }}</span>
 			  </a>
 							<div class="dropdown-menu dropdown-menu-end">
 								<a class="dropdown-item" href="{{ route('dashboard') }}"><i class="align-middle me-1" data-feather="user"></i> Dashboard</a>

@@ -11757,7 +11757,7 @@ fieldset:disabled .btn {
     margin-bottom: 24px;
     background-color: #272c2f;
     border-radius: 20px;
-    height: 10rem;
+    height: 12.5rem;
 }
 .card-header {
     border-bottom-width: 1px;
@@ -11775,6 +11775,11 @@ fieldset:disabled .btn {
 }
 .card-list h3, .card-list a {
     color: white;
+}
+.card .btn-detail {
+    position: absolute;
+    bottom: 5%;
+    left: 37%;
 }
 .card a.btn {
     color: #6968d6;
@@ -13514,5 +13519,16 @@ span.flatpickr-weekday {
 
 .header-text h6, .header-text h5, .header-text h4, .header-text h3, .header-text h2, .header-text h1, .border-button a {
     color: white !important;
+}
+
+/* alert */
+.alert-success {
+    border: solid #373b3e;
+}
+
+.alert-success button.close {
+    border: none;
+    border-right: solid;
+    background-color: #ff00008f;
 }
 /*# sourceMappingURL=app.css.map*/

@@ -25,7 +25,7 @@
                   </a>
     
                                 <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                    <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="" /> <span style="color:white;">{{ $user->name }}</span>
+                    <span style="color:white;">{{ $user->name }}</span>
                   </a>
                                 <div class="home dropdown-menu dropdown-menu-end">
                                     <a class="dropdown-item" href="{{ route('dashboard') }}"><i class="align-middle me-1" data-feather="user"></i> Dashboard</a>
@@ -64,12 +64,11 @@
     <footer class="footer">
         <div class="footer-container">
           <div class="footer-col">
-            <img src="./img/logo-example-1.png" alt="logo">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque nostrum porro rem est ab ad accusantium eveniet exercitationem corporis voluptas, dolores amet maxime facilis maiores! Ea corrupti rerum sunt velit.</p>
+            <p>This is my prototype library system using laravel.</p>
           </div>
           <div class="footer-col">
             <h4>Contact options</h4>
-            <p><a href="mailto:email@example.com?subject=Enquiry&body=Hello, I have a question">Email me</a></p>
+            <p><a href="mailto:u2000464@siswa.um.edu.my?subject=Enquiry&body=Hello, I have a question">Email me</a></p>
             <p>Call me: <a href="tel:+1234567890">+1 (234) 567-8900</a></p>
             <p><a href="https://wa.me/1234567890?text=Hello,%20I%20have%20a%20question">Contact me on WhatsApp</a></p>
           </div>
@@ -77,14 +76,14 @@
             <h4>Sitemap</h4>
             <nav>
               <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="{{ route('book.index') }}">Book</a></li>
+                <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
               </ul>
             </nav>
           </div>
         </div>
-        <div class="bottombar">Copyright © 2023 Your_Name. All rights reserved.</div>
+        <div class="bottombar">Copyright © 2024 MyLib. All rights reserved.</div>
       </footer>
       @vite('resources/js/app.js')
 </body>

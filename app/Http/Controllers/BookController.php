@@ -89,7 +89,7 @@ class BookController extends Controller
 
         $book->save();
 
-        return redirect()->route('dashboard');
+        return redirect('/book');
     }
 
     

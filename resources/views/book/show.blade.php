@@ -18,7 +18,7 @@
                     @else
                     <p><strong>Status: </strong>Unavailable</p>
                 @endif
-                <p><a href="{{ asset('pdfs/' . $book->pdf_path) }}" target="_blank">Read PDF</a></p>
+                <p><a class="btn btn-primary" href="{{ asset('pdfs/' . $book->pdf_path) }}" target="_blank">Read PDF</a></p>
             </div>
         </x-layout>
     @elseif ($usertype == 'user')
