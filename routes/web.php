@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -49,3 +49,6 @@ Route::post('/book', [BookController::class, 'store'])->name('book.store');
 // admin
 Route::get('/admin', [DashboardController::class,'index'])->name('admin.index');
 
+Route::get('/admin/user', [UserController::class,'index'])->name('admin.user');
+
+Route::delete('/admin/delete/{id}', [UserController::class, 'delete'])->name('user.delete');

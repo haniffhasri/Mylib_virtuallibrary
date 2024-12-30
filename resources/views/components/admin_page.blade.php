@@ -46,7 +46,7 @@
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="">
+						<a class="sidebar-link" href="{{ route('admin.user') }}">
               <i class="align-middle" data-feather="user"></i> <span class="align-middle">User List</span>
             </a>
 					</li>
