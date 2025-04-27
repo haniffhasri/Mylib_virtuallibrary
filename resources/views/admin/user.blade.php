@@ -1,5 +1,7 @@
-<x-admin_page>
-    <table class="borrow-table">
+@extends('layouts.backend')
+
+@section('content')    
+<table class="borrow-table">
         <tr>
             <th>User id</th>
             <th>User Name</th>
@@ -13,7 +15,21 @@
                 <td>{{ $singleUser->id }}</td>
                 <td>{{ $singleUser->name }}</td>
                 <td>{{ $singleUser->email }}</td>
-                <td>{{ $singleUser->usertype }}</td>
+                <td>
+                    @if (Auth::user()->usertype == 'admin')
+                        <form action="{{ route('user.updateRole', $singleUser->id) }}" method="POST" style="display: flex; align-items: center;">
+                            @csrf
+                            @method('PUT')
+                            <select name="usertype" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+                                <option value="user" {{ $singleUser->usertype == 'user' ? 'selected' : '' }}>User</option>
+                                <option value="librarian" {{ $singleUser->usertype == 'librarian' ? 'selected' : '' }}>Librarian</option>
+                                <option value="admin" {{ $singleUser->usertype == 'admin' ? 'selected' : '' }}>Admin</option>
+                            </select>
+                        </form>
+                    @else
+                        {{ $singleUser->usertype }}
+                    @endif
+                </td>
                 <td>
                     <form action="{{ route('user.delete', $singleUser->id) }}" method="POST">
                         @csrf
@@ -23,4 +39,4 @@
             </tr>
         @endforeach
     </table>
-</x-admin_page>
+@endsection

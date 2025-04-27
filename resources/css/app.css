@@ -1,9 +1,3 @@
-/*!
- * AdminKit v3.4.0 (https://adminkit.io/)
- * Copyright 2023 Paul Laros
- * Copyright 2023 AdminKit
- * Licensed under MIT (https://github.com/adminkit/adminkit/blob/master/LICENSE)
- */
 @tailwind utilities;
 
 :root,
@@ -144,12 +138,13 @@
         scroll-behavior: smooth;
     }
 }
+
 body {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    background-color: var(--bs-body-bg);
+    background-color: #f8fafc;
     color: var(--bs-body-color);
-    font-family: var(--bs-body-font-family);
+    font-family: 'Nunito', sans-serif;
     font-size: var(--bs-body-font-size);
     font-weight: var(--bs-body-font-weight);
     line-height: var(--bs-body-line-height);
@@ -3831,9 +3826,6 @@ fieldset:disabled .btn {
 }
 .navbar-nav .dropdown-menu {
     position: static;
-}
-.navbar-nav.navbar-align * {
-    color: white;
 }
 .navbar-text {
     color: var(--bs-navbar-color);
@@ -11755,9 +11747,7 @@ fieldset:disabled .btn {
 .card {
     box-shadow: 0 0 0.875rem 0 rgba(33, 37, 41, 0.05);
     margin-bottom: 24px;
-    background-color: #272c2f;
     border-radius: 20px;
-    height: 12.5rem;
 }
 .card-header {
     border-bottom-width: 1px;
@@ -11771,10 +11761,7 @@ fieldset:disabled .btn {
     font-weight: 400;
 }
 .card-list {
-    padding: 1.5rem;
-}
-.card-list h3, .card-list a {
-    color: white;
+    padding: 1rem 2.5rem 3rem;
 }
 .card .btn-detail {
     position: absolute;
@@ -12033,11 +12020,7 @@ a.list-group-item {
     text-decoration: none;
 }
 .main {
-    background-color: #193549;
-    /* border-bottom-left-radius: 0;
-    border-top-left-radius: 0;
-    display: flex;
-    flex-direction: column; */ 
+    background-color: #ebefff;
     min-height: 100vh;
     min-width: 0;
     overflow: hidden;
@@ -12065,10 +12048,9 @@ a.list-group-item {
     margin-left: auto;
 }
 .navbar-bg {
-    background: #000;
+    background: #f8f9fa;
 }
 .navbar-brand {
-    color: #f8f9fa;
     display: block;
     font-size: 1.15rem;
     font-weight: 400;
@@ -13495,7 +13477,6 @@ span.flatpickr-weekday {
 
 .book-show * {
     margin-top: 1rem;
-    color: white;
 }
 
 .image-container {
@@ -13532,3 +13513,81 @@ span.flatpickr-weekday {
     background-color: #ff00008f;
 }
 /*# sourceMappingURL=app.css.map*/
+
+/* comment */
+.comment {
+    width: 50%;
+    padding: 0 0 5rem 7rem;
+}
+
+* borrow-show */
+.borrowed-book {
+    display: flex !important
+;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.borrowed-book .card {
+    width: 20rem;
+    border-radius: 25px;
+}
+
+.borrowed-book .card p {
+    padding: 1rem 0 0 1rem;
+}
+
+.borrowed-book li::marker {
+    color: #f5f7fb;
+}
+
+/* borrow table */
+.borrow-table {
+    margin: auto;
+}
+
+.borrow-table,
+.borrow-table th,
+.borrow-table td {
+    border: solid 1px black;
+}
+
+.borrow-table th,
+.borrow-table td {
+    padding: 13px;
+}
+
+.borrow-table th {
+    background-color: #222e3c;
+    color: white;
+    width: 7%;
+}
+
+.borrow-table td {
+    background-color: #86b7ef;
+}
+
+/* book list */
+.book-container-list {
+    padding: 4rem;
+    height: 100%;
+}
+
+.book-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+.book-list li {
+    width: 30%;
+    margin: 1rem;
+}
+
+.book-list li::marker {
+    color: #193549;
+}
+
+.profile-img {
+    object-fit:cover; 
+    border-radius: 50%;
+    border: solid 1px;
+}

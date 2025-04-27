@@ -1,4 +1,6 @@
-<x-admin_page>
+@extends('layouts.backend')
+
+@section('content')
     <table class="borrow-table">
         <tr>
             <th>Borrow id</th>
@@ -25,4 +27,4 @@
             </tr>
         @endforeach
     </table>
-</x-admin_page>
+@endsection

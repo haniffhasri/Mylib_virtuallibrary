@@ -24,16 +24,16 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function show()
     {
+        $users = Auth::user();
         if (Auth::id()) {
             $usertype = Auth::user()->usertype;
-            if ($usertype == 'admin') {
-                return view('admin.index');
+            if (in_array($usertype, ['admin', 'librarian', 'user'])) {
+                return view('dashboard', compact('users'));
             }
-
-            elseif ($usertype == 'user') {
-                return view('dashboard');
+            else {
+                return view('profile', compact('users'));
             }
         }
     }

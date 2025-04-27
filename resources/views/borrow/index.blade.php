@@ -1,5 +1,7 @@
-<x-user_page>
-    @if(session()->has('message'))
+@extends('layouts.backend')
+
+@section('content')    
+@if(session()->has('message'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">X</button>
         {{ session()->get('message') }}
@@ -16,4 +18,4 @@
         @endforeach
         
     </div>
-</x-user_page>
+@endsection

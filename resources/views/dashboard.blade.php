@@ -1,15 +1,28 @@
-{{-- @extends('layouts.app') --}}
-<x-user_page>
+@extends('layouts.backend')
+
+@section('content')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">{{ __('Dashboard') }}</div>
                     <div class="card-body">
-                        {{ __('You are logged in!') }}
+                        <div class="profile-show">
+                            <p>User Name: {{ $users->name }}</p>
+                            <p>Profile Picture: </p><img src="{{ asset('profile_picture/' . $users->profile_picture) }}" alt="Cover Image" width="100" height="100" class="profile-img">
+                            <p>Bio: {{ $users->bio }}</p>
+                            <p>Email: {{ $users->email }}</p>
+                            <p>Created at: {{ $users->created_at }}</p>
+                            <a class="btn btn-primary" href="{{ route('user.edit', $users->id) }}">Edit Your Profile</a>
+                            @if (Route::has('password.request'))
+                                <a class="btn btn-primary" href="{{ route('password.request') }}">
+                                    {{ __('Change Your Password') }}
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</x-user_page>
+@endsection

@@ -14,4 +14,9 @@ class Book extends Model
     public function borrow() {
         return $this->hasMany(Borrow::class);
     }
+
+    public function comments() {
+        return $this->hasMany(Comment::class)->whereNull('parent_id')->with('replies.user', 'user');
+    }
+    
 }

@@ -1,5 +1,7 @@
-<x-admin_page>
-    <div>
+@extends('layouts.backend')
+
+@section('content')    
+<div>
         <h2>Available Books</h2>
         <ul class="book-list">
             @foreach ($book as $book_item)
@@ -13,4 +15,4 @@
 
         {{ $book->links() }}
     </div>
-</x-admin_page>
+@endsection

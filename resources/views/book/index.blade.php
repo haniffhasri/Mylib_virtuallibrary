@@ -1,78 +1,57 @@
 <style>
     @tailwind utilities;
 </style>
-@if (Auth::check())
-    @php
+@php
+    if (Auth::check()) {
         $usertype = Auth::user()->usertype;
-    @endphp
+        $layout = ($usertype === 'admin' || $usertype === 'librarian') ? 'layouts.backend' : 'layouts.app';
+    } else {
+        $layout = 'layouts.app';
+    }
+@endphp
 
-@if ($usertype == 'admin')
-    <x-admin_page>
-        <div class="book-container-list">
-            <h2>Available Books</h2>
-            <ul class="book-list admin">
-                @foreach ($book as $book_item)
+@extends($layout)
+
+@section('content')
+    <div class="book-container-list">
+        <h2>Available Books</h2>
+        
+        <ul class="book-list {{ $layout == 'layouts.backend' ? 'admin' : '' }}">
+            @foreach ($book as $book_item)
                 <li>
                     <x-card href="{{ route('book.show', $book_item->id) }}">
                         <div class="card-list">
                             <h3>{{ $book_item->book_title }}</h3>
-                            <div>
-                                <a class="btn btn-danger" href="{{ route('book.destroy', $book_item->id) }}">Delete</a>
-                                <a class="btn btn-info" href="{{ route('book.edit', $book_item->id) }}">Update</a>
-                            </div>
-                        </div>
-                    </x-card>
-                </li>
-                @endforeach        
-            </ul>
-    
-            {{ $book->links() }}
-        </div>
-    </x-admin_page>
-@elseif ($usertype == 'user')
-    <x-layout>
-        <div class="book-container-list">
-            <h2 style="color:white;">Available Books</h2>
-            <ul class="book-list">
-                @foreach ($book as $book_item)
-                <li>
-                    <x-card href="{{ route('book.show', $book_item->id) }}">
-                        <div class="card-list">
-                            <h3>{{ $book_item->book_title }}</h3>
-                            @if($borrow->contains($book_item->id)) <!-- Check if the user has borrowed this book -->
-                                <a class="btn btn-primary" href="{{ asset('pdfs/' . $book_item->pdf_path) }}" target="_blank">Read PDF</a>
+
+                            {{-- Admins & Librarians see Edit/Delete --}}
+                            @if($layout == 'layouts.backend')
+                                <div>
+                                    <a class="btn btn-danger" href="{{ route('book.destroy', $book_item->id) }}">Delete</a>
+                                    <a class="btn btn-info" href="{{ route('book.edit', $book_item->id) }}">Update</a>
+                                </div>
+
+                            {{-- Normal users (or guests) --}}
                             @else
-                                <a class="btn btn-primary" href="{{ route('borrow_book', $book_item->id) }}">Borrow</a>
+                                @if ($book_item->media_path)
+                                    @if (isset($borrow) && $borrow->contains($book_item->id))
+                                        <a class="btn btn-primary" href="{{ asset('pdfs/' . $book_item->pdf_path) }}" target="_blank">Read PDF</a>
+                                    @else
+                                        @auth
+                                            <a class="btn btn-primary" href="{{ route('borrow_book', $book_item->id) }}">Borrow</a>
+                                        @else
+                                            <a class="btn btn-primary" href="{{ route('login') }}">Borrow</a>
+                                        @endauth
+                                    @endif
+                                @else
+                                    <p>This book is unavailable.</p>
+                                @endif
                             @endif
                         </div>
                     </x-card>
                 </li>
-                @endforeach        
-            </ul>
-    
-            {{ $book->links() }}
-        </div>
-    </x-layout>
-@endif
+            @endforeach
+        </ul>
 
-@else
-    <x-layout>
-        <div class="book-container-list">
-            <h2 style="color:white;">Available Books</h2>
-            <ul class="book-list">
-                @foreach ($book as $book_item)
-                <li>
-                    <x-card href="{{ route('book.show', $book_item->id) }}">
-                        <div class="card-list">
-                            <h3>{{ $book_item->book_title }}</h3>
-                            <a class="btn btn-primary" href="{{ route('login') }}">Borrow</a>
-                        </div>
-                    </x-card>
-                </li>
-                @endforeach        
-            </ul>
-
-            {{ $book->links() }}
-        </div>
-    </x-layout>
-@endif
+        {{ $book->links() }}
+    </div>
+@endsection

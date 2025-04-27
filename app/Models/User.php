@@ -17,16 +17,15 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $fillable = ['name', 'email', 'password', 'profile_picture', 'bio'];
 
     public function borrow() {
         return $this->hasMany(Borrow::class);
     }
-
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+    
     /**
      * The attributes that should be hidden for serialization.
      *

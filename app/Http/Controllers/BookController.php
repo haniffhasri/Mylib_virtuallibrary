@@ -7,6 +7,8 @@ use App\Models\Book;
 use App\Models\Borrow;
 use Illuminate\Support\Facades\Auth;
 
+use function Pest\Laravel\delete;
+
 class BookController extends Controller
 {
     public function index(){
@@ -18,20 +20,40 @@ class BookController extends Controller
     public function show($id){
         $book = Book::findOrFail($id);
         $borrow = Borrow::with('book')->get();
-
+        
         return view('book.show', compact('book', 'borrow'), ['book'=> $book]);
     }
 
 
     public function create(){
-        return view('book.insertion');
+        return view('book.insert');
     }
 
     public function destroy($id){
         $book = Book::findOrFail($id);
+    
+        // Delete media file if it exists
+        if ($book->media_path) {
+            $mediaPath = public_path('media/' . $book->media_path);
+            if (file_exists($mediaPath)) {
+                unlink($mediaPath);
+            }
+        }
+    
+        // Delete image file if it exists
+        if ($book->image_path) {
+            $imagePath = public_path('image/' . $book->image_path);
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+    
+        // Now delete the book record itself
         $book->delete();
-        return redirect()->back();
+    
+        return redirect()->back()->with('success', 'Media deleted');
     }
+    
 
     public function edit($id){
         $book = Book::findOrFail($id);  
@@ -40,72 +62,90 @@ class BookController extends Controller
 
     public function update(Request $request, $id){
         $book = Book::findOrFail($id);
+    
         $book->book_title = $request->book_title;
         $book->author = $request->author;
         $book->book_description = $request->book_description;
         $book->genre = $request->genre;
         $book->format = $request->format;
-        $book->status = $request->status;
         $book->book_publication_date = $request->book_publication_date;
-        // Handle PDF upload
-        $pdf_path = $request->file('pdf_path');
-        if ($pdf_path) {
-            // Delete old PDF if it exists
-            if ($book->pdf_path) {
-                $old_pdf_path = public_path('pdfs/' . $book->pdf_path);
-                if (file_exists($old_pdf_path)) {
-                    unlink($old_pdf_path);
-                }
+    
+        // Delete media if requested
+        if ($request->delete_media == '1' && $book->media_path) {
+            $mediaPath = public_path('media/' . $book->media_path);
+            if (file_exists($mediaPath)) {
+                unlink($mediaPath);
             }
-            
-            // Save new PDF
-            $pdf_path_name = time() . '.' . $pdf_path->getClientOriginalExtension();
-            $request->pdf_path->move('pdfs', $pdf_path_name);
-            $book->pdf_path = $pdf_path_name;
+            $book->media_path = null;
         }
-
-        // Handle image upload
-        $image_path = $request->file('image_path');
-        if ($image_path) {
-            // Delete old image if it exists
-            if ($book->image_path) {
-                $old_image_path = public_path('pdfs/' . $book->image_path);
-                if (file_exists($old_image_path)) {
-                    unlink($old_image_path);
-                }
+    
+        // Delete image if requested
+        if ($request->delete_image == '1' && $book->image_path) {
+            $imagePath = public_path('image/' . $book->image_path);
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
             }
-            
-            // Save new image
-            $image_path_name = time() . '.' . $image_path->getClientOriginalExtension();
-            $request->image_path->move('pdfs', $image_path_name);
-            $book->image_path = $image_path_name;
+            $book->image_path = null;
         }
-
+    
+        // Upload new media if any
+        if ($request->hasFile('media_path')) {
+            $media = $request->file('media_path');
+            $mediaName = time() . '.' . $media->getClientOriginalExtension();
+            $media->move('media', $mediaName);
+            $book->media_path = $mediaName;
+        }
+    
+        // Upload new image if any
+        if ($request->hasFile('image_path')) {
+            $image = $request->file('image_path');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move('image', $imageName);
+            $book->image_path = $imageName;
+        }
+    
+        // Set status based on whether media_path exists
+        $book->status = $book->media_path ? true : false;
+    
         $book->save();
-        return redirect('/book');
+    
+        return redirect('/book')->with('success', 'Book updated!');
     }
+    
+    
 
     public function store(Request $request){
+        $request->validate([
+            'book_title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'genre' => 'required|string|max:100',
+            'format' => 'required|in:pdf,audio',
+            'book_publication_date' => 'required|date',
+            'media_path' => 'nullable|mimes:pdf,mp3|max:20480', // 20MB max
+            'image_path' => 'nullable|image|max:2048', // 2MB max for image
+        ]);
+
         $book = new Book();
         $book->book_title = $request->book_title;
         $book->author = $request->author;
         $book->book_description = $request->book_description;
         $book->genre = $request->genre;
         $book->format = $request->format;
-        $book->status = $request->status;
         $book->book_publication_date = $request->book_publication_date;
-        $pdf_path = $request->file('pdf_path'); // Use the `file()` method
-        if ($pdf_path) {
-            $pdf_path_name = time() . '.' . $pdf_path->getClientOriginalExtension();
-            $request->pdf_path->move('pdfs',$pdf_path_name);
-            $book->pdf_path = $pdf_path_name;
-        }
+        $book->status = $request->hasFile('media_path') ? true : false;
 
-        $image_path = $request->file('image_path');
-        if ($image_path) {
-            $image_path_name = time() . '.' . $image_path->getClientOriginalExtension();
-            $request->image_path->move('pdfs',$image_path_name);
-            $book->image_path = $image_path_name;
+        if ($request->hasFile('media_path')) {
+            $media = $request->file('media_path');
+            $mediaName = time() . '.' . $media->getClientOriginalExtension();
+            $media->move(public_path('media'), $mediaName); // ✅ fixed this
+            $book->media_path = $mediaName;
+        }
+    
+        if ($request->hasFile('image_path')) {
+            $image = $request->file('image_path');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('image'), $imageName);
+            $book->image_path = $imageName;
         }
 
         $book->save();
@@ -113,5 +153,4 @@ class BookController extends Controller
         return redirect('/book');
     }
 
-    
 }
