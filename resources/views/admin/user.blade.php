@@ -3,7 +3,6 @@
 @section('content')    
 <table class="borrow-table">
         <tr>
-            <th>User id</th>
             <th>User Name</th>
             <th>Email</th>
             <th>Role</th>
@@ -12,7 +11,6 @@
 
         @foreach ($users as $singleUser)
             <tr>
-                <td>{{ $singleUser->id }}</td>
                 <td>{{ $singleUser->name }}</td>
                 <td>{{ $singleUser->email }}</td>
                 <td>

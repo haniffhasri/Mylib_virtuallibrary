@@ -7,69 +7,83 @@ use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Auth\User;
+use App\Http\Controllers\ThreadController;
+use App\Http\Controllers\NotificationController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+// Logout
 Route::get('logout', function () {
     Auth::logout();
     return redirect('/');
 })->name('logout');
 
+// Auth routes
 Auth::routes();
 
-// borrow
-Route::get('/borrow', [BorrowController::class,'index'])->name('borrow.index');
+// Public Book Routes
+Route::prefix('book')->name('book.')->group(function () {
+    Route::get('/', [BookController::class, 'index'])->name('index');
+    Route::get('/{id}', [BookController::class, 'show'])
+        ->where('id', '[0-9]+')
+        ->name('show');
+});
 
-Route::get('/borrow/show', [BorrowController::class,'show'])->name('borrow.show');
-
-Route::get('/borrow/{id}', [BorrowController::class, 'borrow_book'])->name('borrow_book');
-
-Route::delete('/borrow/delete/{id}', [BorrowController::class, 'delete'])->name('borrow.delete');
-
-Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
-
-Route::get('/profile', [DashboardController::class,'show'])->name('profile');
-
-// book
-Route::get('/book', [BookController::class,'index'])->name('book.index');
-
-Route::get('/book/insert', [BookController::class, 'create'])->name('book.create');
-
-Route::get('/book/{id}', [BookController::class, 'show'])->name('book.show');
-
-Route::get('/book/destroy/{id}', [BookController::class, 'destroy'])->name('book.destroy');
-
-Route::get('/book/edit/{id}', [BookController::class, 'edit'])->name('book.edit');
-
-Route::post('/book/update/{id}', [BookController::class, 'update'])->name('book.update');
-
-Route::post('/book', [BookController::class, 'store'])->name('book.store');
-
-Route::delete('/book/{id}/delete-media', [BookController::class, 'deleteMedia'])->name('book.deleteMedia');
-
-Route::delete('/book/{id}/delete-image', [BookController::class, 'deleteImage'])->name('book.deleteImage');
-
-// comment
+// Comments (public for book pages)
 Route::post('/books/{book}/comments', [CommentController::class, 'store'])->name('comments.store');
 
-// admin
-Route::get('/admin/user', [UserController::class,'index'])->name('admin.user');
+// Authenticated Routes
+Route::middleware(['auth'])->group(function () {
 
-Route::delete('/admin/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
+    Route::get('/profile', [DashboardController::class, 'show'])->name('profile');
 
-Route::put('/admin/update-role/{id}', [UserController::class, 'updateRole'])->name('user.updateRole');
+    // Book Routes (insert, update, delete, media actions)
+    Route::prefix('book')->name('book.')->group(function () {
+        Route::get('/insert', [BookController::class, 'create'])->name('create');
+        Route::post('/', [BookController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [BookController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [BookController::class, 'update'])->name('update');
+        Route::get('/destroy/{id}', [BookController::class, 'destroy'])->name('destroy');
+        Route::delete('/{id}/delete-media', [BookController::class, 'deleteMedia'])->name('deleteMedia');
+        Route::delete('/{id}/delete-image', [BookController::class, 'deleteImage'])->name('deleteImage');
+        Route::get('/search', [BookController::class, 'search'])->name('search');
+    });
 
-// profile
-Route::get('/user/edit/{id}', [ProfileController::class, 'edit'])->name('user.edit');
+    // Borrow
+    Route::prefix('borrow')->name('borrow.')->group(function () {
+        Route::get('/', [BorrowController::class, 'index'])->name('index');
+        Route::get('/show', [BorrowController::class, 'show'])->name('show');
+        Route::get('/{id}', [BorrowController::class, 'borrow_book'])->name('book');
+        Route::delete('/delete/{id}', [BorrowController::class, 'delete'])->name('delete');
+    });
 
-Route::post('/user/update/{id}', [ProfileController::class, 'update'])->name('user.update');
+    // Forum
+    Route::resource('forums', ForumController::class);
+    Route::resource('forums.threads', ThreadController::class);
+    Route::resource('threads.comments', CommentController::class);
 
-Route::get('/profile-picture', [ProfileController::class, 'show'])->name('profile.picture.show');
+    // Notifications
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
-Route::post('/profile-picture', [ProfileController::class, 'store'])->name('profile.picture.store');
+    // Admin - User Management
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/user', [UserController::class, 'index'])->name('user');
+        Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+        Route::put('/update-role/{id}', [UserController::class, 'updateRole'])->name('user.updateRole');
+    });
 
-Auth::routes();
+    // Profile (picture and bio)
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('/edit/{id}', [ProfileController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [ProfileController::class, 'update'])->name('update');
+    });
+
+    Route::get('/profile-picture', [ProfileController::class, 'show'])->name('profile.picture.show');
+    Route::post('/profile-picture', [ProfileController::class, 'store'])->name('profile.picture.store');
+});

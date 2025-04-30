@@ -49,6 +49,14 @@
                                 </li>
                             @endif
                         @else
+                            <li class="nav-item">
+                                    {{-- @foreach($notifications as $notification)
+                                        <div class="notification">
+                                            {{ $notification->data['message'] }}
+                                            <a href="{{ route('threads.show', $notification->data['thread_id']) }}">View</a>
+                                        </div>
+                                    @endforeach --}}
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
@@ -56,6 +64,10 @@
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
+                                    <a class="dropdown-item" href="{{ route('book.index') }}">Book List</a>
+                                    @if(auth()->user()?->usertype === 'user')
+                                        <a class="dropdown-item" href="{{ route('borrow.index') }}">Borrowed Books</a>
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -72,7 +84,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-4 px-6">
             @yield('content')
         </main>
     </div>

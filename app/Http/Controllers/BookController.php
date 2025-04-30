@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Borrow;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use function Pest\Laravel\delete;
 
@@ -151,6 +152,26 @@ class BookController extends Controller
         $book->save();
 
         return redirect('/book');
+    }
+
+    public function search(Request $request){
+        $query = $request->input('q');
+
+        $book = DB::table('books')
+            ->select('id', 'book_title', 'book_description')
+            ->whereRaw("search_vector @@ websearch_to_tsquery('english', ?)", [$query])
+            ->orderByRaw("ts_rank(search_vector, websearch_to_tsquery('english', ?)) DESC", [$query])
+            ->paginate(6);
+
+        if ($book->isEmpty()) {
+            // fallback to ILIKE if FTS returns nothing
+            $book = DB::table('books')
+                ->where('book_title', 'ILIKE', '%' . $query . '%')
+                ->orWhere('book_description', 'ILIKE', '%' . $query . '%')
+                ->paginate(6);
+        }
+
+        return view('book.index', compact('book', 'query'));
     }
 
 }

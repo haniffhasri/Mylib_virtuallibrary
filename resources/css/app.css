@@ -7149,6 +7149,7 @@ fieldset:disabled .btn {
 .z-3 {
     z-index: 3 !important;
 }
+
 @media (min-width: 576px) {
     .float-sm-start {
         float: left !important;
@@ -13452,10 +13453,10 @@ span.flatpickr-weekday {
 }
 
 /* book list */
-.book-container-list {
+/* .book-container-list {
     padding: 4rem;
     height: 100%;
-}
+} */
 
 .book-list {
     display: flex;
@@ -13520,10 +13521,9 @@ span.flatpickr-weekday {
     padding: 0 0 5rem 7rem;
 }
 
-* borrow-show */
+/* borrow-show */
 .borrowed-book {
-    display: flex !important
-;
+    display: flex !important;
     gap: 3rem;
     flex-wrap: wrap;
 }
@@ -13534,7 +13534,7 @@ span.flatpickr-weekday {
 }
 
 .borrowed-book .card p {
-    padding: 1rem 0 0 1rem;
+    padding: 1rem 0 2rem 1rem;
 }
 
 .borrowed-book li::marker {
@@ -13568,11 +13568,6 @@ span.flatpickr-weekday {
 }
 
 /* book list */
-.book-container-list {
-    padding: 4rem;
-    height: 100%;
-}
-
 .book-list {
     display: flex;
     flex-wrap: wrap;
@@ -13586,6 +13581,7 @@ span.flatpickr-weekday {
     color: #193549;
 }
 
+/* profile */
 .profile-img {
     object-fit:cover; 
     border-radius: 50%;

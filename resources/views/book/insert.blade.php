@@ -1,6 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <h2>Insert New Book</h2>
 
     <form method="POST" action="{{ route('book.store') }}"  enctype="multipart/form-data">
@@ -82,7 +83,7 @@
             <input type="file" name="image_path" id="image_path" class="form-control" accept="image/*">
         </div>
         <!-- Repeat for other fields -->
-        <button type="button" class="btn btn-primary" id="submitBtn">Submit</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
 
         @if ($errors->any())
             @foreach ($errors->all() as $error)
@@ -90,9 +91,8 @@
             @endforeach
         @endif
     </form>
-@endsection
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         const formatSelect = document.getElementById('format');
         const fileInput = document.getElementById('media_path');
@@ -143,3 +143,4 @@
         });
     });
 </script>
+@endsection

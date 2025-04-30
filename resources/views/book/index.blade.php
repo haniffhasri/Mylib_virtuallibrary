@@ -14,6 +14,11 @@
 
 @section('content')
     <div class="book-container-list">
+        <form action="{{ route('book.search') }}" method="GET">
+            <input type="text" name="q" placeholder="Search books..." value="{{ request('q') }}">
+            <button type="submit">Search</button>
+        </form>
+                
         <h2>Available Books</h2>
         
         <ul class="book-list {{ $layout == 'layouts.backend' ? 'admin' : '' }}">

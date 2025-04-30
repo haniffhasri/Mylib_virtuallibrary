@@ -7,15 +7,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
-	<meta name="author" content="AdminKit">
-	<meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
-
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link rel="shortcut icon" href="img/icons/icon-48x48.png" />
-
-	<link rel="canonical" href="https://demo-basic.adminkit.io/pages-blank.html" />
-
+	
 	<title>{{ config('app.name', 'Mylib') }}</title>
 
 	@vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -71,34 +63,32 @@
 							<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Insert New Book</span>
 						</a>
 					</li>
-				@else
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('borrow.index') }}">
-							<i class="align-middle" data-feather="user"></i> <span class="align-middle">Borrowed Books</span>
-						</a>
-					</li>
 				@endif
 			</div>
 		</nav>
 
 		<div class="main">
 			<nav class="navbar navbar-expand navbar-light navbar-bg">
-				<a class="sidebar-toggle js-sidebar-toggle">
-          <i class="hamburger align-self-center"></i>
-        </a>
+				<a class="sidebar-toggle js-sidebar-toggle"><i class="hamburger align-self-center"></i></a>
 
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
+						<li class="nav-item">
+							{{-- @foreach($notifications as $notification)
+								<div class="notification">
+									{{ $notification->data['message'] }}
+									<a href="{{ route('threads.show', $notification->data['thread_id']) }}">View</a>
+								</div>
+							@endforeach --}}
+						</li>
 						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
-				<i class="align-middle" data-feather="settings"></i>
-			  </a>
-
+							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown"><i class="align-middle" data-feather="settings"></i></a>
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-				<span class="text-dark">{{ Auth::user()->name }}</span>
-			  </a>
+								<span class="text-dark">{{ Auth::user()->name }}</span>
+							</a>
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
+								<a class="dropdown-item" href="{{ route('book.index') }}">Book List</a>
 								<a class="dropdown-item" href="{{ route('logout') }}"
 								onclick="event.preventDefault();
 												document.getElementById('logout-form').submit();">
@@ -118,8 +108,6 @@
 			</main>
 		</div>
 	</div>
-
-	{{-- <script src="{{ asset('adminkit/js/app.js') }}"></script> --}}
 
 </body>
 

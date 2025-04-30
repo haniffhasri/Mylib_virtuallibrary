@@ -3,7 +3,7 @@
 @section('content')
     <table class="borrow-table">
         <tr>
-            <th>Borrow id</th>
+            {{-- <th>Borrow id</th> --}}
             <th>User Name</th>
             <th>Email</th>
             <th>Book Title</th>
@@ -11,15 +11,15 @@
             <th>Drop</th>
         </tr>
 
-        @foreach ($borrow as $borrow)
+        @foreach ($borrow as $borrows)
             <tr>
-                <td>{{ $borrow->id }}</td>
-                <td>{{ $borrow->user->name }}</td>
-                <td>{{ $borrow->user->email }}</td>
-                <td>{{ $borrow->book->book_title }}</td>
-                <td>{{ $borrow->due_date }}</td>
+                {{-- <td>{{ $borrows->id }}</td> --}}
+                <td>{{ $borrows->user->name }}</td>
+                <td>{{ $borrows->user->email }}</td>
+                <td>{{ $borrows->book->book_title }}</td>
+                <td>{{ $borrows->due_date }}</td>
                 <td>
-                    <form action="{{ route('borrow.delete', $borrow->id) }}" method="POST">
+                    <form action="{{ route('borrow.delete', $borrows->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Delete</button>
