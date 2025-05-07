@@ -42,7 +42,7 @@
                                         <a class="btn btn-primary" href="{{ asset('pdfs/' . $book_item->pdf_path) }}" target="_blank">Read PDF</a>
                                     @else
                                         @auth
-                                            <a class="btn btn-primary" href="{{ route('borrow_book', $book_item->id) }}">Borrow</a>
+                                            <a class="btn btn-primary" href="{{ route('borrow.book', $book_item->id) }}">Borrow</a>
                                         @else
                                             <a class="btn btn-primary" href="{{ route('login') }}">Borrow</a>
                                         @endauth

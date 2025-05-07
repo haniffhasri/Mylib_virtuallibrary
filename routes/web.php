@@ -33,8 +33,17 @@ Route::prefix('book')->name('book.')->group(function () {
         ->name('show');
 });
 
-// Comments (public for book pages)
-Route::post('/books/{book}/comments', [CommentController::class, 'store'])->name('comments.store');
+// Forum Route
+Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/forum/create', [ForumController::class, 'create'])->name('forum.create');
+    Route::post('/forum', [ForumController::class, 'store'])->name('forum.store');
+});
+Route::get('/forum/{slug}', [ForumController::class, 'show'])->name('forum.show');
+
+// Comments
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::get('/comments/{id}', [CommentController::class, 'delete'])->name('comments.delete');
 
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
@@ -63,20 +72,25 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/delete/{id}', [BorrowController::class, 'delete'])->name('delete');
     });
 
-    // Forum
-    Route::resource('forums', ForumController::class);
-    Route::resource('forums.threads', ThreadController::class);
-    Route::resource('threads.comments', CommentController::class);
+    // thread
+    Route::post('/forum/{forum}/threads', [ThreadController::class, 'store'])->name('forum.threads.store');
+    Route::get('/edit/{id}', [ThreadController::class, 'edit'])->name('forum.threads.edit');
+    Route::post('/update/{id}', [ThreadController::class, 'update'])->name('forum.threads.update');
+    Route::get('/delete/{id}', [ThreadController::class, 'delete'])->name('forum.threads.delete');
+    Route::get('/threads/{thread}', [ThreadController::class, 'show'])->name('threads.show');
 
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    // Route::post('/notifications/{id}/read', function ($id) {
+    //     Auth::user()->notifications()->find($id)?->markAsRead();
+    //     return back();
+    // })->name('notifications.markAsRead');
+    
 
     // Admin - User Management
-    Route::prefix('admin')->name('admin.')->group(function () {
-        Route::get('/user', [UserController::class, 'index'])->name('user');
-        Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
-        Route::put('/update-role/{id}', [UserController::class, 'updateRole'])->name('user.updateRole');
-    });
+    Route::get('admin/user', [UserController::class, 'index'])->name('admin.user');
+    Route::put('admin/update-role/{id}', [UserController::class, 'updateRole'])->name('user.updateRole');
+    Route::delete('admin/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
 
     // Profile (picture and bio)
     Route::prefix('user')->name('user.')->group(function () {

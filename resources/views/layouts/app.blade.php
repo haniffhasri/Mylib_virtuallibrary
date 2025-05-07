@@ -30,7 +30,12 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        <a class="nav-link"href="{{ route('book.index') }}">Book List</a>
+                        <a class="nav-link"href="{{ route('forum.index') }}">Forum List</a>
+                        @auth
+                            <a class="nav-link" href="{{ route('forum.create') }}">Create a Forum</a>
+                            <a class="nav-link" href="{{ route('borrow.index') }}">Borrowed Books</a>
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -49,13 +54,12 @@
                                 </li>
                             @endif
                         @else
-                            <li class="nav-item">
-                                    {{-- @foreach($notifications as $notification)
-                                        <div class="notification">
-                                            {{ $notification->data['message'] }}
-                                            <a href="{{ route('threads.show', $notification->data['thread_id']) }}">View</a>
-                                        </div>
-                                    @endforeach --}}
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Notifications</a>
+
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    
+                                </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -64,10 +68,6 @@
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
-                                    <a class="dropdown-item" href="{{ route('book.index') }}">Book List</a>
-                                    @if(auth()->user()?->usertype === 'user')
-                                        <a class="dropdown-item" href="{{ route('borrow.index') }}">Borrowed Books</a>
-                                    @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -88,5 +88,7 @@
             @yield('content')
         </main>
     </div>
+
+    @stack('scripts')
 </body>
 </html>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Borrow;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -21,8 +22,9 @@ class BookController extends Controller
     public function show($id){
         $book = Book::findOrFail($id);
         $borrow = Borrow::with('book')->get();
+        $user = User::select('name')->get(); // You can limit this if needed
         
-        return view('book.show', compact('book', 'borrow'), ['book'=> $book]);
+        return view('book.show', compact('book', 'borrow', 'user'), ['book'=> $book]);
     }
 
 

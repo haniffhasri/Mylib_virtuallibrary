@@ -13521,6 +13521,11 @@ span.flatpickr-weekday {
     padding: 0 0 5rem 7rem;
 }
 
+.NestedDepth {
+    border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+    margin: 0.5rem 0;
+}
+
 /* borrow-show */
 .borrowed-book {
     display: flex !important;

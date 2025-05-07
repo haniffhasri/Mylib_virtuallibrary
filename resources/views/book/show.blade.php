@@ -48,7 +48,7 @@
                             </a>
                         </p>
                     @else
-                        <a class="btn btn-primary" href="{{ route('borrow_book', $book->id) }}">Borrow</a>
+                        <a class="btn btn-primary" href="{{ route('borrow.book', $book->id) }}">Borrow</a>
                     @endif
                 @endif
             @else
@@ -58,5 +58,5 @@
         @endif
     </div>
 
-    @include('components.comment', ['book' => $book])
+    <x-comment :model="$book" />
 @endsection

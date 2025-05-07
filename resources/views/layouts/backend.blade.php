@@ -1,5 +1,6 @@
 @php use Illuminate\Support\Facades\Auth; @endphp
 
+@if(auth()->user()?->usertype === 'admin' || auth()->user()?->usertype === 'librarian')
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,33 +37,33 @@
 						<i class="align-middle" data-feather="book"></i> <span class="align-middle">Book List</span>
 					</a>
 				</li>
+				<li class="sidebar-item">
+					<a class="sidebar-link" href="{{ route('borrow.show') }}">
+						<i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Borrow List</span>
+					</a>
+				</li>
+				<li class="sidebar-item">
+					<a class="sidebar-link" href="{{ route('book.create') }}">
+						<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Insert New Book</span>
+					</a>
+				</li>
+				<li class="sidebar-item">
+					<a class="sidebar-link" href="{{ route('forum.index') }}">
+						<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Forum List</span>
+					</a>
+				</li>
+				<li class="sidebar-item">
+					<a class="sidebar-link" href="{{ route('forum.create') }}">
+						<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Create a Forum</span>
+					</a>
+				</li>
 				@if(auth()->user()?->usertype === 'admin')
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('admin.user') }}">
 							<i class="align-middle" data-feather="user"></i> <span class="align-middle">User List</span>
 						</a>
 					</li>
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('borrow.show') }}">
-							<i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Borrow List</span>
-						</a>
-					</li>
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('book.create') }}">
-							<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Insert New Book</span>
-						</a>
-					</li>
-				@elseif(auth()->user()?->usertype === 'librarian')
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('borrow.show') }}">
-							<i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Borrow List</span>
-						</a>
-					</li>
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('book.create') }}">
-							<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Insert New Book</span>
-						</a>
-					</li>
+				{{-- @elseif(auth()->user()?->usertype === 'librarian') --}}
 				@endif
 			</div>
 		</nav>
@@ -73,13 +74,21 @@
 
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
-						<li class="nav-item">
-							{{-- @foreach($notifications as $notification)
-								<div class="notification">
-									{{ $notification->data['message'] }}
-									<a href="{{ route('threads.show', $notification->data['thread_id']) }}">View</a>
-								</div>
-							@endforeach --}}
+						<li class="nav-item dropdown">
+							<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Notifications</a>
+
+							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+								@php
+									$notifications = Auth::user()->unreadNotifications;
+								@endphp
+								@forelse ($notifications as $notification)
+								<a href="{{ Arr::get($notification->data, 'url') }}" class="dropdown-item">
+									{{ Arr::get($notification->data, 'message', 'You have a new notification') }}
+								</a>
+								@empty
+									<span class="dropdown-item text-muted">No new notifications</span>
+								@endforelse
+							</div>
 						</li>
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown"><i class="align-middle" data-feather="settings"></i></a>
@@ -109,6 +118,7 @@
 		</div>
 	</div>
 
+	@stack('scripts')
 </body>
-
 </html>
+@endif

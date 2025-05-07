@@ -32,9 +32,9 @@ class DashboardController extends Controller
             if (in_array($usertype, ['admin', 'librarian', 'user'])) {
                 return view('dashboard', compact('users'));
             }
-            else {
-                return view('profile', compact('users'));
-            }
+        }
+        else {
+            return view('profile', compact('users'));
         }
     }
     

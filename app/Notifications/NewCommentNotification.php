@@ -16,7 +16,7 @@ class NewCommentNotification extends Notification
         return ['database'];
     }
 
-    public function toDatabase($notifiable)
+    public function toArray($notifiable)
     {
         return [
             'message' => "New comment posted in thread: {$this->comment->thread->title}",
