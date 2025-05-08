@@ -26,9 +26,19 @@ class CommentController extends Controller
             'parent_id' => $request->parent_id,
         ]);
 
-        $this->handleTagging($comment, $request->body);
+        // Detect @tags in comment body
+        preg_match_all('/@([\w\-]+)/', $comment->body, $matches);
 
-        return back();
+        $usernames = $matches[1]; // contains array of usernames mentioned
+        $taggedUsers = User::whereIn('name', $usernames)->get();
+
+        foreach ($taggedUsers as $user) {
+            if ($user->id !== Auth::id()) {
+                $user->notify(new UserTagged($comment));
+            }
+        }
+
+        return redirect()->back();
     }
 
 

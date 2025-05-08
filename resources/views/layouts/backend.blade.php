@@ -57,6 +57,11 @@
 						<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Create a Forum</span>
 					</a>
 				</li>
+				<li class="sidebar-item">
+					<a class="sidebar-link" href="{{ route('notifications.index') }}">
+						<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Notifications</span>
+					</a>
+				</li>
 				@if(auth()->user()?->usertype === 'admin')
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('admin.user') }}">
@@ -78,16 +83,16 @@
 							<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Notifications</a>
 
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-								@php
-									$notifications = Auth::user()->unreadNotifications;
-								@endphp
-								@forelse ($notifications as $notification)
-								<a href="{{ Arr::get($notification->data, 'url') }}" class="dropdown-item">
-									{{ Arr::get($notification->data, 'message', 'You have a new notification') }}
-								</a>
-								@empty
-									<span class="dropdown-item text-muted">No new notifications</span>
-								@endforelse
+								@if($notifications->isEmpty())
+									<p>No new notifications.</p>
+								@else
+									@foreach($notifications as $note)
+										<div>
+											{{ $note->data['message'] }}
+											<a href="{{ $note->data['url'] }}">View</a>
+										</div>
+									@endforeach
+								@endif
 							</div>
 						</li>
 						<li class="nav-item dropdown">

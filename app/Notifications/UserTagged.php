@@ -26,18 +26,16 @@ class UserTagged extends Notification
     public function toDatabase($notifiable){
         $commentable = $this->comment->commentable;
 
-        if ($commentable instanceof \App\Models\Thread) {
-            $url = route('threads.show', ['thread' => $commentable->id]) . '#comment-' . $this->comment->id;
-        } elseif ($commentable instanceof \App\Models\Book) {
-            $url = route('book.show', ['id' => $commentable->id]) . '#comment-' . $this->comment->id;
-        } else {
-            $url = url('/'); // fallback
-        }
+        $route = match (get_class($commentable)) {
+            \App\Models\Thread::class => route('threads.show', $commentable->id),
+            \App\Models\Book::class => route('book.show', $commentable->id),
+            default => '#',
+        };
 
         return [
             'message' => "{$this->comment->user->name} mentioned you in a comment.",
             'comment_id' => $this->comment->id,
-            'url' => $url, 
+            'url' => $route . '#comment-' . $this->comment->id,
         ];
     }
 
