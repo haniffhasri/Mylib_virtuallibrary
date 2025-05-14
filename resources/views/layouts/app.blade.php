@@ -14,6 +14,7 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
@@ -34,7 +35,15 @@
                         <a class="nav-link"href="{{ route('forum.index') }}">Forum List</a>
                         @auth
                             <a class="nav-link" href="{{ route('forum.create') }}">Create a Forum</a>
+                            @if(Auth::user()?->usertype === 'user')
                             <a class="nav-link" href="{{ route('borrow.index') }}">Borrowed Books</a>
+                            @elseif(Auth::user()?->usertype === 'admin' || Auth::user()?->usertype === 'librarian')
+                                <a class="nav-link" href="{{ route('borrow.show') }}">Borrow List</a>
+                                <a class="nav-link" href="{{ route('book.create') }}">Insert New Book</a>
+                            @elseif(Auth::user()?->usertype === 'admin')
+                                <a class="nav-link" href="{{ route('admin.user') }}">User List</a>
+                                <a class="nav-link" href="{{ route('analytics.index') }}">Analytics</a>
+                            @endif
                         @endauth
                     </ul>
 
@@ -98,6 +107,6 @@
         </main>
     </div>
 
-    @yield('scripts')
+    @stack('scripts')
 </body>
 </html>

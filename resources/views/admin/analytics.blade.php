@@ -1,44 +1,70 @@
 @extends('layouts.backend')
 
 @section('content')
-<div class="container py-5">
-    <h2 class="mb-4">Analytics Dashboard</h2>
+<div class="container-fluid p-0">
 
-    {{-- User Activity Chart --}}
-    <div class="card mb-4">
-        <div class="card-header">User Activity</div>
-        <div class="card-body">
-            <canvas id="userActivityChart" height="100"></canvas>
-        </div>
+    <div class="mb-3">
+        <h1 class="h3 d-inline align-middle">Analytics Dashboard</h1>
     </div>
-
-    {{-- Most Borrowed Books --}}
-    <div class="card mb-4">
-        <div class="card-header">Top 5 Borrowed Books</div>
-        <div class="card-body">
-            <canvas id="borrowedBooksChart" height="100"></canvas>
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <div class="card flex-fill w-100">
+                <div class="card-header">
+                    <h5 class="card-title">User Activity</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart">
+                        <canvas id="userActivityChart" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    {{-- Forum Engagement --}}
-    <div class="card mb-4">
-        <div class="card-header">Forum Engagement</div>
-        <div class="card-body">
-            <canvas id="engagementChart" height="100"></canvas>
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Top 5 Borrowed Books</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart">
+                        <canvas id="borrowedBooksChart" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    {{-- Top Search Terms --}}
-    <div class="card mb-4">
-        <div class="card-header">Top Search Terms</div>
-        <div class="card-body">
-            <canvas id="searchChart" height="100"></canvas>
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Forum Engagement</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart">
+                        <canvas id="engagementChart" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header">
+                        <h5 class="card-title">Top Search Terms</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart">
+                        <canvas id="searchChart" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // User Activity
@@ -47,7 +73,7 @@
         data: {
             labels: ['Today', 'Last 7 Days', 'Last 30 Days'],
             datasets: [{
-                label: 'New Users',
+                label: 'Visitors',
                 data: [@json($daily_visits), @json($weekly_visits), @json($monthly_visits)],
                 backgroundColor: ['#4caf50', '#2196f3', '#ff9800']
             }]
@@ -107,4 +133,4 @@
         options: { responsive: true }
     });
 </script>
-@endsection
+@endpush

@@ -128,7 +128,7 @@
 		</div>
 	</div>
 
-	@yield('scripts')
+	@stack('scripts')
 </body>
 </html>
 @endif

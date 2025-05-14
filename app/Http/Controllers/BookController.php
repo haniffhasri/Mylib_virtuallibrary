@@ -8,7 +8,6 @@ use App\Models\Borrow;
 use App\Models\User;
 use App\Models\SearchLog;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 use function Pest\Laravel\delete;
 
@@ -17,10 +16,10 @@ class BookController extends Controller
     public function index(){
         $books = Book::orderBy('created_at', 'desc')->paginate(6);
 
-        $activeBorrowedBooks = collect(); // default empty
+        $activeBorrowedBooks = collect(); 
         if (Auth::check()) {
             $activeBorrowedBooks = Borrow::where('user_id', Auth::id())
-                ->where('is_active', true) // or use due_date if that's your logic
+                ->where('is_active', true) 
                 ->pluck('book_id');
         }
 
@@ -180,29 +179,37 @@ class BookController extends Controller
 
     public function search(Request $request){
         $query = $request->input('q');
-
-        $book = DB::table('books')
-            ->select('id', 'book_title', 'book_description')
-            ->whereRaw("search_vector @@ websearch_to_tsquery('english', ?)", [$query])
+    
+        $book = Book::whereRaw("search_vector @@ websearch_to_tsquery('english', ?)", [$query])
             ->orderByRaw("ts_rank(search_vector, websearch_to_tsquery('english', ?)) DESC", [$query])
             ->paginate(6);
-
+    
         if ($book->isEmpty()) {
-            // fallback to ILIKE if FTS returns nothing
-            $book = DB::table('books')
-                ->where('book_title', 'ILIKE', '%' . $query . '%')
+            $book = Book::where('book_title', 'ILIKE', '%' . $query . '%')
                 ->orWhere('book_description', 'ILIKE', '%' . $query . '%')
                 ->paginate(6);
         }
 
+        $activeBorrowedBooks = collect(); 
+        if (Auth::check()) {
+            $activeBorrowedBooks = Borrow::where('user_id', Auth::id())
+                ->where('is_active', true) 
+                ->pluck('book_id');
+        }
+    
         SearchLog::create([
             'term' => $query,
             'results' => $book->total(),
             'ip' => $request->ip(),
             'user_id' => Auth::id(),
         ]);
-
-        return view('book.index', compact('book', 'query'));
+    
+        return view('book.index', [
+            'book' => $book,
+            'query' => $query,
+            'borrowedBookIds' => $activeBorrowedBooks
+        ]);
     }
+    
 
 }

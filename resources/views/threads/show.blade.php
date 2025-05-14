@@ -32,10 +32,34 @@
 
     <!-- Comments Section -->
     <div class="mt-5">
-        <h4>Discussion</h4>
         <x-comment :model="$thread" />
     </div>
 
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('click', function (e) {
+        const editBtn = e.target.closest('.toggle-edit');
+        const cancelBtn = e.target.closest('.cancel-edit');
+
+        if (editBtn) {
+            const commentId = editBtn.dataset.commentId;
+            const form = document.getElementById('edit-form-' + commentId);
+            if (form) {
+                form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+            }
+        }
+
+        if (cancelBtn) {
+            const commentId = cancelBtn.dataset.commentId;
+            const form = document.getElementById('edit-form-' + commentId);
+            if (form) {
+                form.style.display = 'none';
+            }
+        }
+    });
+</script>
+@endpush

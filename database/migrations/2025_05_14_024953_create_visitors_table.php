@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('visitors', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->text('url')->nullable();
+            $table->timestamps();            
         });
     }
 

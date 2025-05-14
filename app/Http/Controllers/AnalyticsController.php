@@ -9,6 +9,7 @@ use App\Models\Book;
 use App\Models\Borrow;
 use App\Models\Forum;
 use App\Models\Thread;
+use App\Models\Visitor;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 
@@ -21,10 +22,10 @@ class AnalyticsController extends Controller
 
         return view('admin.analytics', [
             // User Activity
-            'daily_visits' => User::whereDate('created_at', $today)->count(),
-            'weekly_visits' => User::whereBetween('created_at', [$weekAgo, now()])->count(),
-            'monthly_visits' => User::whereBetween('created_at', [$monthAgo, now()])->count(),
-            'registration_users' => User::where('created_at', '>=', $monthAgo)->count(),
+            'daily_visits' => Visitor::whereDate('created_at', $today)->count(),
+            'weekly_visits' => Visitor::whereBetween('created_at', [$weekAgo, now()])->count(),
+            'monthly_visits' => Visitor::whereBetween('created_at', [$monthAgo, now()])->count(),
+            // 'registration_users' => Visitor::where('created_at', '>=', $monthAgo)->count(),
 
             // Content Usage
             'most_borrowed_books' => Borrow::select('book_id', DB::raw('count(*) as total'))

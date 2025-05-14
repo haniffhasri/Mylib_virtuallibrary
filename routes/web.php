@@ -12,11 +12,12 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Middleware\TrackVisitor;
 
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware(TrackVisitor::class);
 
 // Logout
 Route::get('logout', function () {

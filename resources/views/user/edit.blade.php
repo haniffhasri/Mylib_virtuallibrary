@@ -1,6 +1,15 @@
-@extends('layouts.backend')
+@php
+    if (Auth::check()) {
+        $usertype = Auth::user()->usertype;
+        $layout = ($usertype === 'admin' || $usertype === 'librarian') ? 'layouts.backend' : 'layouts.app';
+    } else {
+        $layout = 'layouts.app';
+    }
+@endphp
 
-@section('content')    
+@extends($layout)
+
+@section('content')  
 <form action="{{ route('user.update', $users->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('POST')

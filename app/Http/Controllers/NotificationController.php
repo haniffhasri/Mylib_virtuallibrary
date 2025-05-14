@@ -10,14 +10,14 @@ class NotificationController extends Controller
 {
     public function index()
     {
-        // $notifications = Auth::user()->unreadNotifications()->get();
-        // return view('notifications.index', ['notifications'=>$notifications]);
+        $notifications = Auth::user()->unreadNotifications()->get();
+        return view('notifications.index', ['notifications'=>$notifications]);
     }
 
-    // public function read($id){
-    //     $notification = Auth::user()->notifications()->findOrFail($id);
-    //     $notification->markAsRead();
-    //     return redirect($notification->data['url']);
-    // }
+    public function read($id){
+        $notification = Auth::user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        return redirect($notification->data['url']);
+    }
 
 }
