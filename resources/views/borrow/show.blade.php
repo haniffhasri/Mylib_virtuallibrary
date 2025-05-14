@@ -12,19 +12,21 @@
         </tr>
 
         @foreach ($borrow as $borrows)
-            <tr>
-                {{-- <td>{{ $borrows->id }}</td> --}}
-                <td>{{ $borrows->user->name }}</td>
-                <td>{{ $borrows->user->email }}</td>
-                <td>{{ $borrows->book->book_title }}</td>
-                <td>{{ $borrows->due_date }}</td>
-                <td>
-                    <form action="{{ route('borrow.delete', $borrows->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form></td>
-            </tr>
+            @if ($borrows->is_active === true)
+                <tr>
+                    <td>{{ $borrows->user->name }}</td>
+                    <td>{{ $borrows->user->email }}</td>
+                    <td>{{ $borrows->book->book_title }}</td>
+                    <td>{{ $borrows->due_date }}</td>
+                    <td>
+                        <form action="{{ route('borrow.delete', $borrows->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            @endif
         @endforeach
     </table>
 @endsection

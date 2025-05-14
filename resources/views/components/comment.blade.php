@@ -1,9 +1,6 @@
 @props(['model']) {{-- model = $book or $thread --}}
 @php
     $usernames = Auth::check() ? \App\Models\User::pluck('name') : collect([]);
-    function highlightMentions($text) {
-        return preg_replace('/@([\w\s]+)/', '<span style="color: blue;">@$1</span>', e($text));
-    }
 @endphp
 
 <div class="comment">
@@ -24,7 +21,7 @@
     @endforeach
 </div>
 
-@push('scripts')
+@section('scripts')
 <link rel="stylesheet" href="https://unpkg.com/tributejs@5.1.3/dist/tribute.css" />
 <script src="https://unpkg.com/tributejs@5.1.3/dist/tribute.js"></script>
 <script>
@@ -35,7 +32,7 @@
             trigger: '@',
             values: users.map(name => ({ key: name, value: name })),
             selectTemplate: function (item) {
-                return `@${item.original.value}`; // just insert plain @mention
+                return `@${item.original.value}`; 
             }
         });
 
@@ -52,6 +49,6 @@
         });
     });
 </script>
-@endpush
+@endsection
 
 

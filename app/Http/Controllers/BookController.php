@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Borrow;
 use App\Models\User;
+use App\Models\SearchLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -14,19 +15,40 @@ use function Pest\Laravel\delete;
 class BookController extends Controller
 {
     public function index(){
-        $book = Book::orderBy('created_at','desc')->paginate(6);
-        $borrow = Borrow::where('user_id', Auth::id())->pluck('book_id');
-        return view('book.index', compact('book', 'borrow'));
+        $books = Book::orderBy('created_at', 'desc')->paginate(6);
+
+        $activeBorrowedBooks = collect(); // default empty
+        if (Auth::check()) {
+            $activeBorrowedBooks = Borrow::where('user_id', Auth::id())
+                ->where('is_active', true) // or use due_date if that's your logic
+                ->pluck('book_id');
+        }
+
+        return view('book.index', [
+            'book' => $books,
+            'borrowedBookIds' => $activeBorrowedBooks
+        ]);
     }
-    
+
     public function show($id){
         $book = Book::findOrFail($id);
         $borrow = Borrow::with('book')->get();
-        $user = User::select('name')->get(); // You can limit this if needed
-        
-        return view('book.show', compact('book', 'borrow', 'user'), ['book'=> $book]);
-    }
+        $user = User::select('name')->get(); 
 
+        $activeBorrowedBooks = collect(); // default empty
+        if (Auth::check()) {
+            $activeBorrowedBooks = Borrow::where('user_id', Auth::id())
+                ->where('is_active', true)
+                ->pluck('book_id');
+        }
+
+        return view('book.show', [
+            'book' => $book,
+            'borrow' => $borrow,
+            'user' => $user,
+            'borrowedBookIds' => $activeBorrowedBooks
+        ]);
+    }
 
     public function create(){
         return view('book.insert');
@@ -172,6 +194,13 @@ class BookController extends Controller
                 ->orWhere('book_description', 'ILIKE', '%' . $query . '%')
                 ->paginate(6);
         }
+
+        SearchLog::create([
+            'term' => $query,
+            'results' => $book->total(),
+            'ip' => $request->ip(),
+            'user_id' => Auth::id(),
+        ]);
 
         return view('book.index', compact('book', 'query'));
     }

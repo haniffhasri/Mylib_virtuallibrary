@@ -41,7 +41,7 @@
                     </p>
                 @elseif (Auth::user()->usertype === 'user')
                     {{-- Regular User View --}}
-                    @if ($borrow->contains('book_id', $book->id))
+                    @if ($borrowedBookIds->contains($book->id))
                         <p>
                             <a class="btn btn-primary" href="{{ asset('media/' . $book->media_path) }}" target="_blank" id="media_label">
                                 {{ $book->format === 'audio' ? 'Listen to Audiophile' : 'Read PDF' }}

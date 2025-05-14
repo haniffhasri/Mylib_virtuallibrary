@@ -29,7 +29,7 @@ class CommentController extends Controller
         // Detect @tags in comment body
         preg_match_all('/@([\w\-]+)/', $comment->body, $matches);
 
-        $usernames = $matches[1]; // contains array of usernames mentioned
+        $usernames = $matches[1]; 
         $taggedUsers = User::whereIn('name', $usernames)->get();
 
         foreach ($taggedUsers as $user) {

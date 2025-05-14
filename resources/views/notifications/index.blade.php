@@ -10,14 +10,14 @@
 @extends($layout)
 
 @section('content')
-    @if($notifications->isEmpty())
+    {{-- @if($notifications->isEmpty())
         <p>No new notifications.</p>
     @else
         @foreach($notifications as $note)
             <div>
                 {{ $note->data['message'] }}
-                <a href="{{ $note->data['url'] }}">View</a>
+                <a href="{{ route('notifications.read', $note->id) }}">View</a>
             </div>
         @endforeach
-    @endif
+    @endif --}}
 @endsection

@@ -62,10 +62,15 @@
 						<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Notifications</span>
 					</a>
 				</li>
-				@if(auth()->user()?->usertype === 'admin')
+				@if(Auth::user()?->usertype === 'admin')
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('admin.user') }}">
 							<i class="align-middle" data-feather="user"></i> <span class="align-middle">User List</span>
+						</a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{ route('analytics.index') }}">
+							<i class="align-middle" data-feather="user"></i> <span class="align-middle">Analytics</span>
 						</a>
 					</li>
 				{{-- @elseif(auth()->user()?->usertype === 'librarian') --}}
@@ -83,7 +88,7 @@
 							<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Notifications</a>
 
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-								@if($notifications->isEmpty())
+								{{-- @if($notifications->isEmpty())
 									<p>No new notifications.</p>
 								@else
 									@foreach($notifications as $note)
@@ -92,7 +97,7 @@
 											<a href="{{ $note->data['url'] }}">View</a>
 										</div>
 									@endforeach
-								@endif
+								@endif --}}
 							</div>
 						</li>
 						<li class="nav-item dropdown">
@@ -123,7 +128,7 @@
 		</div>
 	</div>
 
-	@stack('scripts')
+	@yield('scripts')
 </body>
 </html>
 @endif

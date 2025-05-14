@@ -11,6 +11,8 @@ use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\AnalyticsController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -44,6 +46,7 @@ Route::get('/forum/{slug}', [ForumController::class, 'show'])->name('forum.show'
 // Comments
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::get('/comments/{id}', [CommentController::class, 'delete'])->name('comments.delete');
+Route::post('/comments/update/{id}', [CommentController::class, 'update'])->name('comments.update');
 
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
@@ -81,6 +84,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/read/{id}', [NotificationController::class, 'read'])->name('notifications.read');
     // Route::post('/notifications/{id}/read', function ($id) {
     //     Auth::user()->notifications()->find($id)?->markAsRead();
     //     return back();
@@ -91,6 +95,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('admin/user', [UserController::class, 'index'])->name('admin.user');
     Route::put('admin/update-role/{id}', [UserController::class, 'updateRole'])->name('user.updateRole');
     Route::delete('admin/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+
+    // Admin - Analytics
+    Route::get('/admin/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
 
     // Profile (picture and bio)
     Route::prefix('user')->name('user.')->group(function () {

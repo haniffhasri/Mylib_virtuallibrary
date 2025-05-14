@@ -58,7 +58,7 @@
 							<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Notifications</a>
 
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-								@if($notifications->isEmpty())
+								{{-- @if($notifications->isEmpty())
 									<p>No new notifications.</p>
 								@else
 									@foreach($notifications as $note)
@@ -67,7 +67,7 @@
 											<a href="{{ $note->data['url'] }}">View</a>
 										</div>
 									@endforeach
-								@endif
+								@endif --}}
 							</div>
 						</li>
                             <li class="nav-item dropdown">
@@ -98,6 +98,6 @@
         </main>
     </div>
 
-    @stack('scripts')
+    @yield('scripts')
 </body>
 </html>

@@ -38,8 +38,10 @@
                             {{-- Normal users (or guests) --}}
                             @else
                                 @if ($book_item->media_path)
-                                    @if (isset($borrow) && $borrow->contains($book_item->id))
-                                        <a class="btn btn-primary" href="{{ asset('pdfs/' . $book_item->pdf_path) }}" target="_blank">Read PDF</a>
+                                    @if ($borrowedBookIds->contains($book_item->id))
+                                        <a class="btn btn-primary" href="{{ asset('media/' . $book_item->media_path) }}" target="_blank" id="media_label">
+                                            {{ $book_item->format === 'audio' ? 'Listen to Audiophile' : 'Read PDF' }}
+                                        </a>
                                     @else
                                         @auth
                                             <a class="btn btn-primary" href="{{ route('borrow.book', $book_item->id) }}">Borrow</a>

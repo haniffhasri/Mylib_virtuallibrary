@@ -39,7 +39,8 @@ class BorrowController extends Controller
 
     public function delete($id){
         $borrow = Borrow::find($id);
-        $borrow->delete();
+        $borrow->is_active = false;
+        $borrow->save();
         return redirect()->back();
     }
 }
