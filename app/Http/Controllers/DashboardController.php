@@ -28,14 +28,23 @@ class DashboardController extends Controller
     {
         $users = Auth::user();
         if (Auth::id()) {
-            $usertype = Auth::user()->usertype;
-            if (in_array($usertype, ['admin', 'librarian', 'user'])) {
                 return view('dashboard', compact('users'));
-            }
         }
         else {
-            return view('profile', compact('users'));
+            abort(403, 'Unauthorized');
         }
     }
-    
+
+    public function viewUser($id)
+    {
+        $currentUser = Auth::user();
+
+        if (!in_array($currentUser->usertype, ['admin', 'librarian'])) {
+            abort(403, 'Unauthorized');
+        }
+
+        $user = User::findOrFail($id);
+        return view('admin.view', ['user' => $user]);
+    }
+ 
 }

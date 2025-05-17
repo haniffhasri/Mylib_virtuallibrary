@@ -7,17 +7,21 @@ use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Middleware\TrackVisitor;
-
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\SupportController;
 
 Route::get('/', function () {
     return view('welcome');
 })->middleware(TrackVisitor::class);
+
+Route::get('/send-mail', [RegisterController::class, 'create']);
 
 // Logout
 Route::get('logout', function () {
@@ -49,12 +53,20 @@ Route::post('/comments', [CommentController::class, 'store'])->name('comments.st
 Route::get('/comments/{id}', [CommentController::class, 'delete'])->name('comments.delete');
 Route::post('/comments/update/{id}', [CommentController::class, 'update'])->name('comments.update');
 
+// ContactUs
+Route::get('/contact-us/{id}', [ContactController::class, 'show'])->name('contact-us.show');
+Route::post('/contact-us/update/{id}', [ContactController::class, 'store'])->name('contact-us.update');
+
+// support route
+Route::get('/support', [SupportController::class, 'showSupportPage'])->name('support.index');
+
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
-    Route::get('/profile', [DashboardController::class, 'show'])->name('profile');
+    Route::get('/admin/user/{id}', [DashboardController::class, 'viewUser'])->name('admin.view');
+
 
     // Book Routes (insert, update, delete, media actions)
     Route::prefix('book')->name('book.')->group(function () {
@@ -85,12 +97,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-    Route::get('/notifications/read/{id}', [NotificationController::class, 'read'])->name('notifications.read');
-    // Route::post('/notifications/{id}/read', function ($id) {
-    //     Auth::user()->notifications()->find($id)?->markAsRead();
-    //     return back();
-    // })->name('notifications.markAsRead');
-    
+    Route::get('/notifications/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll'); 
 
     // Admin - User Management
     Route::get('admin/user', [UserController::class, 'index'])->name('admin.user');
@@ -108,4 +116,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/profile-picture', [ProfileController::class, 'show'])->name('profile.picture.show');
     Route::post('/profile-picture', [ProfileController::class, 'store'])->name('profile.picture.store');
+
+    Route::get('/support', [SupportController::class, 'showSupportPage'])->name('support.index');
+
+    // Admin support routes
+    // Route::get('/admin/support', [SupportController::class, 'adminIndex'])->name('admin.support.index');
+    Route::get('/support/create', [SupportController::class, 'create'])->name('support.create');
+    Route::post('/support', [SupportController::class, 'store'])->name('support.store');
+    Route::delete('/support/{content}', [SupportController::class, 'destroy'])->name('support.destroy');
 });
+

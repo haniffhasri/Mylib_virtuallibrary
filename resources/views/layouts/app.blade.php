@@ -33,8 +33,11 @@
                     <ul class="navbar-nav me-auto">
                         <a class="nav-link"href="{{ route('book.index') }}">Book List</a>
                         <a class="nav-link"href="{{ route('forum.index') }}">Forum List</a>
+                        <a class="nav-link" href="{{ route('contact-us.show', ['id' => 1]) }}">Contact Us</a>
+                        <a class="nav-link" href="{{ route('support.index') }}">Support</a>
                         @auth
                             <a class="nav-link" href="{{ route('forum.create') }}">Create a Forum</a>
+                            <a class="nav-link" href="{{ route('notifications.index') }}">Notifications</a>
                             @if(Auth::user()?->usertype === 'user')
                             <a class="nav-link" href="{{ route('borrow.index') }}">Borrowed Books</a>
                             @elseif(Auth::user()?->usertype === 'admin' || Auth::user()?->usertype === 'librarian')
@@ -67,16 +70,18 @@
 							<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Notifications</a>
 
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-								{{-- @if($notifications->isEmpty())
-									<p>No new notifications.</p>
-								@else
-									@foreach($notifications as $note)
-										<div>
-											{{ $note->data['message'] }}
-											<a href="{{ $note->data['url'] }}">View</a>
-										</div>
-									@endforeach
-								@endif --}}
+								{{-- @forelse($notifications as $notification)
+                                    <div class="list-group-item d-flex justify-content-between align-items-center {{ $notification->read_at ? '' : 'bg-light' }}">
+                                        <div>
+                                            {{ $notification->data['message'] }}
+                                        </div>
+                                        <a href="{{ route('notifications.read', $notification->id) }}" class="btn btn-sm btn-outline-success">
+                                            {{ $notification->read_at ? 'View' : 'Mark as Read & View' }}
+                                        </a>
+                                    </div>
+                                @empty
+                                    <p class="list-group-item">No notifications found.</p>
+                                @endforelse --}}
 							</div>
 						</li>
                             <li class="nav-item dropdown">

@@ -33,7 +33,7 @@ class NewUserNotification extends Notification
             'id' => $this->user->id,
             'name' => $this->user->name,
             'email' => $this->user->email,
-            'url' => url('/admin/user/' . $this->user->id),
+            'url' => route('admin.view', $this->user->id),
         ];
     }
 }

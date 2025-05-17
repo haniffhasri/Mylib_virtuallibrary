@@ -6,7 +6,7 @@
     $isFirstDepth = $depth === 1;
 @endphp
 
-<div class="{{ $canNest ? 'ms-5' : '' }} {{ $isFirstDepth ? 'mt-3 border p-2 bg-light rounded' : '' }}">
+<div id="comment-{{ $comment->id }}" class="{{ $canNest ? 'ms-5' : '' }} {{ $isFirstDepth ? 'mt-3 border p-2 bg-light rounded' : '' }}">
     <div>
         <strong>{{ $comment->user->name }}</strong> said:
         <p>{!! nl2br(e($comment->body)) !!}</p>

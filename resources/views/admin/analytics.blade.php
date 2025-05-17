@@ -10,11 +10,11 @@
         <div class="col-12 col-lg-6">
             <div class="card flex-fill w-100">
                 <div class="card-header">
-                    <h5 class="card-title">User Activity</h5>
+                    <h5 class="card-title">Visitor Activity</h5>
                 </div>
                 <div class="card-body">
                     <div class="chart">
-                        <canvas id="userActivityChart" height="100"></canvas>
+                        <canvas id="visitorActivityChart" height="100"></canvas>
                     </div>
                 </div>
             </div>
@@ -68,7 +68,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // User Activity
-    const userActivityChart = new Chart(document.getElementById('userActivityChart'), {
+    const visitorActivityChart = new Chart(document.getElementById('visitorActivityChart'), {
         type: 'bar',
         data: {
             labels: ['Today', 'Last 7 Days', 'Last 30 Days'],
