@@ -13,10 +13,12 @@
     <div class="container">
         <h2>Notifications</h2>
 
-        <form action="{{ route('notifications.readAll') }}" method="POST">
-            @csrf
-            <button class="btn btn-sm btn-primary mb-3">Mark All as Read</button>
-        </form>
+        @if(Auth::user()->unreadNotifications()->count() > 0)
+            <form action="{{ route('notifications.readAll') }}" method="POST">
+                @csrf
+                <button class="btn btn-sm btn-primary mb-3">Mark All as Read</button>
+            </form>
+        @endif
 
         <ul class="list-group">
             @forelse($notifications as $notification)

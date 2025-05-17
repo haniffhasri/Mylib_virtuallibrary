@@ -11,13 +11,13 @@ use Carbon\Carbon;
 class BorrowController extends Controller
 {
     public function index(){
-        $borrowed_book = Borrow::with('book')->where('user_id', Auth::user()->id)->get();
+        $borrowed_book = Borrow::with('book')->where('is_active', true)->get();
         return view('borrow.index', ['borrow' => $borrowed_book]);
     }
 
     public function show(){
         $borrow = Borrow::all();
-        return view('borrow.show', compact('borrow'));
+        return view('admin.borrow', compact('borrow'));
     }
 
     public function borrow_book($id){

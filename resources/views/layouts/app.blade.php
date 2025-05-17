@@ -37,7 +37,6 @@
                         <a class="nav-link" href="{{ route('support.index') }}">Support</a>
                         @auth
                             <a class="nav-link" href="{{ route('forum.create') }}">Create a Forum</a>
-                            <a class="nav-link" href="{{ route('notifications.index') }}">Notifications</a>
                             @if(Auth::user()?->usertype === 'user')
                             <a class="nav-link" href="{{ route('borrow.index') }}">Borrowed Books</a>
                             @elseif(Auth::user()?->usertype === 'admin' || Auth::user()?->usertype === 'librarian')
@@ -67,10 +66,15 @@
                             @endif
                         @else
                         <li class="nav-item dropdown">
-							<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Notifications</a>
+							<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+								Notifications
+								@if($headerNotifications->count() > 0)
+									<span class="badge bg-danger">{{ $headerNotifications->count() }}</span>
+								@endif
+							</a>
 
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-								{{-- @forelse($notifications as $notification)
+								@forelse($headerNotifications as $notification)
                                     <div class="list-group-item d-flex justify-content-between align-items-center {{ $notification->read_at ? '' : 'bg-light' }}">
                                         <div>
                                             {{ $notification->data['message'] }}
@@ -81,7 +85,8 @@
                                     </div>
                                 @empty
                                     <p class="list-group-item">No notifications found.</p>
-                                @endforelse --}}
+                                @endforelse
+								<a class="list-group-item" href="{{ route('notifications.index') }}">View All</a>
 							</div>
 						</li>
                             <li class="nav-item dropdown">

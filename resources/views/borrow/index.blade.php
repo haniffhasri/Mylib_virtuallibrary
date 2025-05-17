@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')    
-@if(session()->has('message'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">X</button>
-        {{ session()->get('message') }}
-    </div>
+    @if(session()->has('message'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">X</button>
+            {{ session()->get('message') }}
+        </div>
     @endif
     <h2>Borrowed Books</h2>
     <div class="borrowed-book">
@@ -13,9 +13,11 @@
                 <li>
                     <x-card href="{{ route('book.show', $borrowed->book_id) }}">
                         <p>Book: {{ $borrowed->book->book_title }}</p>
+                        <a class="btn btn-primary" href="{{ asset('media/' . $borrowed->book->media_path) }}" target="_blank" id="media_label">
+                            {{ $borrowed->book->format === 'audio' ? 'Listen to Audiophile' : 'Read PDF' }}
+                        </a>                        
                     </x-card>
                 </li>
-        @endforeach
-        
+        @endforeach 
     </div>
 @endsection

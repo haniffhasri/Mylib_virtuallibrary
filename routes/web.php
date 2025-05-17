@@ -16,6 +16,7 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Middleware\TrackVisitor;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\SupportController;
+use App\Http\Controllers\BackupController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -55,7 +56,7 @@ Route::post('/comments/update/{id}', [CommentController::class, 'update'])->name
 
 // ContactUs
 Route::get('/contact-us/{id}', [ContactController::class, 'show'])->name('contact-us.show');
-Route::post('/contact-us/update/{id}', [ContactController::class, 'store'])->name('contact-us.update');
+Route::post('/contact-us/update/{id}', [ContactController::class, 'update'])->name('contact-us.update');
 
 // support route
 Route::get('/support', [SupportController::class, 'showSupportPage'])->name('support.index');
@@ -83,7 +84,6 @@ Route::middleware(['auth'])->group(function () {
     // Borrow
     Route::prefix('borrow')->name('borrow.')->group(function () {
         Route::get('/', [BorrowController::class, 'index'])->name('index');
-        Route::get('/show', [BorrowController::class, 'show'])->name('show');
         Route::get('/{id}', [BorrowController::class, 'borrow_book'])->name('book');
         Route::delete('/delete/{id}', [BorrowController::class, 'delete'])->name('delete');
     });
@@ -108,6 +108,9 @@ Route::middleware(['auth'])->group(function () {
     // Admin - Analytics
     Route::get('/admin/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
 
+    // Admin - Borrow
+    Route::get('admin/borrow', [BorrowController::class, 'show'])->name('admin.borrow');
+
     // Profile (picture and bio)
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/edit/{id}', [ProfileController::class, 'edit'])->name('edit');
@@ -124,5 +127,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/support/create', [SupportController::class, 'create'])->name('support.create');
     Route::post('/support', [SupportController::class, 'store'])->name('support.store');
     Route::delete('/support/{content}', [SupportController::class, 'destroy'])->name('support.destroy');
+
+    // backup route
+    Route::get('/backup', [BackupController::class, 'index'])->name('backup.index');
+    Route::post('/backup/create', [BackupController::class, 'create'])->name('backup.create');
+    Route::get('/backup/download/{file}', [BackupController::class, 'download'])->name('backup.download');
+    Route::post('/backup/restore/{file}', [BackupController::class, 'restore'])->name('backup.restore');
+
 });
 

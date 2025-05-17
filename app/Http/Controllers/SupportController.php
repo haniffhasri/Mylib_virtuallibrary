@@ -14,15 +14,16 @@ class SupportController extends Controller
     {
         $faqs = Support::where('support_type', 'faq')->get();
         $videos = Support::where('support_type', 'embedded_video')->get();
+        $contents = Support::latest()->paginate(10);
 
-        return view('support.index', compact('faqs', 'videos'));
+        return view('support.index', compact('faqs', 'videos', 'contents'));
     }
 
     // Admin-facing: Show create form
     public function create()
     {
-        $this->authorizeAdmin();
-        return view('admin.support.create');
+        // $this->authorizeAdmin();
+        return view('support.create');
     }
 
     // Admin-facing: Store new support content
@@ -38,7 +39,7 @@ class SupportController extends Controller
 
         Support::create($request->all());
 
-        return redirect()->route('admin.support.index')->with('success', 'Support content added.');
+        return redirect()->route('support.index')->with('success', 'Support content added.');
     }
 
     // Admin-facing: Delete content

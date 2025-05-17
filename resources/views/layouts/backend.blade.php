@@ -38,7 +38,7 @@
 					</a>
 				</li>
 				<li class="sidebar-item">
-					<a class="sidebar-link" href="{{ route('borrow.show') }}">
+					<a class="sidebar-link" href="{{ route('admin.borrow') }}">
 						<i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Borrow List</span>
 					</a>
 				</li>
@@ -55,11 +55,6 @@
 				<li class="sidebar-item">
 					<a class="sidebar-link" href="{{ route('forum.create') }}">
 						<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Create a Forum</span>
-					</a>
-				</li>
-				<li class="sidebar-item">
-					<a class="sidebar-link" href="{{ route('notifications.index') }}">
-						<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Notifications</span>
 					</a>
 				</li>
 				@if(Auth::user()?->usertype === 'admin')
@@ -80,12 +75,12 @@
 					</li>
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('support.index') }}">
-							<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Support</span>
+							<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Support View</span>
 						</a>
 					</li>
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{ route('support.create') }}">
-							<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Add Content</span>
+						<a class="sidebar-link" href="{{ route('backup.index') }}">
+							<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Backup</span>
 						</a>
 					</li>
 				@endif
@@ -99,10 +94,15 @@
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
 						<li class="nav-item dropdown">
-							<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Notifications</a>
+							<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+								Notifications
+								@if($headerNotifications->count() > 0)
+									<span class="badge bg-danger">{{ $headerNotifications->count() }}</span>
+								@endif
+							</a>
 
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-								{{-- @forelse($notifications as $notification)
+								@forelse($headerNotifications as $notification)
                                     <div class="list-group-item d-flex justify-content-between align-items-center {{ $notification->read_at ? '' : 'bg-light' }}">
                                         <div>
                                             {{ $notification->data['message'] }}
@@ -113,7 +113,8 @@
                                     </div>
                                 @empty
                                     <p class="list-group-item">No notifications found.</p>
-                                @endforelse --}}
+                                @endforelse
+								<a class="list-group-item" href="{{ route('notifications.index') }}">View All</a>
 							</div>
 						</li>
 						<li class="nav-item dropdown">
