@@ -2,7 +2,13 @@
 
 @section('content')  
 
-
+<form method="GET" action="{{ route('admin.user') }}" class="mb-4">
+    <label for="sort">Sort by:</label>
+    <select name="sort" id="sort" onchange="this.form.submit()">
+        <option value="latest" {{ request('sort') === 'latest' ? 'selected' : '' }}>Latest</option>
+        <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Oldest</option>
+    </select>
+</form>
 <div class="mb-3">
     <h4 class="h3 d-inline align-middle">List of Users</h4>
 </div>
@@ -10,9 +16,6 @@
     <table class="w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" class="px-6 py-3">
-                    User ID
-                </th>
                 <th scope="col" class="px-6 py-3">
                     User Name
                 </th>
@@ -33,9 +36,6 @@
         <tbody>
             @foreach ($users as $singleUser)
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                    {{ $singleUser->id }}
-                </th>
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                     {{ $singleUser->name }}
                 </th>

@@ -7,9 +7,27 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function index(){
-        $users = User::all();
-        return view("admin.user",compact("users"));
+    public function index(Request $request){
+        $sort = $request->query('sort', 'latest');
+
+        $users = User::orderByRaw("
+                    CASE usertype
+                        WHEN 'admin' THEN 1
+                        WHEN 'librarian' THEN 2
+                        WHEN 'user' THEN 3
+                        ELSE 4
+                    END
+                ")
+                ->when($sort === 'latest', function ($query) {
+                    return $query->orderBy('created_at', 'desc');
+                })
+                ->when($sort === 'oldest', function ($query) {
+                    return $query->orderBy('created_at', 'asc');
+                })
+                ->paginate(10)
+                ->withQueryString();
+
+        return view("admin.user", compact("users"));
     }
 
     public function delete($id){
