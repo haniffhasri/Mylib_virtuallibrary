@@ -23,5 +23,5 @@
                     </x-card>
                 </li>
         @endforeach 
-            </ul>
+    </ul>
 @endsection

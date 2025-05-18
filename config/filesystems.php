@@ -57,6 +57,11 @@ return [
             'throw' => false,
         ],
 
+        'backup_local' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private'),
+        ],
+
     ],
 
     /*

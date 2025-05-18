@@ -10,7 +10,7 @@ class BackupController extends Controller
 {
     public function index()
     {
-        $backups = Storage::disk('local')->files('Laravel');
+        $backups = Storage::disk('local')->files('private');
         return view('backup.index', compact('backups'));
     }
 
@@ -22,7 +22,7 @@ class BackupController extends Controller
 
     public function download($file)
     {
-        $path = storage_path("app/Laravel/{$file}");
+        $path = storage_path("app/private/{$file}");
         if (!file_exists($path)) {
             abort(404);
         }
@@ -32,12 +32,12 @@ class BackupController extends Controller
 
     public function restore($file)
     {
-        $path = storage_path("app/Laravel/{$file}");
-        $dbName = config('database.connections.mysql.database');
-        $username = config('database.connections.mysql.username');
-        $password = config('database.connections.mysql.password');
+        $path = storage_path("app/private/{$file}");
+        $dbName = config('database.connections.pgsql.database');
+        $username = config('database.connections.pgsql.username');
+        $password = config('database.connections.pgsql.password');
 
-        $command = "mysql -u {$username} -p{$password} {$dbName} < {$path}";
+        $command = "pgsql -u {$username} -p{$password} {$dbName} < {$path}";
         exec($command);
 
         return redirect()->back()->with('success', 'Database restored.');

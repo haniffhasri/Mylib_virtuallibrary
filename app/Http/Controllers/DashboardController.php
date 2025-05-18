@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Borrow;
 
 class DashboardController extends Controller
 {
@@ -28,7 +29,8 @@ class DashboardController extends Controller
     {
         $users = Auth::user();
         if (Auth::id()) {
-                return view('dashboard', compact('users'));
+            $borrows = Borrow::with('book')->where('is_active', true)->paginate(3);
+            return view('dashboard', compact('users', 'borrows'));
         }
         else {
             abort(403, 'Unauthorized');
@@ -46,5 +48,4 @@ class DashboardController extends Controller
         $user = User::findOrFail($id);
         return view('admin.view', ['user' => $user]);
     }
- 
 }

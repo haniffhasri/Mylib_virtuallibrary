@@ -31,6 +31,27 @@
                         </div>
                     </div>
                 </div>
+                @if(Auth::user()->usertype === 'user')
+                    <div>
+                        <h4 class="py-6">Borrowed Books</h4>
+                        <ul class="borrowed-book list-none">
+                            @foreach($borrows as $borrowed)
+                                    <li>
+                                        <x-card href="{{ route('book.show', $borrowed->book_id) }}">
+                                            <div class="card-list">
+                                                <img src="{{ asset('image/' . $borrowed->book->image_path) }}" alt="{{ $borrowed->book->book_title }}">
+                                                <p>Book: {{ $borrowed->book->book_title }}</p>
+                                                <a class="btn btn-primary" href="{{ asset('media/' . $borrowed->book->media_path) }}" target="_blank" id="media_label">
+                                                    {{ $borrowed->book->format === 'audio' ? 'Listen to Audiophile' : 'Read PDF' }}
+                                                </a>         
+                                            </div>               
+                                        </x-card>
+                                    </li>
+                            @endforeach 
+                            <a href="{{ route('borrow.index') }}" class="button center">See more</a>
+                        </ul>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

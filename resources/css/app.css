@@ -13611,6 +13611,7 @@ span.flatpickr-weekday {
     display: flex !important;
     gap: 3rem;
     flex-wrap: wrap;
+    flex-direction: column;
 }
 
 .borrowed-book .card {

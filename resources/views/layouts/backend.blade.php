@@ -29,58 +29,58 @@
 				</li>
 				<li class="sidebar-item">
 					<a class="sidebar-link" href="{{ route('dashboard') }}">
-						<i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+						<span class="align-middle">Dashboard</span>
 					</a>
 				</li>
 				<li class="sidebar-item">
 					<a class="sidebar-link" href="{{ route('book.index') }}">
-						<i class="align-middle" data-feather="book"></i> <span class="align-middle">Book List</span>
+						<span class="align-middle">Book List</span>
 					</a>
 				</li>
 				<li class="sidebar-item">
 					<a class="sidebar-link" href="{{ route('admin.borrow') }}">
-						<i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Borrow List</span>
+						<span class="align-middle">Borrow List</span>
 					</a>
 				</li>
 				<li class="sidebar-item">
 					<a class="sidebar-link" href="{{ route('book.create') }}">
-						<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Insert New Book</span>
+						<span class="align-middle">Insert New Book</span>
 					</a>
 				</li>
 				<li class="sidebar-item">
 					<a class="sidebar-link" href="{{ route('forum.index') }}">
-						<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Forum List</span>
+						<span class="align-middle">Forum List</span>
 					</a>
 				</li>
 				<li class="sidebar-item">
 					<a class="sidebar-link" href="{{ route('forum.create') }}">
-						<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Create a Forum</span>
+						<span class="align-middle">Create a Forum</span>
 					</a>
 				</li>
 				@if(Auth::user()?->usertype === 'admin')
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('admin.user') }}">
-							<i class="align-middle" data-feather="user"></i> <span class="align-middle">User List</span>
+							<span class="align-middle">User List</span>
 						</a>
 					</li>
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('analytics.index') }}">
-							<i class="align-middle" data-feather="user"></i> <span class="align-middle">Analytics</span>
+							<span class="align-middle">Analytics</span>
 						</a>
 					</li>
 					<li class="sidebar-item">
 						<a class="sidebar-link"href="{{ route('contact-us.show', ['id' => 1]) }}">
-							<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Contact Us</span>
+							<span class="align-middle">Contact Us</span>
 						</a>
 					</li>
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('support.index') }}">
-							<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Support View</span>
+							<span class="align-middle">Support View</span>
 						</a>
 					</li>
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('backup.index') }}">
-							<i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Backup</span>
+							<span class="align-middle">Backup</span>
 						</a>
 					</li>
 				@endif

@@ -15,7 +15,7 @@
 
     <hr>
 
-    <h5>Available Backups</h5>
+    {{-- <h5>Available Backups</h5>
     <table class="table">
         <thead>
             <tr>
@@ -38,6 +38,6 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
+    </table> --}}
 </div>
 @endsection
