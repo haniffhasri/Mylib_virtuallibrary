@@ -16,12 +16,12 @@ class NewCommentNotification extends Notification
         return ['database'];
     }
 
-    public function toArray($notifiable)
-    {
+    public function toArray($notifiable){
         return [
             'message' => "New comment posted in thread: {$this->comment->thread->title}",
-            'comment_id' => $this->comment->id,
-            'thread_id' => $this->comment->thread_id,
+            'type' => 'comment',
+            'resource_id' => $this->comment->id,
+            'url' => route('comments.show', $this->comment->id),
         ];
     }
 }

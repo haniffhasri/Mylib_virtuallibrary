@@ -1,7 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
-    <h1>Update Book</h1>
+    <h4>Update Book</h4>
     <form method="POST" action="{{ route('book.update',$book->id) }}"  enctype="multipart/form-data">
         @csrf
         <div class="form-group mb-3">

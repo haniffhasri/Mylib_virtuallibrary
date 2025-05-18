@@ -6,11 +6,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Support;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 class SupportController extends Controller
 {
     // User-facing: Show support page
-    public function showSupportPage()
+    public function index()
     {
         $faqs = Support::where('support_type', 'faq')->get();
         $videos = Support::where('support_type', 'embedded_video')->get();
@@ -19,20 +18,15 @@ class SupportController extends Controller
         return view('support.index', compact('faqs', 'videos', 'contents'));
     }
 
-    // Admin-facing: Show create form
     public function create()
     {
-        // $this->authorizeAdmin();
         return view('support.create');
     }
 
-    // Admin-facing: Store new support content
     public function store(Request $request)
     {
-        // $this->authorizeAdmin();
-
         $request->validate([
-            'title' => 'required|string|max:255',
+            'support_title' => 'required',
             'support_type' => 'required|in:faq,embedded_video',
             'content' => 'nullable|string',
         ]);
@@ -42,11 +36,8 @@ class SupportController extends Controller
         return redirect()->route('support.index')->with('success', 'Support content added.');
     }
 
-    // Admin-facing: Delete content
     public function destroy(Support $content)
     {
-        // $this->authorizeAdmin();
-
         $content->delete();
 
         return back()->with('success', 'Support content deleted.');

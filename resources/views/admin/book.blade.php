@@ -2,12 +2,12 @@
 
 @section('content')    
 <div>
-        <h2>Available Books</h2>
+        <h4>Available Books</h4>
         <ul class="book-list">
             @foreach ($book as $book_item)
             <li>
                 <x-card href="{{ route('book.show', $book_item->id) }}">
-                        <h3>{{ $book_item->book_title }}</h3>
+                        <h4>{{ $book_item->book_title }}</h4>
                 </x-card>
             </li>
             @endforeach        

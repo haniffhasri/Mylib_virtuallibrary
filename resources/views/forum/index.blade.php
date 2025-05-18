@@ -10,12 +10,20 @@
 @extends($layout)
 
 @section('content')
-<ul class="book-list">
+<h4>Forum List</h4>
+<form method="GET" action="{{ route('forum.index') }}" class="mb-4">
+    <label for="sort">Sort by:</label>
+    <select name="sort" id="sort" onchange="this.form.submit()">
+        <option value="latest" {{ request('sort') === 'latest' ? 'selected' : '' }}>Latest</option>
+        <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Oldest</option>
+    </select>
+</form>
+<ul class="forum-list list-none">
     @foreach ($forum as $forums)
         <li>
             <x-card href="{{ route('forum.show', $forums->slug) }}">
                 <div class="card-list">
-                    <h3>{{ $forums->forum_title }}</h3>
+                    <h4>{{ $forums->forum_title }}</h4>
                 </div>
             </x-card>
         </li>

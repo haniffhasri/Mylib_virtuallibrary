@@ -14,7 +14,7 @@
 
     <!-- Thread Header -->
     <div class="mb-4 p-4 bg-light rounded shadow-sm">
-        <h2>{{ $thread->thread_title }}</h2>
+        <h4>{{ $thread->thread_title }}</h4>
         <p class="text-muted">
             Posted by {{ $thread->user->name }} • {{ $thread->created_at->diffForHumans() }}
         </p>

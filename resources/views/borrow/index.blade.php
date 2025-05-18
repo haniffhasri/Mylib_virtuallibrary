@@ -7,17 +7,21 @@
             {{ session()->get('message') }}
         </div>
     @endif
-    <h2>Borrowed Books</h2>
-    <div class="borrowed-book">
+    
+    <h4>Borrowed Books</h4>
+    <ul class="borrowed-book list-none">
         @foreach($borrow as $borrowed)
                 <li>
                     <x-card href="{{ route('book.show', $borrowed->book_id) }}">
-                        <p>Book: {{ $borrowed->book->book_title }}</p>
-                        <a class="btn btn-primary" href="{{ asset('media/' . $borrowed->book->media_path) }}" target="_blank" id="media_label">
-                            {{ $borrowed->book->format === 'audio' ? 'Listen to Audiophile' : 'Read PDF' }}
-                        </a>                        
+                        <div class="card-list">
+                            <img src="{{ asset('image/' . $borrowed->book->image_path) }}" alt="{{ $borrowed->book->book_title }}">
+                            <p>Book: {{ $borrowed->book->book_title }}</p>
+                            <a class="btn btn-primary" href="{{ asset('media/' . $borrowed->book->media_path) }}" target="_blank" id="media_label">
+                                {{ $borrowed->book->format === 'audio' ? 'Listen to Audiophile' : 'Read PDF' }}
+                            </a>         
+                        </div>               
                     </x-card>
                 </li>
         @endforeach 
-    </div>
+            </ul>
 @endsection

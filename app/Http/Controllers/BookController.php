@@ -13,8 +13,17 @@ use function Pest\Laravel\delete;
 
 class BookController extends Controller
 {
-    public function index(){
-        $books = Book::orderBy('created_at', 'desc')->paginate(6);
+    public function index(Request $request){
+        $sort = $request->query('sort', 'latest');
+
+        $books = Book::when($sort === 'latest', function ($query) {
+                    return $query->orderBy('created_at', 'desc');
+                })
+                ->when($sort === 'oldest', function ($query) {
+                    return $query->orderBy('created_at', 'asc');
+                })
+                ->paginate(10)
+                ->withQueryString();
 
         $activeBorrowedBooks = collect(); 
         if (Auth::check()) {
@@ -23,9 +32,14 @@ class BookController extends Controller
                 ->pluck('book_id');
         }
 
+        $authors = Book::select('author')->distinct()->pluck('author');
+        $genres = Book::select('genre')->distinct()->pluck('genre');
+
         return view('book.index', [
             'book' => $books,
-            'borrowedBookIds' => $activeBorrowedBooks
+            'borrowedBookIds' => $activeBorrowedBooks,
+            'authors' => $authors,
+            'genres' => $genres,
         ]);
     }
 
@@ -197,6 +211,9 @@ class BookController extends Controller
                 ->pluck('book_id');
         }
     
+        $authors = Book::select('author')->distinct()->pluck('author');
+        $genres = Book::select('genre')->distinct()->pluck('genre');
+
         SearchLog::create([
             'term' => $query,
             'results' => $book->total(),
@@ -207,9 +224,53 @@ class BookController extends Controller
         return view('book.index', [
             'book' => $book,
             'query' => $query,
-            'borrowedBookIds' => $activeBorrowedBooks
+            'borrowedBookIds' => $activeBorrowedBooks,
+            'genres' => $genres,
+            'authors' => $authors,
         ]);
     }
-    
 
+    public function filter(Request $request){
+        $author = $request->input('author');
+        $genre = $request->input('genre');
+        $format = $request->input('format');
+        $status = $request->input('status');
+    
+        $book = Book::query();
+
+        if ($author) {
+            $book->where('author', $author);
+        }
+    
+        if ($genre) {
+            $book->where('genre', $genre);
+        }
+    
+        if ($format) {
+            $book->where('format', $format);
+        }
+    
+        if ($status) {
+            $book->where('status', $status === 'true');
+        }
+    
+        $book = $book->paginate(6)->withQueryString();
+
+        $activeBorrowedBooks = collect(); 
+        if (Auth::check()) {
+            $activeBorrowedBooks = Borrow::where('user_id', Auth::id())
+                ->where('is_active', true)
+                ->pluck('book_id');
+        }
+
+        $authors = Book::select('author')->distinct()->pluck('author');
+        $genres = Book::select('genre')->distinct()->pluck('genre');
+    
+        return view('book.index', [
+            'book' => $book,
+            'authors' => $authors,
+            'genres' => $genres,
+            'borrowedBookIds' => $activeBorrowedBooks,
+        ]);
+    }
 }

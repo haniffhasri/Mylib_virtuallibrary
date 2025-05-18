@@ -2,7 +2,7 @@
 
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <h2>Insert New Book</h2>
+    <h4>Insert New Book</h4>
 
     <form method="POST" action="{{ route('book.store') }}"  enctype="multipart/form-data">
         @csrf

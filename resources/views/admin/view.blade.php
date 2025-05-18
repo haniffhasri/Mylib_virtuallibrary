@@ -1,8 +1,7 @@
 @extends('layouts.backend')
 
 @section('content')
-<h1>This is ADMIN VIEW PAGE</h1>
-    <h2>Viewing Dashboard of {{ $user->name }}</h2>
+    <h4>Viewing Dashboard of {{ $user->name }}</h4>
     <div class="profile-show">
         <p>User Name: {{ $user->name }}</p>
         <p>Email: {{ $user->email }}</p>

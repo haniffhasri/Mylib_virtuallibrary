@@ -11,7 +11,7 @@
 
 @section('content')
     <div class="book-show">
-        <h2>{{ $book->book_title }}</h2>
+        <h4>{{ $book->book_title }}</h4>
         
         <img src="{{ asset('image/' . $book->image_path) }}" alt="Cover Image" width="200">
 

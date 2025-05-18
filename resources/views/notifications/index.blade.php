@@ -11,8 +11,19 @@
 
 @section('content')
     <div class="container">
-        <h2>Notifications</h2>
+        <h4>Notifications</h4>
 
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+        @if(session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+        @endif
+        
         @if(Auth::user()->unreadNotifications()->count() > 0)
             <form action="{{ route('notifications.readAll') }}" method="POST">
                 @csrf

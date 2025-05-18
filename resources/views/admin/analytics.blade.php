@@ -4,13 +4,14 @@
 <div class="container-fluid p-0">
 
     <div class="mb-3">
-        <h1 class="h3 d-inline align-middle">Analytics Dashboard</h1>
+        <h4 class="h3 d-inline align-middle">Analytics Dashboard</h4>
     </div>
+    <a href="{{ route('analytics.download') }}" class="btn btn-primary mb-3">Download Report</a>
     <div class="row">
         <div class="col-12 col-lg-6">
             <div class="card flex-fill w-100">
                 <div class="card-header">
-                    <h5 class="card-title">Visitor Activity</h5>
+                    <h4 class="card-title">Visitor Activity</h4>
                 </div>
                 <div class="card-body">
                     <div class="chart">
@@ -23,7 +24,7 @@
         <div class="col-12 col-lg-6">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title">Top 5 Borrowed Books</h5>
+                    <h4 class="card-title">Top 5 Borrowed Books</h4>
                 </div>
                 <div class="card-body">
                     <div class="chart">
@@ -36,7 +37,7 @@
         <div class="col-12 col-lg-6">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title">Forum Engagement</h5>
+                    <h4 class="card-title">Forum Engagement</h4>
                 </div>
                 <div class="card-body">
                     <div class="chart">
@@ -50,12 +51,25 @@
             <div class="card">
                 <div class="card-header">
                     <div class="card-header">
-                        <h5 class="card-title">Top Search Terms</h5>
+                        <h4 class="card-title">Top Search Terms</h4>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="chart">
                         <canvas id="searchChart" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="card flex-fill w-100">
+                <div class="card-header">
+                    <h4 class="card-title">Registration Trend</h4>
+                </div>
+                <div class="card-body">
+                    <div class="chart">
+                        <canvas id="RegistrationTrendChart" height="100"></canvas>
                     </div>
                 </div>
             </div>
@@ -131,6 +145,33 @@
             }]
         },
         options: { responsive: true }
+    });
+
+    // registration trend
+    const regData = @json($registration_users);
+    const regLabels = regData.map(item => item.month);
+    const regCounts = regData.map(item => item.total);
+
+    new Chart(document.getElementById('RegistrationTrendChart'), {
+        type: 'line',
+        data: {
+            labels: regLabels,
+            datasets: [{
+                label: 'Monthly Registrations',
+                data: regCounts,
+                borderColor: '#ff9800',
+                fill: false,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
     });
 </script>
 @endpush

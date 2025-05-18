@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Backup & Restore</h2>
+    <h4>Backup & Restore</h4>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
@@ -15,7 +15,7 @@
 
     <hr>
 
-    <h4>Available Backups</h4>
+    <h5>Available Backups</h5>
     <table class="table">
         <thead>
             <tr>

@@ -12,7 +12,7 @@
 @section('content')
     <div class="container-fluid p-0">
         <div class="mb-3">
-            <h1 class="h3 d-inline align-middle">Create New Forum</h1>
+            <h4 class="h3 d-inline align-middle">Create New Forum</h4>
         </div>  
         <div class="row">
             <div class="col-12 col-lg-6">

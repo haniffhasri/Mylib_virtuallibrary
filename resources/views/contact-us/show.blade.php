@@ -12,17 +12,17 @@
 @section('content')
     <div class="container">
         <div class="mb-3">
-            <h1 class="h3 d-inline align-middle">Contact Us</h1>
+            <h4 class="h3 d-inline align-middle">Contact Us</h4>
         </div>
         <div class="mb-4 p-4 bg-light rounded shadow-sm">
-            <h2><a href="mailto:{{ $contact->email }}">{{ $contact->email }}</a></h2>
-            <h2><a href="tel:{{ $contact->contact }}">{{ $contact->contact }}</a></h2>
+            <p><a href="mailto:{{ $contact->email }}">{{ $contact->email }}</a></p>
+            <p><a href="tel:{{ $contact->contact }}">{{ $contact->contact }}</a></p>
         </div>
         @auth
             @if(Auth::user()->usertype === 'admin') 
                 <div class="container-fluid p-0">
                     <div class="mb-3">
-                        <h1 class="h3 d-inline align-middle">Update Contact Information</h1>
+                        <h4 class="h3 d-inline align-middle">Update Contact Information</h4>
                     </div> 
                     <div class="row">
                         <div class="col-12 col-lg-6">

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\DashboardController;
@@ -33,13 +34,22 @@ Route::get('logout', function () {
 // Auth routes
 Auth::routes();
 
+// Landing Page
+Route::get('/', [Controller::class, 'landingPage'])->name('welcome');
+
 // Public Book Routes
 Route::prefix('book')->name('book.')->group(function () {
     Route::get('/', [BookController::class, 'index'])->name('index');
     Route::get('/{id}', [BookController::class, 'show'])
         ->where('id', '[0-9]+')
         ->name('show');
+    Route::get('/search', [BookController::class, 'search'])->name('search');
+    Route::get('/filter', [BookController::class, 'filter'])->name('filter');
 });
+
+
+// support route
+Route::get('/support', [SupportController::class, 'index'])->name('support.index');
 
 // Forum Route
 Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
@@ -56,36 +66,18 @@ Route::post('/comments/update/{id}', [CommentController::class, 'update'])->name
 
 // ContactUs
 Route::get('/contact-us/{id}', [ContactController::class, 'show'])->name('contact-us.show');
-Route::post('/contact-us/update/{id}', [ContactController::class, 'update'])->name('contact-us.update');
-
-// support route
-Route::get('/support', [SupportController::class, 'showSupportPage'])->name('support.index');
 
 // Authenticated Routes
 Route::middleware(['auth'])->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
-    Route::get('/admin/user/{id}', [DashboardController::class, 'viewUser'])->name('admin.view');
-
-
-    // Book Routes (insert, update, delete, media actions)
-    Route::prefix('book')->name('book.')->group(function () {
-        Route::get('/insert', [BookController::class, 'create'])->name('create');
-        Route::post('/', [BookController::class, 'store'])->name('store');
-        Route::get('/edit/{id}', [BookController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}', [BookController::class, 'update'])->name('update');
-        Route::get('/destroy/{id}', [BookController::class, 'destroy'])->name('destroy');
-        Route::delete('/{id}/delete-media', [BookController::class, 'deleteMedia'])->name('deleteMedia');
-        Route::delete('/{id}/delete-image', [BookController::class, 'deleteImage'])->name('deleteImage');
-        Route::get('/search', [BookController::class, 'search'])->name('search');
-    });
 
     // Borrow
     Route::prefix('borrow')->name('borrow.')->group(function () {
         Route::get('/', [BorrowController::class, 'index'])->name('index');
         Route::get('/{id}', [BorrowController::class, 'borrow_book'])->name('book');
-        Route::delete('/delete/{id}', [BorrowController::class, 'delete'])->name('delete');
+        Route::get('/show', [BorrowController::class, 'show'])->name('show');
     });
 
     // thread
@@ -99,17 +91,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('/notifications/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll'); 
-
-    // Admin - User Management
-    Route::get('admin/user', [UserController::class, 'index'])->name('admin.user');
-    Route::put('admin/update-role/{id}', [UserController::class, 'updateRole'])->name('user.updateRole');
-    Route::delete('admin/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
-
-    // Admin - Analytics
-    Route::get('/admin/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
-
-    // Admin - Borrow
-    Route::get('admin/borrow', [BorrowController::class, 'show'])->name('admin.borrow');
+    Route::get('/notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
 
     // Profile (picture and bio)
     Route::prefix('user')->name('user.')->group(function () {
@@ -119,14 +101,50 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/profile-picture', [ProfileController::class, 'show'])->name('profile.picture.show');
     Route::post('/profile-picture', [ProfileController::class, 'store'])->name('profile.picture.store');
+});
 
-    Route::get('/support', [SupportController::class, 'showSupportPage'])->name('support.index');
+// Admin and librarian route
+Route::middleware(['auth', 'AdminLibrarianAccess'])->group(function () {
+    // Book Routes (insert, update, delete, media actions)
+    Route::prefix('book')->name('book.')->group(function () {
+        Route::get('/insert', [BookController::class, 'create'])->name('create');
+        Route::post('/', [BookController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [BookController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [BookController::class, 'update'])->name('update');
+        Route::get('/destroy/{id}', [BookController::class, 'destroy'])->name('destroy');
+        Route::delete('/{id}/delete-media', [BookController::class, 'deleteMedia'])->name('deleteMedia');
+        Route::delete('/{id}/delete-image', [BookController::class, 'deleteImage'])->name('deleteImage');
+    });
+
+    // Borrow route
+    Route::delete('borrow/delete/{id}', [BorrowController::class, 'delete'])->name('borrow.delete');
+
+});
+
+// Admin only route
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    // view User as Admin
+    Route::get('/admin/user/{id}', [DashboardController::class, 'viewUser'])->name('admin.view');
+
+    // Admin - User Management
+    Route::get('admin/user', [UserController::class, 'index'])->name('admin.user');
+    Route::put('admin/update-role/{id}', [UserController::class, 'updateRole'])->name('user.updateRole');
+    Route::delete('admin/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+
+    // Admin - Analytics
+    Route::get('/admin/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+    Route::get('/admin/analytics/download', [AnalyticsController::class, 'downloadReport'])->name('analytics.download');
+
+    // Admin - Borrow
+    Route::get('admin/borrow', [BorrowController::class, 'show'])->name('admin.borrow');
 
     // Admin support routes
-    // Route::get('/admin/support', [SupportController::class, 'adminIndex'])->name('admin.support.index');
     Route::get('/support/create', [SupportController::class, 'create'])->name('support.create');
     Route::post('/support', [SupportController::class, 'store'])->name('support.store');
     Route::delete('/support/{content}', [SupportController::class, 'destroy'])->name('support.destroy');
+
+    // Admin - Contact Us
+    Route::post('/contact-us/update/{id}', [ContactController::class, 'update'])->name('contact-us.update');
 
     // backup route
     Route::get('/backup', [BackupController::class, 'index'])->name('backup.index');
@@ -134,5 +152,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/backup/download/{file}', [BackupController::class, 'download'])->name('backup.download');
     Route::post('/backup/restore/{file}', [BackupController::class, 'restore'])->name('backup.restore');
 
+    // Admin - Contact Us
+    Route::post('/contact-us/update/{id}', [ContactController::class, 'update'])->name('contact-us.update');
 });
-

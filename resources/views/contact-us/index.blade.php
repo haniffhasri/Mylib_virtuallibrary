@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid p-0">
         <div class="mb-3">
-            <h1 class="h3 d-inline align-middle">Insert Contact Information</h1>
+            <h4 class="h3 d-inline align-middle">Insert Contact Information</h4>
         </div>  
         <div class="row">
             <div class="col-12 col-lg-6">

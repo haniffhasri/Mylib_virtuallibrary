@@ -12,8 +12,9 @@
 @section('content')
 <div class="container">
     <!-- Forum Info -->
-    <div class="mb-4 p-4 bg-light rounded shadow-sm">
-        <h2>{{ $forum->title }}</h2>
+    <div class="mb-4 py-4">
+        <h4>{{ $forum->forum_title }}</h4>
+        <h5 style="font-size: 1.2em; margin-bottom: 0;">Description</h5>
         <p class="text-muted">{{ $forum->forum_description }}</p>
     </div>
 
@@ -33,7 +34,7 @@
             <button type="submit" class="btn btn-primary">Post Thread</button>
         </form>
         @else
-            <p>Please <a href="{{ route('login') }}">log in</a> to create a thread.</p>
+            <h5>Please <a href="{{ route('login') }}">Sign in</a> to create a thread.</h5>
         @endauth
     </div>
 
@@ -44,9 +45,9 @@
         @forelse($forum->threads as $thread)
             <div class="card mb-3">
                 <div class="card-body">
-                    <h5>
+                    <p><b>
                         <a href="{{ route('threads.show', $thread->id) }}">{{ $thread->thread_title }}</a>
-                    </h5>
+                    </b></p>
                     <p class="text-muted mb-1">
                         Posted by {{ $thread->user->name }} • {{ $thread->created_at->diffForHumans() }}
                     </p>

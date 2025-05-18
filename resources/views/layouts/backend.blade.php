@@ -103,7 +103,7 @@
 
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 								@forelse($headerNotifications as $notification)
-                                    <div class="list-group-item d-flex justify-content-between align-items-center {{ $notification->read_at ? '' : 'bg-light' }}">
+                                    <div class="dropdown-item d-flex justify-content-between align-items-center {{ $notification->read_at ? '' : 'bg-light' }}">
                                         <div>
                                             {{ $notification->data['message'] }}
                                         </div>
@@ -112,9 +112,9 @@
                                         </a>
                                     </div>
                                 @empty
-                                    <p class="list-group-item">No notifications found.</p>
+                                    <p class="dropdown-item">No notifications found</p>
                                 @endforelse
-								<a class="list-group-item" href="{{ route('notifications.index') }}">View All</a>
+								<a class="dropdown-item" href="{{ route('notifications.index') }}">View All</a>
 							</div>
 						</li>
 						<li class="nav-item dropdown">
@@ -146,6 +146,44 @@
 	</div>
 
 	@stack('scripts')
+	<script>
+		function fetchNotifications() {
+			$.ajax({
+				url: '{{ route("notifications.fetch") }}',
+				type: 'GET',
+				success: function (data) {
+					let dropdown = $('.dropdown-menu[aria-labelledby="navbarDropdown"]');
+					dropdown.empty();
+	
+					if (data.count > 0) {
+						$('#navbarDropdown span.badge').remove();
+						$('#navbarDropdown').append(`<span class="badge bg-danger">${data.count}</span>`);
+					}
+	
+					if (data.notifications.length === 0) {
+						dropdown.append(`<p class="list-group-item">No notifications found.</p>`);
+					} else {
+						data.notifications.forEach(n => {
+							dropdown.append(`
+								<div class="list-group-item d-flex justify-content-between align-items-center bg-light">
+									<div>${n.data.message}</div>
+									<a href="/notifications/read/${n.id}" class="btn btn-sm btn-outline-success">Mark as Read & View</a>
+								</div>
+							`);
+						});
+					}
+	
+					dropdown.append(`<a class="list-group-item" href="{{ route('notifications.index') }}">View All</a>`);
+				}
+			});
+		}
+	
+		// Fetch notifications every 30 seconds
+		setInterval(fetchNotifications, 30000);
+		// Also fetch once on page load
+		$(document).ready(fetchNotifications);
+	</script>
+	
 </body>
 </html>
 @endif

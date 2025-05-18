@@ -9,8 +9,18 @@ use App\Models\Forum;
 
 class ForumController extends Controller
 {
-    public function index(){
-        $forum = Forum::orderBy('updated_at')->paginate('10');
+    public function index(Request $request){
+        $sort = $request->query('sort', 'latest');
+
+        $forum = Forum::when($sort === 'latest', function ($query) {
+            return $query->orderBy('created_at', 'desc');
+        })
+        ->when($sort === 'oldest', function ($query) {
+            return $query->orderBy('created_at', 'asc');
+        })
+        ->paginate(10)
+        ->withQueryString();
+        
         return view('forum.index', compact('forum'));
     }
 

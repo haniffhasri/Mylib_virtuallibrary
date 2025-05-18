@@ -4,7 +4,7 @@
 
 
 <div class="mb-3">
-    <h1 class="h3 d-inline align-middle">List of Users</h1>
+    <h4 class="h3 d-inline align-middle">List of Users</h4>
 </div>
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">

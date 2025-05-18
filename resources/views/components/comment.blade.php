@@ -5,10 +5,12 @@
 @endphp
 
 <div class="max-w-2xl mx-auto px-4">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-lg lg:text-2xl font-bold text-gray-900">Discussion</h2>
+    <div class="flex justify-center items-center">
+        <h4 class="text-center">Discussion</h4>
     </div>
-
+    @guest
+        <h5 class="text-center mb-6">Please <a href="{{ route('login') }}">Sign in</a> to comment.</h5>
+    @endguest
     @auth
         <form class="mb-6" action="{{ route('comments.store') }}" method="POST">
             @csrf

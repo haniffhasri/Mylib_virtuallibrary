@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('supports', function (Blueprint $table) {
             $table->id();
-            $table->text('Support_Detail')->nullable();
+            $table->text('support_title')->nullable();
+            $table->text('content')->nullable();
             $table->enum('support_type', ['faq', 'embedded_video']);
             $table->timestamps();
         });
