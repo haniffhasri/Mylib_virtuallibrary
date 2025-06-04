@@ -10,12 +10,12 @@
 @extends($layout)
 
 @section('content')
-    <div class="container-fluid p-0">
-        <div class="mb-3">
+    <div class="{{ Auth::user()->usertype === 'admin' || Auth::user()->usertype === 'librarian' ? '' : 'container-fluid card p-5 w-fit' }}">
+        <div class="mb-5">
             <h4 class="h3 d-inline align-middle">Create New Forum</h4>
         </div>  
         <div class="row">
-            <div class="col-12 col-lg-6">
+            <div>
                 <form class="max-w-sm" method="POST" action="{{ route('forum.store') }}"  enctype="multipart/form-data">
                     @csrf
                     <div class="mb-5">

@@ -1,7 +1,7 @@
 @props(['model'])
 
 @php
-    $usernames = Auth::check() ? \App\Models\User::pluck('name') : collect([]);
+    $usernames = Auth::check() ? \App\Models\User::pluck('username') : collect([]);
 @endphp
 
 <div class="max-w-2xl mx-auto px-4">

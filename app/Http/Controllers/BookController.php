@@ -7,6 +7,8 @@ use App\Models\Book;
 use App\Models\Borrow;
 use App\Models\User;
 use App\Models\SearchLog;
+use Illuminate\Support\Facades\Log;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 
 use function Pest\Laravel\delete;
@@ -99,178 +101,222 @@ class BookController extends Controller
     }
 
     public function update(Request $request, $id){
-        $book = Book::findOrFail($id);
-    
-        $book->book_title = $request->book_title;
-        $book->author = $request->author;
-        $book->book_description = $request->book_description;
-        $book->genre = $request->genre;
-        $book->format = $request->format;
-        $book->book_publication_date = $request->book_publication_date;
-    
-        // Delete media if requested
-        if ($request->delete_media == '1' && $book->media_path) {
-            $mediaPath = public_path('media/' . $book->media_path);
-            if (file_exists($mediaPath)) {
-                unlink($mediaPath);
+        try {
+            $request->validate([
+                'book_title' => 'required|string|max:255',
+                'author' => 'required|string|max:255',
+                'genre' => 'required|string|max:100',
+                'format' => 'required|in:pdf,audio',
+                'call_number' => 'required|string|unique:books,call_number,' . $id,
+                'item_id' => 'required|string|unique:books,item_id,' . $id,
+                'isbn' => 'required|string',
+                'book_publication_date' => 'required|date',
+                'media_path' => 'nullable|mimes:pdf,mp3|max:20480',
+                'image_path' => 'nullable|image|max:2048',
+            ]);
+
+            $book = Book::findOrFail($id);
+        
+            $book->book_title = $request->book_title;
+            $book->author = $request->author;
+            $book->book_description = $request->book_description;
+            $book->genre = $request->genre;
+            $book->format = $request->format;
+            $book->call_number = $request->call_number;
+            $book->item_id = $request->item_id;
+            $book->isbn = $request->isbn;
+            $book->book_publication_date = $request->book_publication_date;
+        
+            // Delete media if requested
+            if ($request->delete_media == '1' && $book->media_path) {
+                $mediaPath = public_path('media/' . $book->media_path);
+                if (file_exists($mediaPath)) {
+                    unlink($mediaPath);
+                }
+                $book->media_path = null;
             }
-            $book->media_path = null;
-        }
-    
-        // Delete image if requested
-        if ($request->delete_image == '1' && $book->image_path) {
-            $imagePath = public_path('image/' . $book->image_path);
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
+        
+            // Delete image if requested
+            if ($request->delete_image == '1' && $book->image_path) {
+                $imagePath = public_path('image/' . $book->image_path);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+                $book->image_path = null;
             }
-            $book->image_path = null;
+        
+            // Upload new media if any
+            if ($request->hasFile('media_path')) {
+                $media = $request->file('media_path');
+                $mediaName = time() . '.' . $media->getClientOriginalExtension();
+                $media->move('media', $mediaName);
+                $book->media_path = $mediaName;
+            }
+        
+            // Upload new image if any
+            if ($request->hasFile('image_path')) {
+                $image = $request->file('image_path');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move('image', $imageName);
+                $book->image_path = $imageName;
+            }
+        
+            // Set status based on whether media_path exists
+            $book->status = $book->media_path ? true : false;
+        
+            $book->save();
+        
+            return redirect('/book')->with('success', 'Book updated!');
+        } catch(Exception $e){
+            Log::error('Book update error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to update the book.');
         }
-    
-        // Upload new media if any
-        if ($request->hasFile('media_path')) {
-            $media = $request->file('media_path');
-            $mediaName = time() . '.' . $media->getClientOriginalExtension();
-            $media->move('media', $mediaName);
-            $book->media_path = $mediaName;
-        }
-    
-        // Upload new image if any
-        if ($request->hasFile('image_path')) {
-            $image = $request->file('image_path');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move('image', $imageName);
-            $book->image_path = $imageName;
-        }
-    
-        // Set status based on whether media_path exists
-        $book->status = $book->media_path ? true : false;
-    
-        $book->save();
-    
-        return redirect('/book')->with('success', 'Book updated!');
     }
     
     
 
     public function store(Request $request){
-        $request->validate([
-            'book_title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
-            'genre' => 'required|string|max:100',
-            'format' => 'required|in:pdf,audio',
-            'book_publication_date' => 'required|date',
-            'media_path' => 'nullable|mimes:pdf,mp3|max:20480', // 20MB max
-            'image_path' => 'nullable|image|max:2048', // 2MB max for image
-        ]);
+        try{
+            $request->validate([
+                'book_title' => 'required|string|max:255',
+                'author' => 'required|string|max:255',
+                'genre' => 'required|string|max:100',
+                'format' => 'required|in:pdf,audio',
+                'call_number' => 'required|string|unique:books,call_number',
+                'item_id' => 'required|string|unique:books,item_id',
+                'isbn' => 'required|string',
+                'book_publication_date' => 'required|date',
+                'media_path' => 'nullable|mimes:pdf,mp3|max:20480', // 20MB max
+                'image_path' => 'nullable|image|max:2048', // 2MB max for image
+            ]);
 
-        $book = new Book();
-        $book->book_title = $request->book_title;
-        $book->author = $request->author;
-        $book->book_description = $request->book_description;
-        $book->genre = $request->genre;
-        $book->format = $request->format;
-        $book->book_publication_date = $request->book_publication_date;
-        $book->status = $request->hasFile('media_path') ? true : false;
+            $book = new Book();
+            $book->book_title = $request->book_title;
+            $book->author = $request->author;
+            $book->book_description = $request->book_description;
+            $book->genre = $request->genre;
+            $book->format = $request->format;
+            $book->call_number = $request->call_number;
+            $book->item_id = $request->item_id;
+            $book->isbn = $request->isbn;
+            $book->initial_cataloguer = Auth::user()->username;
+            $book->book_publication_date = $request->book_publication_date;
+            $book->status = $request->hasFile('media_path') ? true : false;
 
-        if ($request->hasFile('media_path')) {
-            $media = $request->file('media_path');
-            $mediaName = time() . '.' . $media->getClientOriginalExtension();
-            $media->move(public_path('media'), $mediaName); // ✅ fixed this
-            $book->media_path = $mediaName;
+            if ($request->hasFile('media_path')) {
+                $media = $request->file('media_path');
+                $mediaName = time() . '.' . $media->getClientOriginalExtension();
+                $media->move(public_path('media'), $mediaName); 
+                $book->media_path = $mediaName;
+            }
+        
+            if ($request->hasFile('image_path')) {
+                $image = $request->file('image_path');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('image'), $imageName);
+                $book->image_path = $imageName;
+            }
+
+            $book->save();
+
+            return redirect('/book');
+        } catch (Exception $e) {
+            Log::error('Book store error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to save the book.')->withInput();
         }
-    
-        if ($request->hasFile('image_path')) {
-            $image = $request->file('image_path');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('image'), $imageName);
-            $book->image_path = $imageName;
-        }
-
-        $book->save();
-
-        return redirect('/book');
     }
 
     public function search(Request $request){
         $query = $request->input('q');
-    
-        $book = Book::whereRaw("search_vector @@ websearch_to_tsquery('english', ?)", [$query])
-            ->orderByRaw("ts_rank(search_vector, websearch_to_tsquery('english', ?)) DESC", [$query])
-            ->paginate(6);
-    
-        if ($book->isEmpty()) {
-            $book = Book::where('book_title', 'ILIKE', '%' . $query . '%')
-                ->orWhere('book_description', 'ILIKE', '%' . $query . '%')
-                ->paginate(6);
-        }
-
-        $activeBorrowedBooks = collect(); 
-        if (Auth::check()) {
-            $activeBorrowedBooks = Borrow::where('user_id', Auth::id())
-                ->where('is_active', true) 
-                ->pluck('book_id');
-        }
-    
-        $authors = Book::select('author')->distinct()->pluck('author');
-        $genres = Book::select('genre')->distinct()->pluck('genre');
-
-        SearchLog::create([
-            'term' => $query,
-            'results' => $book->total(),
-            'ip' => $request->ip(),
-            'user_id' => Auth::id(),
-        ]);
-    
-        return view('book.index', [
-            'book' => $book,
-            'query' => $query,
-            'borrowedBookIds' => $activeBorrowedBooks,
-            'genres' => $genres,
-            'authors' => $authors,
-        ]);
-    }
-
-    public function filter(Request $request){
         $author = $request->input('author');
         $genre = $request->input('genre');
         $format = $request->input('format');
         $status = $request->input('status');
-    
-        $book = Book::query();
 
+        $bookQuery = Book::query();
+
+        // If there's a keyword, apply full-text search
+        if ($query) {
+            $bookQuery->whereRaw("search_vector @@ websearch_to_tsquery('english', ?)", [$query])
+                    ->orderByRaw("ts_rank(search_vector, websearch_to_tsquery('english', ?)) DESC", [$query]);
+        }
+
+        // Apply filters (whether or not a keyword is present)
         if ($author) {
-            $book->where('author', $author);
+            $bookQuery->where('author', $author);
         }
-    
-        if ($genre) {
-            $book->where('genre', $genre);
-        }
-    
-        if ($format) {
-            $book->where('format', $format);
-        }
-    
-        if ($status) {
-            $book->where('status', $status === 'true');
-        }
-    
-        $book = $book->paginate(6)->withQueryString();
 
-        $activeBorrowedBooks = collect(); 
+        if ($genre) {
+            $bookQuery->where('genre', $genre);
+        }
+
+        if ($format) {
+            $bookQuery->where('format', $format);
+        }
+
+        if ($status !== null) {
+            $bookQuery->where('status', $status === 'true');
+        }
+
+        // Clone the query before fallback in case search returns no result
+        $books = $bookQuery->paginate(6)->withQueryString();
+
+        // If the result is empty and a keyword was given, fallback to ILIKE search
+        if ($query && $books->isEmpty()) {
+            $fallbackQuery = Book::query()
+                ->where('book_title', 'ILIKE', '%' . $query . '%')
+                ->orWhere('book_description', 'ILIKE', '%' . $query . '%')
+                ->orWhere('author', 'ILIKE', '%' . $query . '%');
+
+            // Reapply filters for fallback
+            if ($author) {
+                $fallbackQuery->where('author', $author);
+            }
+
+            if ($genre) {
+                $fallbackQuery->where('genre', $genre);
+            }
+
+            if ($format) {
+                $fallbackQuery->where('format', $format);
+            }
+
+            if ($status !== null) {
+                $fallbackQuery->where('status', $status === 'true');
+            }
+
+            $books = $fallbackQuery->paginate(6)->withQueryString();
+        }
+
+        // Borrowed book tracking
+        $activeBorrowedBooks = collect();
         if (Auth::check()) {
             $activeBorrowedBooks = Borrow::where('user_id', Auth::id())
                 ->where('is_active', true)
                 ->pluck('book_id');
         }
 
+        // Dropdown data
         $authors = Book::select('author')->distinct()->pluck('author');
         $genres = Book::select('genre')->distinct()->pluck('genre');
-    
+
+        // Log search
+        if ($query) {
+            SearchLog::create([
+                'term' => $query,
+                'results' => $books->total(),
+                'ip' => $request->ip(),
+                'user_id' => Auth::id(),
+                'type' => 'book',
+            ]);
+        }
+
         return view('book.index', [
-            'book' => $book,
-            'authors' => $authors,
-            'genres' => $genres,
+            'book' => $books,
+            'query' => $query,
             'borrowedBookIds' => $activeBorrowedBooks,
+            'genres' => $genres,
+            'authors' => $authors,
         ]);
     }
 }

@@ -95,6 +95,10 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => 'prefer',
+            'dump' => [
+                'dump_binary_path' => 'C:\Program Files\PostgreSQL\17\bin', // <-- Important
+                'use_single_transaction' => true, // Optional but recommended
+            ],
         ],
 
         'sqlsrv' => [

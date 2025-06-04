@@ -34,8 +34,8 @@
                         <td>{{ $content->support_title }}</td>
                         <td>{{ $content->content }}</td>
                         <td>{{ ucfirst(str_replace('_', ' ', $content->support_type)) }}</td>
-                        <td>
-                            <form method="POST" action="{{ route('support.destroy', $content) }}" onsubmit="return confirm('Are you sure?')">
+                        <td><a href="{{ route('support.edit', $content) }}" class="btn btn-sm btn-warning w-full mb-1">Edit</a>
+                            <form method="POST" action="{{ route('support.destroy', $content) }}" class="w-full show-confirm">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-sm btn-danger">Delete</button>

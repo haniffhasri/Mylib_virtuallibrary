@@ -15,7 +15,7 @@
                         <div class="col-md-6 mb-3">
                         <input type="file" name="profile_picture" accept="image/*" capture="environment" required>
                         </div>
-                        <div class="row ">
+                        <div class="col-10">
                             <button type="submit" class="btn btn-primary">Upload</button>
                             <button type="button" id="skipButton" class="btn btn-secondary ms-2">Skip</button>
                         </div>

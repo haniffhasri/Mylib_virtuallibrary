@@ -29,7 +29,8 @@ class DashboardController extends Controller
     {
         $users = Auth::user();
         if (Auth::id()) {
-            $borrows = Borrow::with('book')->where('is_active', true)->paginate(3);
+            $userId = Auth::id();
+            $borrows = Borrow::with('book')->where('user_id', $userId)->where('is_active', true)->paginate(3);
             return view('dashboard', compact('users', 'borrows'));
         }
         else {

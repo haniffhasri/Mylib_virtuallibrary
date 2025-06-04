@@ -8,7 +8,7 @@
         </div>
     @endif
     
-    <h4>Borrowed Books</h4>
+    <h4>My Borrowed Books</h4>
     <ul class="borrowed-book list-none">
         @foreach($borrow as $borrowed)
                 <li>

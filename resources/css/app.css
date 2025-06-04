@@ -1809,6 +1809,9 @@ progress {
         --bs-gutter-y: 6rem;
     }
 }
+.bg-dark-blue-premium {
+    background-color: #222e3c !important;
+}
 .table {
     --bs-table-color-type: initial;
     --bs-table-bg-type: initial;
@@ -6090,6 +6093,33 @@ p.dropdown-item {
 .mb-auto {
     margin-bottom: auto !important;
 }
+.mt-0 {
+    margin-top: 0 !important;
+}
+.mt-1 {
+    margin-top: 0.25rem !important;
+}
+.mt-2 {
+    margin-top: 0.5rem !important;
+}
+.mt-3 {
+    margin-top: 1rem !important;
+}
+.mt-4 {
+    margin-top: 1.5rem !important;
+}
+.mt-5 {
+    margin-top: 3rem !important;
+}
+.mt-6 {
+    margin-top: 4.5rem !important;
+}
+.mt-7 {
+    margin-top: 6rem !important;
+}
+.mt-auto {
+    margin-top: auto !important;
+}
 .ms-0 {
     margin-left: 0 !important;
 }
@@ -6957,6 +6987,10 @@ p.dropdown-item {
         var(--bs-white-rgb),
         var(--bs-bg-opacity)
     ) !important;
+}
+.hover\:bg-blue-500:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1)) !important;
 }
 .bg-body {
     --bs-bg-opacity: 1;
@@ -12114,6 +12148,9 @@ footer.footer .bottombar {
 a.list-group-item {
     text-decoration: none;
 }
+/* main {
+    min-height: 100vh;
+} */
 .main {
     background-color: #ebefff;
     min-height: 100vh;
@@ -12423,7 +12460,7 @@ a.sidebar-link svg {
     vertical-align: middle;
 }
 .text-sm {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
 }
 .text-lg {
     font-size: 0.925rem;
@@ -13630,6 +13667,9 @@ span.flatpickr-weekday {
     object-fit: cover;
     border-radius: 50%;
     border: solid 1px;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
 }
 
 /* landing page */
@@ -13730,6 +13770,23 @@ img.hero-model-img {
     padding-right: 40px;
 }
 
+.seventh .accordion-header:before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    background: url(https://amwayapps.amway2u.com/hybris/landing-page/GutReset/new/plus-icon.svg) no-repeat center center #24aadc;
+    background-size: 35%;
+    width: auto;
+    height: 30px;
+    aspect-ratio: 1;
+    border-radius: 100%;
+    box-shadow: 0 0 20px #afeaff;
+    filter: none;
+}
+
 .accordion-header:before {
     content: "";
     position: absolute;
@@ -13737,14 +13794,10 @@ img.hero-model-img {
     top: 0;
     bottom: 0;
     margin: auto 0;
-    background: url(https://amwayapps.amway2u.com/hybris/landing-page/GutReset/new/plus-icon.svg)
-        no-repeat center center #24aadc;
-    background-size: 35%;
-    width: auto;
-    height: 30px;
+    background: url(https://amwayapps.amway2u.com/hybris/landing-page/GutReset/new/plus-icon.svg) no-repeat center center #060504;
     aspect-ratio: 1;
-    border-radius: 100%;
-    box-shadow: 0 0 20px #afeaff;
+    filter: invert(100%);
+    box-shadow: unset;
 }
 
 .accordion-header * {
@@ -13891,6 +13944,11 @@ img.hero-model-img {
     margin: 0;
 }
 
+.w-fit {
+    width: -moz-fit-content;
+    width: fit-content !important;
+}
+
 /*------------------------------------- Animation -------------------------------------*/
 .element-fade-up.triggered {
     transform: translateY(0px);
@@ -13901,6 +13959,10 @@ img.hero-model-img {
     transform: translateY(30px);
     opacity: 0;
     transition: 0.8s;
+}
+
+button.block.w-full.text-left.px-4.py-2.text-sm.border-none.bg-white.text-gray-700:hover {
+    text-decoration: underline;
 }
 
 /*------------------------------------- Media Query -------------------------------------*/

@@ -33,7 +33,7 @@ class UserTagged extends Notification
         };
 
         return [
-            'message' => "{$this->comment->user->name} mentioned you in a comment.",
+            'message' => "{$this->comment->user->username} mentioned you in a comment.",
             'comment_id' => $this->comment->id,
             'url' => $route . '#comment-' . $this->comment->id,
         ];

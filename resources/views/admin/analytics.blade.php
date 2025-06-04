@@ -130,7 +130,7 @@
     });
 
     // Top Search Terms
-    const topSearches = @json($top_searches);
+    const topSearches = @json($book_search_trends);
     const searchLabels = topSearches.map(s => s.term);
     const searchCounts = topSearches.map(s => s.total);
 

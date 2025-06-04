@@ -20,6 +20,10 @@
         <p><strong>Written by:</strong> {{ $book->author }}</p>
         <p><strong>Format:</strong> {{ $book->format }}</p>
         <p><strong>Published:</strong> {{ $book->book_publication_date }}</p>
+        <p><strong>ISBN:</strong> {{ $book->isbn }}</p>
+        <p><strong>Item ID:</strong> {{ $book->item_id }}</p>
+        <p><strong>Call Number:</strong> {{ $book->call_number }}</p>
+        <p><strong>Initial Cataloguer:</strong>{{ $book->initial_cataloguer }}</p>
 
         @if ($book->status)
             <p><strong>Status: </strong>Available</p>

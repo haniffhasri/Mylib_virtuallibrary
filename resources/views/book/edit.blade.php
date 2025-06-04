@@ -17,6 +17,18 @@
             <textarea row="5" id="book_description" name="book_description" class="form-control">{{ $book->book_description }}</textarea>
         </div>
         <div class="form-group mb-3">
+            <label for="term_id">Item ID</label>
+            <input type="text" id="term_id" name="term_id" class="form-control" value="{{ $book->item_id }}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="call_number">Call Number</label>
+            <input type="text" id="call_number" name="call_number" class="form-control" value="{{ $book->call_number }}" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="isbn">ISBN</label>
+            <input type="text" id="isbn" name="isbn" class="form-control" value="{{ $book->isbn }}" required>
+        </div>
+        <div class="form-group mb-3">
             <label for="genre">Genre</label>
             <select name="genre" id="genre" required>
                 <optgroup label="Fiction">

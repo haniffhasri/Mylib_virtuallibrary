@@ -11,12 +11,23 @@ use Carbon\Carbon;
 class BorrowController extends Controller
 {
     public function index(){
-        $borrowed_book = Borrow::with('book')->where('is_active', true)->get();
+        $userId = Auth::id();
+        $borrowed_book = Borrow::with('book')->where('user_id', $userId)->where('is_active', true)->get();
         return view('borrow.index', ['borrow' => $borrowed_book]);
     }
 
-    public function show(){
-        $borrow = Borrow::all();
+    public function show(Request $request){
+        $sort = $request->query('sort', 'latest');
+
+        $borrow = Borrow::when($sort === 'latest', function ($query) {
+                    return $query->orderBy('created_at', 'desc');
+                })
+                ->when($sort === 'oldest', function ($query) {
+                    return $query->orderBy('created_at', 'asc');
+                })
+                ->paginate(10)
+                ->withQueryString();
+
         return view('admin.borrow', compact('borrow'));
     }
 

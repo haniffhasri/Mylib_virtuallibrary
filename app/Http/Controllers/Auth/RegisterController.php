@@ -8,8 +8,10 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Events\UserRegistered;
+use App\Models\LibrarianValidationCode;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendWelcomeMail;
+use Illuminate\Support\Facades\Log;
 class RegisterController extends Controller
 {
     /*
@@ -52,10 +54,22 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'validation_code' => [
+                'nullable',
+                'string',
+                function ($attribute, $value, $fail) {
+                    $code = LibrarianValidationCode::where('code', $value)->first();
+                    if (!$code || $code->used) {
+                        $fail('The validation code is invalid or has already been used.');
+                    }
+                },
+            ],
         ]);
     }
+
 
     /**
      * Create a new user instance after a valid registration.
@@ -65,17 +79,31 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        Log::info('Validation Code: ' . $data['validation_code']);
+
+        $usertype = 'user';
+
+        if (!empty($data['validation_code'])) {
+            $code = LibrarianValidationCode::where('code', $data['validation_code'])->where('used', false)->first();
+
+            if ($code) {
+                $usertype = 'librarian';
+                $code->used = true;
+                $code->save();
+            }
+        }
+
+        Log::info('Usertype assigned: ' . $usertype);
 
         // $welcomeMessage = "Welcome to our platform, {$user->name}!";
         // Mail::to($user->email)->send(new SendWelcomeMail($welcomeMessage));
 
-        event(new UserRegistered($user));
-
-        return $user;
+        return User::create([
+            'name' => $data['name'],
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'usertype' => $usertype,
+        ]);
     }
 }

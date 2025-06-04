@@ -18,6 +18,7 @@ use App\Http\Middleware\TrackVisitor;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\Admin\LibrarianValidationCodeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -44,7 +45,6 @@ Route::prefix('book')->name('book.')->group(function () {
         ->where('id', '[0-9]+')
         ->name('show');
     Route::get('/search', [BookController::class, 'search'])->name('search');
-    Route::get('/filter', [BookController::class, 'filter'])->name('filter');
 });
 
 
@@ -52,12 +52,16 @@ Route::prefix('book')->name('book.')->group(function () {
 Route::get('/support', [SupportController::class, 'index'])->name('support.index');
 
 // Forum Route
-Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
 Route::middleware(['auth'])->group(function () {
     Route::get('/forum/create', [ForumController::class, 'create'])->name('forum.create');
     Route::post('/forum', [ForumController::class, 'store'])->name('forum.store');
 });
+Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
+Route::get('/forum/search', [ForumController::class, 'search'])->name('forum.search');
 Route::get('/forum/{slug}', [ForumController::class, 'show'])->name('forum.show');
+
+// thread
+Route::get('/threads/{thread}', [ThreadController::class, 'show'])->name('threads.show');
 
 // Comments
 Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
@@ -85,7 +89,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit/{id}', [ThreadController::class, 'edit'])->name('forum.threads.edit');
     Route::post('/update/{id}', [ThreadController::class, 'update'])->name('forum.threads.update');
     Route::get('/delete/{id}', [ThreadController::class, 'delete'])->name('forum.threads.delete');
-    Route::get('/threads/{thread}', [ThreadController::class, 'show'])->name('threads.show');
 
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
@@ -116,6 +119,9 @@ Route::middleware(['auth', 'AdminLibrarianAccess'])->group(function () {
         Route::delete('/{id}/delete-image', [BookController::class, 'deleteImage'])->name('deleteImage');
     });
 
+    // Borrow List
+    Route::get('borrow', [BorrowController::class, 'show'])->name('admin.borrow');
+
     // Borrow route
     Route::delete('borrow/delete/{id}', [BorrowController::class, 'delete'])->name('borrow.delete');
 
@@ -124,24 +130,28 @@ Route::middleware(['auth', 'AdminLibrarianAccess'])->group(function () {
 // Admin only route
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     // view User as Admin
+    Route::get('/admin/user/search', [UserController::class, 'search'])->name('admin.user.search');
     Route::get('/admin/user/{id}', [DashboardController::class, 'viewUser'])->name('admin.view');
-
-    // Admin - User Management
     Route::get('admin/user', [UserController::class, 'index'])->name('admin.user');
     Route::put('admin/update-role/{id}', [UserController::class, 'updateRole'])->name('user.updateRole');
     Route::delete('admin/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+
+    // Admin - librarian code generator
+    Route::get('/admin/codes', [LibrarianValidationCodeController::class, 'index'])->name('admin.codes.index');
+    Route::post('/admin/codes', [LibrarianValidationCodeController::class, 'store'])->name('admin.codes.store');
+    Route::delete('/admin/codes/{id}', [LibrarianValidationCodeController::class, 'destroy'])->name('admin.codes.destroy');
 
     // Admin - Analytics
     Route::get('/admin/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
     Route::get('/admin/analytics/download', [AnalyticsController::class, 'downloadReport'])->name('analytics.download');
 
-    // Admin - Borrow
-    Route::get('admin/borrow', [BorrowController::class, 'show'])->name('admin.borrow');
-
     // Admin support routes
     Route::get('/support/create', [SupportController::class, 'create'])->name('support.create');
     Route::post('/support', [SupportController::class, 'store'])->name('support.store');
     Route::delete('/support/{content}', [SupportController::class, 'destroy'])->name('support.destroy');
+    Route::get('/support/{content}/edit', [SupportController::class, 'edit'])->name('support.edit');
+    Route::put('/support/{content}', [SupportController::class, 'update'])->name('support.update');
+
 
     // Admin - Contact Us
     Route::post('/contact-us/update/{id}', [ContactController::class, 'update'])->name('contact-us.update');

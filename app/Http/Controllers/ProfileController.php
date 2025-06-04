@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
@@ -45,26 +47,37 @@ class ProfileController extends Controller
     }
 
     public function update(Request $request, $id){
-        $users = User::findOrFail($id);
+        try {
+            $users = User::findOrFail($id);
 
-        $request->validate([
-            'name' => 'required',
-            'profile_picture' => 'image|mimes:jpg,jpeg,png|max:2048',
-            'bio' => 'nullable|string'
-        ]);
+            $request->validate([
+                'name' => 'required',
+                'profile_picture' => 'image|mimes:jpg,jpeg,png|max:2048',
+                'bio' => 'nullable|string',
+            ]);
 
-        $users->name = $request->name;
-        $users->bio = $request->bio;
+            $users->name = $request->name;
+            $users->bio = $request->bio;
 
-        if ($request->hasFile('profile_picture')) {
-            $profile_picture = $request->file('profile_picture');
-            $image = time() . '.' . $profile_picture->getClientOriginalExtension();
-            $profile_picture->move(public_path('profile_picture'), $image);
-            $users->profile_picture = $image;
+            if ($request->hasFile('profile_picture')) {
+                // Delete old file if exists
+                $oldProfile = public_path('profile_picture/' . $users->profile_picture);
+                if (file_exists($oldProfile) && $users->profile_picture != 'default.jpg') {
+                    unlink($oldProfile);
+                }
+
+                $profile_picture = $request->file('profile_picture');
+                $image = time() . '_profile.' . $profile_picture->getClientOriginalExtension();
+                $profile_picture->move(public_path('profile_picture'), $image);
+                $users->profile_picture = $image;
+            }
+
+            $users->save();
+
+            return redirect('dashboard')->with('success', 'Profile updated!');
+        } catch(Exception $e){
+            Log::error('Profile update error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to update your profile.');
         }
-
-        $users->save();
-
-        return redirect('dashboard')->with('success', 'Profile updated!');
     }
 }

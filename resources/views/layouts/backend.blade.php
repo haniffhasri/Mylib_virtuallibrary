@@ -14,6 +14,12 @@
 	@vite(['resources/css/app.css', 'resources/js/app.js'])
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+	<script src="//unpkg.com/alpinejs" defer></script>
 </head>
 
 <body>
@@ -83,6 +89,11 @@
 							<span class="align-middle">Backup</span>
 						</a>
 					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{ route('admin.codes.index') }}">
+							<span class="align-middle">Librarian code generator</span>
+						</a>
+					</li>
 				@endif
 			</div>
 		</nav>
@@ -93,7 +104,7 @@
 
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
-						<li class="nav-item dropdown">
+						<li class="nav-item dropdown flex items-center">
 							<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
 								Notifications
 								@if($headerNotifications->count() > 0)
@@ -101,7 +112,7 @@
 								@endif
 							</a>
 
-							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+							<div class="dropdown-menu w-max notification-dropdown dropdown-menu-end" aria-labelledby="navbarDropdown">
 								@forelse($headerNotifications as $notification)
                                     <div class="dropdown-item d-flex justify-content-between align-items-center {{ $notification->read_at ? '' : 'bg-light' }}">
                                         <div>
@@ -119,8 +130,9 @@
 						</li>
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown"><i class="align-middle" data-feather="settings"></i></a>
-							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-								<span class="text-dark">{{ Auth::user()->name }}</span>
+							<a class="nav-link dropdown-toggle d-none d-sm-inline-block flex gap-2 items-center" href="#" data-bs-toggle="dropdown">
+									<img src="{{ asset('profile_picture/' . Auth::user()->profile_picture) }}" class="object-cover w-10 h-10 bg-blue-500 rounded-full">
+									<span>{{ Auth::user()->username }}</span>
 							</a>
 							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
@@ -152,7 +164,7 @@
 				url: '{{ route("notifications.fetch") }}',
 				type: 'GET',
 				success: function (data) {
-					let dropdown = $('.dropdown-menu[aria-labelledby="navbarDropdown"]');
+					let dropdown = $('.notification-dropdown[aria-labelledby="navbarDropdown"]');
 					dropdown.empty();
 	
 					if (data.count > 0) {
@@ -161,29 +173,212 @@
 					}
 	
 					if (data.notifications.length === 0) {
-						dropdown.append(`<p class="list-group-item">No notifications found.</p>`);
+						dropdown.append(`<p class="list-group-item m-3 mt-0">No notifications found.</p>`);
 					} else {
 						data.notifications.forEach(n => {
 							dropdown.append(`
 								<div class="list-group-item d-flex justify-content-between align-items-center bg-light">
-									<div>${n.data.message}</div>
-									<a href="/notifications/read/${n.id}" class="btn btn-sm btn-outline-success">Mark as Read & View</a>
+									<div class="m-3 mt-0">${n.data.message}</div>
+									<a href="/notifications/read/${n.id}" class="btn btn-sm text-sm btn-outline-success mx-3">Mark as Read & View</a>
 								</div>
 							`);
 						});
 					}
 	
-					dropdown.append(`<a class="list-group-item" href="{{ route('notifications.index') }}">View All</a>`);
+					dropdown.append(`<a class="list-group-item mx-3 text-sm" href="{{ route('notifications.index') }}">View All</a>`);
 				}
 			});
 		}
-	
+
 		// Fetch notifications every 30 seconds
 		setInterval(fetchNotifications, 30000);
 		// Also fetch once on page load
 		$(document).ready(fetchNotifications);
 	</script>
-	
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			// Grab all delete buttons with the show-confirm class
+			const deleteButtons = document.querySelectorAll('.show-confirm');
+
+			deleteButtons.forEach(button => {
+				button.addEventListener('click', function (e) {
+					e.preventDefault(); // prevent default form submission
+
+					const form = this.closest('form');
+
+					Swal.fire({
+						title: 'Are you sure?',
+						text: "This action cannot be undone.",
+						icon: 'warning',
+						showCancelButton: true,
+						confirmButtonColor: '#d33',
+						cancelButtonColor: '#3085d6',
+						confirmButtonText: 'Yes, delete it!',
+						cancelButtonText: 'Cancel'
+					}).then((result) => {
+						if (result.isConfirmed) {
+							form.submit(); // submit the form only if confirmed
+						}
+					});
+				});
+			});
+		});
+	</script>
+	<script type="text/javascript">
+      $(function () {
+        var $window = $(window),
+          win_height_padded = $window.height() * 0.8;
+
+        $window.on('scroll', setInterval(maskinleftload, 100));
+
+        function maskinleftload() {
+          var scrolled = $window.scrollTop();
+          $('.element-fade-up:not(.animated)').each(function () {
+            var $this = $(this),
+              offsetTop = $this.offset().top;
+            if (scrolled + win_height_padded > offsetTop) {
+              if ($this.data('timeout')) {
+                window.setTimeout(function () {
+                  $this.addClass('triggered ' + $this.data('animation'));
+                }, parseInt($this.data('timeout'), 10));
+              } else {
+                $this.addClass('triggered ' + $this.data('animation'));
+              }
+            }
+          });
+        }
+      });
+    </script>
+
+    <script>
+      $('.testimonial-slider').slick({
+        infinite: true,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        responsive: [
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 1,
+              infinite: true,
+            },
+          },
+          {
+            breakpoint: 800,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 1,
+              infinite: true,
+            },
+          },
+          {
+            breakpoint: 565,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+            },
+          },
+          // You can unslick at a given breakpoint now by adding:
+          // settings: "unslick"
+          // instead of a settings object
+        ],
+      });
+
+      if ($('div').is('.accordion')) {
+        // Initially, hide all accordion content
+        $('.accordion-content').hide();
+
+        // When an accordion header is clicked
+        $('.accordion-header').click(function () {
+          // Toggle the content
+          var content = $(this).next('.accordion-content');
+          content.slideToggle(200);
+
+          // Toggle the active class to change the style
+          $(this).toggleClass('active');
+
+          // Close other open accordions
+          $('.accordion-content').not(content).slideUp(200);
+          $('.accordion-header').not(this).removeClass('active');
+        });
+      }
+
+      $('.timeline-tab .inner').on('click', function () {
+        $('.timeline-tab .inner').removeClass('active');
+        $(this).addClass('active');
+
+        let currentActive = $(this).data('tab');
+        $('.timeline-content .content-holder').removeClass('active');
+        $('.timeline-content .content-holder.' + currentActive).addClass('active');
+      });
+
+      if ($(window).width() < 767) {
+        $('.timeline-tab').click(function () {
+          $('.inner-holder').toggleClass('active');
+        });
+
+        $('.inner-holder h3').click(function () {
+          let currentActive = $(this).text();
+          $('.timeline-tab > .mobile > h3').text(currentActive);
+        });
+      }
+    </script>
+
+    <script>
+      gsap.registerPlugin(ScrollTrigger);
+
+      if ($(window).width() > 768) {
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: '.did-you-know-col',
+              pin: '.did-you-know-col',
+              start: 'top top',
+              end: 'bottom top',
+              scrub: true,
+              toggleActions: 'play reverse play reverse',
+              ease: 'none',
+            },
+          })
+          .to('.dyk-col-1', { opacity: 1 })
+          .to('.dyk-col-3', { opacity: 1 })
+          .to('.dyk-col-4', { opacity: 1 });
+      } else {
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: '.did-you-know-col',
+              // pin: ".did-you-know-col",
+              start: 'top 40%',
+              end: 'center top',
+              scrub: true,
+              toggleActions: 'play reverse play reverse',
+              ease: 'none',
+            },
+          })
+          .to('.dyk-col-1', { opacity: 1 })
+          .to('.dyk-col-3', { opacity: 1 })
+          .to('.dyk-col-4', { opacity: 1 });
+      }
+
+      if ($(window).width() < 565) {
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: '.gh-section eighth',
+              start: 'bottom bottom',
+              toggleActions: 'play reverse play reverse',
+              scrub: true,
+              ease: 'linear',
+            },
+          })
+          .to('.floating-widget', {
+            opacity: 0,
+            pointerEvents: 'none',
+          });
+      }
+    </script>
 </body>
 </html>
 @endif

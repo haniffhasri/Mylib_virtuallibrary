@@ -28,7 +28,7 @@ class NewUserNotification extends Notification
     // Store the notification content in the DB
     public function toArray($notifiable){
         return [
-            'message' => "New user registered: {$this->user->name} ({$this->user->email})",
+            'message' => "New user registered: {$this->user->username} ({$this->user->email})",
             'type' => 'user',
             'resource_id' => $this->user->id,
             'url' => route('admin.view', $this->user->id),

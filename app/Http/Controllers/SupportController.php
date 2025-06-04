@@ -42,4 +42,22 @@ class SupportController extends Controller
 
         return back()->with('success', 'Support content deleted.');
     }
+
+    public function edit(Support $content)
+    {
+        return view('support.edit', compact('content'));
+    }
+
+    public function update(Request $request, Support $content)
+    {
+        $request->validate([
+            'support_title' => 'required',
+            'support_type' => 'required|in:faq,embedded_video',
+            'content' => 'nullable|string',
+        ]);
+
+        $content->update($request->all());
+
+        return redirect()->route('support.index')->with('success', 'Support content updated.');
+    }
 }

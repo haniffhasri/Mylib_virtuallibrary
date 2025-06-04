@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\Forum;
+use App\Models\SearchLog;
+use Carbon\Carbon;
 
 class ForumController extends Controller
 {
@@ -28,10 +30,42 @@ class ForumController extends Controller
         return view ('forum.create');
     }
 
-    public function show($slug){
+    public function show($slug, Request $request){
         $forum = Forum::where('slug', $slug)->firstOrFail();
-        return view('forum.show', compact('forum'));
+
+        $query = $request->input('q');
+        $sort = $request->query('sort', 'latest');
+        $created_at = $request->input('created_at');
+        $updated_at = $request->input('updated_at');
+
+        $threads = $forum->threads()->with('user')
+            ->when($query, function ($q) use ($query) {
+                $q->where('thread_title', 'ILIKE', '%' . $query . '%')
+                ->orWhere('thread_body', 'ILIKE', '%' . $query . '%');
+            })
+            ->when($created_at, function ($q) use ($created_at) {
+                [$from, $to] = $this->getDateRange($created_at);
+                $q->whereBetween('created_at', [$from, $to]);
+            })
+            ->when($sort === 'latest', fn($q) => $q->orderBy('updated_at', 'desc'))
+            ->when($sort === 'oldest', fn($q) => $q->orderBy('updated_at', 'asc'))
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('forum.show', compact('forum', 'threads'));
     }
+
+    private function getDateRange($range){
+        $now = Carbon::now();
+        return match($range) {
+            'today' => [Carbon::today(), $now],
+            'this_week' => [Carbon::now()->startOfWeek(), $now],
+            'this_month' => [Carbon::now()->startOfMonth(), $now],
+            'this_year' => [Carbon::now()->startOfYear(), $now],
+            default => [Carbon::minValue(), $now]
+        };
+    }
+
 
     public function store(Request $request){
         $request->validate([
@@ -48,4 +82,56 @@ class ForumController extends Controller
 
         return redirect()->route('forum.index');
     }
+
+    public function search(Request $request){
+        $query = $request->input('q');
+        $user = $request->input('user');
+        $created_at = $request->input('created_at'); 
+
+        $forum = Forum::query();
+
+        if ($user) {
+            $forum->whereHas('user', function ($q) use ($user) {
+                $q->where('username', 'ILIKE', '%' . $user . '%');
+            });
+        }
+
+        if ($created_at) {
+            $forum->whereBetween('created_at', $this->getDateRange($created_at));
+        }
+
+        $forums = $forum->paginate(6)->withQueryString();
+
+        if ($query && $forums->isEmpty()) {
+            $fallbackQuery = Forum::query()
+                ->where('forum_title', 'ILIKE', '%' . $query . '%')
+                ->orWhere('forum_description', 'ILIKE', '%' . $query . '%');
+
+            if ($user) {
+                $fallbackQuery->orWhereHas('user', function ($q) use ($user) {
+                    $q->where('username', 'ILIKE', '%' . $user . '%');
+                });
+            }
+
+            $forums = $fallbackQuery->paginate(6)->withQueryString();
+        }
+
+        // Log search
+        if ($query) {
+            SearchLog::create([
+                'term' => $query,
+                'results' => $forums->total(),
+                'ip' => $request->ip(),
+                'user_id' => Auth::id(),
+                'type' => 'forum',
+            ]);
+        }
+
+        return view('forum.index', [
+            'forum' => $forums,
+            'user' => $user,
+            'created_at' => $created_at,
+        ]);
+    }
+
 }

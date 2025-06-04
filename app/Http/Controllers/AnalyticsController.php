@@ -50,13 +50,18 @@ class AnalyticsController extends Controller
             'comment_count' => DB::table('comments')->count(),
 
             // Search
-            'top_searches' => DB::table('search_logs')
-                ->select('term', DB::raw('count(*) as total'))
-                ->groupBy('term')
-                ->orderByDesc('total')
-                ->limit(10)
+            'book_search_trends' => DB::table('search_logs')
+                ->select(DB::raw("DATE(created_at) as date"), DB::raw("count(*) as total"))
+                ->where('type', 'book')
+                ->groupBy(DB::raw("DATE(created_at)"))
+                ->orderBy('date', 'desc')
+                ->limit(30)
                 ->get(),
-            'no_result_searches' => DB::table('search_logs')->where('results', 0)->count(),
+
+            'book_no_result_searches' => DB::table('search_logs')
+                ->where('type', 'book')
+                ->where('results', 0)
+                ->count(),
         ]);
     }
 
