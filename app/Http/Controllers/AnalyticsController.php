@@ -19,6 +19,9 @@ class AnalyticsController extends Controller
         $today = Carbon::today();
         $weekAgo = Carbon::now()->subWeek();
         $monthAgo = Carbon::now()->subMonth();
+        $searchTotal = DB::table('search_logs')->where('type', 'book')->count();
+        $searchFailures = DB::table('search_logs')->where('type', 'book')->where('results', 0)->count();
+        $searchFailureRate = $searchTotal > 0 ? round(($searchFailures / $searchTotal) * 100, 2) : 0;
 
         return view('admin.analytics', [
             // User Activity
@@ -51,17 +54,49 @@ class AnalyticsController extends Controller
 
             // Search
             'book_search_trends' => DB::table('search_logs')
-                ->select(DB::raw("DATE(created_at) as date"), DB::raw("count(*) as total"))
+                ->select('term', DB::raw('count(*) as total'))
                 ->where('type', 'book')
-                ->groupBy(DB::raw("DATE(created_at)"))
-                ->orderBy('date', 'desc')
-                ->limit(30)
+                ->groupBy('term')
+                ->orderByDesc('total')
+                ->limit(10)
                 ->get(),
 
             'book_no_result_searches' => DB::table('search_logs')
                 ->where('type', 'book')
                 ->where('results', 0)
                 ->count(),
+
+            // borrowing trends over time
+            'borrowing_trends' => Borrow::selectRaw("TO_CHAR(created_at, 'YYYY-MM') as month, COUNT(*) as total")
+                ->where('created_at', '>=', now()->subYear())
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get(),
+            
+            // No result ratio
+            'search_total' => $searchTotal,
+            'total_book_searches' => $searchTotal,
+            'search_failures' => $searchFailures,
+            'search_failure_rate' => $searchFailureRate,
+
+            // most commented thread & book
+            'most_commented_threads' => Thread::withCount('comments')
+                ->orderByDesc('comments_count')
+                ->take(5)
+                ->get(),
+
+            'most_commented_books' => Book::withCount('comments')
+                ->orderByDesc('comments_count')
+                ->take(5)
+                ->get(),
+
+            // top borrower
+            'top_borrowers' => Borrow::select('user_id', DB::raw('count(*) as total'))
+                ->groupBy('user_id')
+                ->orderByDesc('total')
+                ->with('user')
+                ->take(5)
+                ->get(),
         ]);
     }
 
@@ -69,6 +104,10 @@ class AnalyticsController extends Controller
         $today = Carbon::today();
         $weekAgo = Carbon::now()->subWeek();
         $monthAgo = Carbon::now()->subMonth();
+
+        $searchTotal = DB::table('search_logs')->where('type', 'book')->count();
+        $searchFailures = DB::table('search_logs')->where('type', 'book')->where('results', 0)->count();
+        $searchFailureRate = $searchTotal > 0 ? round(($searchFailures / $searchTotal) * 100, 2) : 0;
 
         $data = [
             'daily_visits' => Visitor::whereDate('created_at', $today)->count(),
@@ -93,7 +132,27 @@ class AnalyticsController extends Controller
                 ->groupBy('term')
                 ->orderByDesc('total')
                 ->limit(10)
-                ->get()
+                ->get(),
+            'most_commented_threads' => Thread::withCount('comments')
+            ->orderByDesc('comments_count')
+            ->take(5)
+            ->get(),
+            'most_commented_books' => Book::withCount('comments')
+                ->orderByDesc('comments_count')
+                ->take(5)
+                ->get(),
+
+            // Top Borrowers
+            'top_borrowers' => Borrow::select('user_id', DB::raw('count(*) as total'))
+                ->groupBy('user_id')
+                ->orderByDesc('total')
+                ->with('user')
+                ->take(5)
+                ->get(),
+
+            'search_total' => $searchTotal,
+            'search_failures' => $searchFailures,
+            'search_failure_rate' => $searchFailureRate,
         ];
 
         $pdf = Pdf::loadView('admin.analytics_report_pdf', $data);
