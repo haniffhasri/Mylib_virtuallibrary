@@ -90,6 +90,13 @@ class ForumController extends Controller
 
         $forum = Forum::query();
 
+        if ($query) {
+            $forum->where(function ($q1) use ($query) {
+                $q1->where('forum_title', 'ILIKE', '%' . $query . '%')
+                    ->orWhere('forum_description', 'ILIKE', '%' . $query . '%');
+            });
+        }
+
         if ($user) {
             $forum->whereHas('user', function ($q) use ($user) {
                 $q->where('username', 'ILIKE', '%' . $user . '%');
@@ -101,20 +108,6 @@ class ForumController extends Controller
         }
 
         $forums = $forum->paginate(6)->withQueryString();
-
-        if ($query && $forums->isEmpty()) {
-            $fallbackQuery = Forum::query()
-                ->where('forum_title', 'ILIKE', '%' . $query . '%')
-                ->orWhere('forum_description', 'ILIKE', '%' . $query . '%');
-
-            if ($user) {
-                $fallbackQuery->orWhereHas('user', function ($q) use ($user) {
-                    $q->where('username', 'ILIKE', '%' . $user . '%');
-                });
-            }
-
-            $forums = $fallbackQuery->paginate(6)->withQueryString();
-        }
 
         // Log search
         if ($query) {
@@ -133,5 +126,4 @@ class ForumController extends Controller
             'created_at' => $created_at,
         ]);
     }
-
 }

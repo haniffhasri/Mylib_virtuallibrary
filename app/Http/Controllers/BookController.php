@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Borrow;
 use App\Models\User;
+use App\Models\Rating;
 use App\Models\SearchLog;
 use Illuminate\Support\Facades\Log;
 use Exception;
@@ -93,7 +94,6 @@ class BookController extends Controller
     
         return redirect()->back()->with('success', 'Media deleted');
     }
-    
 
     public function edit($id){
         $book = Book::findOrFail($id);  
@@ -172,8 +172,6 @@ class BookController extends Controller
             return back()->with('error', 'Failed to update the book.');
         }
     }
-    
-    
 
     public function store(Request $request){
         try{
@@ -318,5 +316,20 @@ class BookController extends Controller
             'genres' => $genres,
             'authors' => $authors,
         ]);
+    }
+
+    public function rate(Request $request, $bookId){
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+        ]);
+
+        $book = Book::findOrFail($bookId);
+
+        Rating::updateOrCreate(
+            ['user_id' => Auth::id(), 'book_id' => $book->id],
+            ['rating' => $request->rating]
+        );
+
+        return redirect()->back()->with('success', 'Rating submitted!');
     }
 }

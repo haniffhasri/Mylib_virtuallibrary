@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Borrow extends Model
 {
-    protected $fillable = ['user_id', 'book_id', 'due_date', 'returned_at'];
+    protected $fillable = ['user_id', 'book_id', 'due_date', 'returned_at', 'is_active'];
     /** @use HasFactory<\Database\Factories\BorrowFactory> */
     use HasFactory;
 

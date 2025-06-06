@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class SearchLog extends Model
 {
-    protected $fillable = ['term', 'results', 'ip', 'user_id'];
+    protected $fillable = ['term', 'results', 'ip', 'user_id', 'type'];
     
 }

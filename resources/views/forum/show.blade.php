@@ -132,7 +132,7 @@
                 </div>
             </div>
         @empty
-            <p>Sorry, Not Found.</p>
+            <p>No Thread yet.</p>
         @endforelse
 
         <!-- Pagination -->

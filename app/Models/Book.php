@@ -19,4 +19,12 @@ class Book extends Model
     {
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id')->with('replies.user');
     }    
+
+    public function ratings() {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function averageRating() {
+        return $this->ratings()->avg('rating');
+    }
 }

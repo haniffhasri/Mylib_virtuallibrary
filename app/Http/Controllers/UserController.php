@@ -64,10 +64,13 @@ class UserController extends Controller
 
         $userQuery = User::query();
 
-        // Apply full-text search if present
+        // Apply search keyword
         if ($query) {
-            $userQuery->whereRaw("search_vector @@ websearch_to_tsquery('english', ?)", [$query])
-                    ->orderByRaw("ts_rank(search_vector, websearch_to_tsquery('english', ?)) DESC", [$query]);
+            $userQuery->where(function ($q1) use ($query) {
+                $q1->where('username', 'ILIKE', '%' . $query . '%')
+                    ->orWhere('name', 'ILIKE', '%' . $query . '%')
+                    ->orWhere('email', 'ILIKE', '%' . $query . '%');
+            });
         }
 
         // Apply filters
@@ -91,26 +94,6 @@ class UserController extends Controller
         }
 
         $users = $userQuery->paginate(10)->withQueryString();
-
-        // Fallback to ILIKE if no results
-        if ($query && $users->isEmpty()) {
-            $fallbackQuery = User::query()
-                ->where('username', 'ILIKE', '%' . $query . '%')
-                ->orWhere('name', 'ILIKE', '%' . $query . '%')
-                ->orWhere('email', 'ILIKE', '%' . $query . '%');
-
-            if ($usertype) {
-                $fallbackQuery->where('usertype', $usertype);
-            }
-
-            if ($sort === 'oldest') {
-                $fallbackQuery->orderBy('created_at', 'asc');
-            } else {
-                $fallbackQuery->orderBy('created_at', 'desc');
-            }
-
-            $users = $fallbackQuery->paginate(10)->withQueryString();
-        }
 
         // Log search
         if ($query) {

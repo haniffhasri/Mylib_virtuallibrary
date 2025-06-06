@@ -46,7 +46,7 @@
                             @if(Auth::user()?->usertype === 'user')
                             <a class="nav-link" href="{{ route('borrow.index') }}">My Borrowed Books</a>
                             @elseif(Auth::user()?->usertype === 'admin' || Auth::user()?->usertype === 'librarian')
-                                <a class="nav-link" href="{{ route('borrow.show') }}">Borrow List</a>
+                                <a class="nav-link" href="{{ route('admin.borrow') }}">Borrow List</a>
                                 <a class="nav-link" href="{{ route('book.create') }}">Insert New Book</a>
                             @elseif(Auth::user()?->usertype === 'admin')
                                 <a class="nav-link" href="{{ route('admin.user') }}">User List</a>

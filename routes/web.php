@@ -84,6 +84,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/show', [BorrowController::class, 'show'])->name('show');
     });
 
+    // book rate
+    Route::post('/book/{book}/rate', [BookController::class, 'rate'])->name('book.rate');
+
     // thread
     Route::post('/forum/{forum}/threads', [ThreadController::class, 'store'])->name('forum.threads.store');
     Route::get('/edit/{id}', [ThreadController::class, 'edit'])->name('forum.threads.edit');
@@ -120,7 +123,7 @@ Route::middleware(['auth', 'AdminLibrarianAccess'])->group(function () {
     });
 
     // Borrow List
-    Route::get('borrow', [BorrowController::class, 'show'])->name('admin.borrow');
+    Route::get('admin/borrow', [BorrowController::class, 'show'])->name('admin.borrow');
 
     // Borrow route
     Route::delete('borrow/delete/{id}', [BorrowController::class, 'delete'])->name('borrow.delete');

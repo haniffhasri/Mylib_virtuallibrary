@@ -32,21 +32,33 @@ class BorrowController extends Controller
     }
 
     public function borrow_book($id){
+        $user = Auth::user();
+
+        // Count active borrows for the current user
+        $activeBorrowCount = Borrow::where('user_id', $user->id)
+                                    ->where('is_active', true)
+                                    ->count();
+
+        if ($activeBorrowCount >= 5) {
+            return redirect('/borrow')->with('error', 'You can only borrow up to 5 books at a time.');
+        }
+
         $book = Book::find($id);
-        $books_id = $book->id;
+
+        if (!$book) {
+            return redirect('/borrow')->with('error', 'Book not found.');
+        }
 
         $borrow = new Borrow;
-        $borrow->book_id = $books_id;
-        $borrow->user_id = Auth::user()->id;
-
+        $borrow->book_id = $book->id;
+        $borrow->user_id = $user->id;
         $borrow->due_date = Carbon::now()->addDays(10);
+        $borrow->is_active = true;
 
         $borrow->save();
 
-        return redirect('/borrow')->with('message','Borrow Successfully!');
+        return redirect('/borrow')->with('message', 'Borrowed Successfully!');
     }
-
-    
 
     public function delete($id){
         $borrow = Borrow::find($id);
