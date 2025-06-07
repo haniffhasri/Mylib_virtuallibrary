@@ -30,7 +30,7 @@ class CommentController extends Controller
         preg_match_all('/@([\w\-]+)/', $comment->body, $matches);
 
         $usernames = $matches[1]; 
-        $taggedUsers = User::whereIn('name', $usernames)->get();
+        $taggedUsers = User::whereIn('username', $usernames)->get();
 
         foreach ($taggedUsers as $user) {
             if ($user->id !== Auth::id()) {
@@ -62,8 +62,8 @@ class CommentController extends Controller
         preg_match_all('/@([\w\s]+)/', $body, $matches);
 
         if ($matches && !empty($matches[1])) {
-            foreach ($matches[1] as $name) {
-                $user = User::where('name', $name)->first();
+            foreach ($matches[1] as $username) {
+                $user = User::where('username', $username)->first();
                 if ($user && $user->id !== Auth::id()) {
                     $user->notify(new UserTagged($comment));
                 }

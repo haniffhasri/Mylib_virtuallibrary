@@ -159,43 +159,6 @@
 
 	@stack('scripts')
 	<script>
-		function fetchNotifications() {
-			$.ajax({
-				url: '{{ route("notifications.fetch") }}',
-				type: 'GET',
-				success: function (data) {
-					let dropdown = $('.notification-dropdown[aria-labelledby="navbarDropdown"]');
-					dropdown.empty();
-	
-					if (data.count > 0) {
-						$('#navbarDropdown span.badge').remove();
-						$('#navbarDropdown').append(`<span class="badge bg-danger">${data.count}</span>`);
-					}
-	
-					if (data.notifications.length === 0) {
-						dropdown.append(`<p class="list-group-item m-3 mt-0">No notifications found.</p>`);
-					} else {
-						data.notifications.forEach(n => {
-							dropdown.append(`
-								<div class="list-group-item d-flex justify-content-between align-items-center bg-light">
-									<div class="m-3 mt-0">${n.data.message}</div>
-									<a href="/notifications/read/${n.id}" class="btn btn-sm text-sm btn-outline-success mx-3">Mark as Read & View</a>
-								</div>
-							`);
-						});
-					}
-	
-					dropdown.append(`<a class="list-group-item mx-3 text-sm" href="{{ route('notifications.index') }}">View All</a>`);
-				}
-			});
-		}
-
-		// Fetch notifications every 30 seconds
-		setInterval(fetchNotifications, 30000);
-		// Also fetch once on page load
-		$(document).ready(fetchNotifications);
-	</script>
-	<script>
 		document.addEventListener('DOMContentLoaded', function () {
 			// Grab all delete buttons with the show-confirm class
 			const deleteButtons = document.querySelectorAll('.show-confirm');
