@@ -11,4 +11,12 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '', // optional global SCSS variables
+        includePaths: ['node_modules'], // <== tell Sass to look inside node_modules
+      },
+    },
+  },
 });

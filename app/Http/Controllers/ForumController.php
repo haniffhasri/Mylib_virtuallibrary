@@ -26,10 +26,6 @@ class ForumController extends Controller
         return view('forum.index', compact('forum'));
     }
 
-    public function create(){
-        return view ('forum.create');
-    }
-
     public function show($slug, Request $request){
         $forum = Forum::where('slug', $slug)->firstOrFail();
 

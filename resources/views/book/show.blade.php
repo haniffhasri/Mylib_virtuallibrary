@@ -71,9 +71,10 @@
         @else
             <p><strong>Status: </strong>Unavailable</p>
         @endif
-
+        
         {{-- rate --}}
         @auth
+        <p><strong>Your Rating:</strong></p>
             <form action="{{ route('book.rate', $book->id) }}" method="POST">
                 @csrf
                 <div class="flex flex-row-reverse justify-end rating gap-1">
@@ -131,6 +132,8 @@
     document.addEventListener('click', function (e) {
         const editBtn = e.target.closest('.toggle-edit');
         const cancelBtn = e.target.closest('.cancel-edit');
+        const replyBtn = e.target.closest('.toggle-reply');
+        const cancelReplyBtn = e.target.closest('.cancel-reply');
 
         if (editBtn) {
             const commentId = editBtn.dataset.commentId;
@@ -143,6 +146,22 @@
         if (cancelBtn) {
             const commentId = cancelBtn.dataset.commentId;
             const form = document.getElementById('edit-form-' + commentId);
+            if (form) {
+                form.style.display = 'none';
+            }
+        }
+
+        if (replyBtn) {
+            const commentId = replyBtn.dataset.commentId;
+            const form = document.getElementById('reply-form-' + commentId);
+            if (form) {
+                form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+            }
+        }
+
+        if (cancelReplyBtn) {
+            const commentId = cancelReplyBtn.dataset.commentId;
+            const form = document.getElementById('reply-form-' + commentId);
             if (form) {
                 form.style.display = 'none';
             }

@@ -18,8 +18,8 @@
     </div>
 
     <!-- Create Thread -->
-    <div class="mb-5 accordion block h-min w-full p-2.5 rounded-lg z-20 text-sm text-gray-900 bg-gray-50 border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500">
-        <div class="accordion-header text-black">Post a New Thread</div>
+    <div class="mb-5 accordion block h-min w-full p-2.5 z-20 text-sm text-gray-900 bg-white shadow-xl focus:ring-blue-500 focus:border-blue-500 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500">
+        <div class="accordion-header text-black"><strong>Post a New Thread</strong></div>
         <div class="accordion-content">
             @auth
                 <form action="{{ route('forum.threads.store', $forum->id) }}" method="POST">

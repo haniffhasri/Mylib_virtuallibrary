@@ -6,7 +6,7 @@
     $isFirstDepth = $depth === 1;
 @endphp
 
-<div id="comment-{{ $comment->id }}" class="{{ $canNest ? 'ms-5' : '' }} {{ $isFirstDepth ? 'mt-3 border p-2 bg-light rounded' : '' }}">
+<div id="comment-{{ $comment->id }}" class="{{ !$isFirstDepth ? 'border-comment' : '' }} {{ $canNest ? 'ms-5' : '' }} {{ $isFirstDepth ? 'mt-3 border p-2 bg-light rounded' : '' }}">
     <div>
         <strong>{{ $comment->user->name }}</strong> said:
         <p>{!! nl2br(e($comment->body)) !!}</p>
@@ -39,14 +39,18 @@
             </form>
         @endif
 
-        {{-- Reply Form --}}
-        <form action="{{ route('comments.store') }}" method="POST" class="{{ $canNest ? 'ms-4' : '' }} mt-2">
+        {{-- Reply Toggle Button --}}
+        <button type="button" class="btn btn-sm btn-link toggle-reply mt-3 mb-2 relative" style="top:-1rem" data-comment-id="{{ $comment->id }}"><b>Reply</b></button>
+
+        {{-- Reply Form (Initially Hidden) --}}
+        <form action="{{ route('comments.store') }}" method="POST" class="{{ $canNest ? 'ms-4' : '' }} mt-2 mb-3" id="reply-form-{{ $comment->id }}" style="display: none;">
             @csrf
             <input type="hidden" name="commentable_id" value="{{ $comment->commentable_id }}">
             <input type="hidden" name="commentable_type" value="{{ get_class($comment->commentable) }}">
             <input type="hidden" name="parent_id" value="{{ $comment->id }}">
             <textarea name="body" class="form-control mentionable my-2" rows="3" placeholder="Write your reply..."></textarea>
             <button type="submit" class="btn btn-sm btn-secondary">Reply</button>
+            <button type="button" class="btn btn-sm btn-light cancel-reply" data-comment-id="{{ $comment->id }}">Cancel</button>
         </form>
     @endauth
 

@@ -13,7 +13,7 @@
 <div class="container">
 
     <!-- Thread Header -->
-    <div class="mb-4 p-4 bg-light rounded shadow-sm">
+    <div class="mb-4 p-4 bg-white shadow-xl">
         <h4>{{ $thread->thread_title }}</h4>
         <p class="text-muted">
             Posted by {{ $thread->user->name }} • {{ $thread->created_at->diffForHumans() }}
@@ -44,6 +44,8 @@
     document.addEventListener('click', function (e) {
         const editBtn = e.target.closest('.toggle-edit');
         const cancelBtn = e.target.closest('.cancel-edit');
+        const replyBtn = e.target.closest('.toggle-reply');
+        const cancelReplyBtn = e.target.closest('.cancel-reply');
 
         if (editBtn) {
             const commentId = editBtn.dataset.commentId;
@@ -60,6 +62,22 @@
                 form.style.display = 'none';
             }
         }
+
+        if (replyBtn) {
+            const commentId = replyBtn.dataset.commentId;
+            const form = document.getElementById('reply-form-' + commentId);
+            if (form) {
+                form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+            }
+        }
+
+        if (cancelReplyBtn) {
+            const commentId = cancelReplyBtn.dataset.commentId;
+            const form = document.getElementById('reply-form-' + commentId);
+            if (form) {
+                form.style.display = 'none';
+            }
+        }
     });
-</script>
+</script>S
 @endpush

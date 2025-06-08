@@ -42,7 +42,6 @@
                         <a class="nav-link" href="{{ route('contact-us.show', ['id' => 1]) }}">Contact Us</a>
                         <a class="nav-link" href="{{ route('support.index') }}">Support</a>
                         @auth
-                            <a class="nav-link" href="{{ route('forum.create') }}">Create a Forum</a>
                             @if(Auth::user()?->usertype === 'user')
                             <a class="nav-link" href="{{ route('borrow.index') }}">My Borrowed Books</a>
                             @elseif(Auth::user()?->usertype === 'admin' || Auth::user()?->usertype === 'librarian')

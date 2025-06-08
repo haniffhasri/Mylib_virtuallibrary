@@ -4,7 +4,7 @@
     $usernames = Auth::check() ? \App\Models\User::pluck('username') : collect([]);
 @endphp
 
-<div class="max-w-2xl mx-auto px-4">
+<div class="mx-auto px-4">
     <div class="flex justify-center items-center">
         <h4 class="text-center">Discussion</h4>
     </div>

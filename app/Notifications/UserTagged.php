@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class UserTagged extends Notification
 {
@@ -37,6 +38,16 @@ class UserTagged extends Notification
             'comment_id' => $this->comment->id,
             'url' => $route . '#comment-' . $this->comment->id,
         ];
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'comment_id' => $this->comment->id,
+            'comment_body' => $this->comment->body,
+            'commenter' => $this->comment->user->name,
+            'url' => url("/comments/{$this->comment->id}")
+        ]);
     }
 
 }

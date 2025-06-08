@@ -10,6 +10,29 @@
 @extends($layout)
 
 @section('content')
+<!-- Create Forum -->
+<div class="mb-5 accordion block h-min w-full p-2.5 z-20 text-sm text-gray-900 bg-white shadow-xl focus:ring-blue-500 focus:border-blue-500 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500">
+    <div class="accordion-header text-black"><strong>Create New Forum</strong></div>
+    <div class="accordion-content">
+        <form action="{{ route('forum.store') }}" method="POST">
+            @csrf
+            <div class="mb-3">
+                <label for="forum_title" class="block mb-2 font-medium text-gray-900">Forum Name</label>
+                <input type="text" id="forum_title" name="forum_title" class="form-control" placeholder="Forum Name" class="border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+            </div>
+            <div class="mb-3">
+                <label for="forum_description" class="block mb-2 font-medium text-gray-900">Forum Description</label>
+                <textarea row="5" id="forum_description" name="forum_description"  placeholder="Describe the forum" class="border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-40 dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submitBtn">Create</button>
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger">{{ $error }}</div>
+                @endforeach
+            @endif
+        </form>
+    </div>
+</div>
 <h4>Forum List</h4>
 <div class="flex justify-center gap-3 bg-white shadow-xl items-center p-3">
     <form action="{{ route('forum.search') }}" method="GET" class="mb-0 w-full h-min">

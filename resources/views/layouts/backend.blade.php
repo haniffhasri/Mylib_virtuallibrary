@@ -49,6 +49,11 @@
 					</a>
 				</li>
 				<li class="sidebar-item">
+					<a class="sidebar-link" href="{{ route('wishlist.index') }}">
+						<span class="align-middle">Wish List</span>
+					</a>
+				</li>
+				<li class="sidebar-item">
 					<a class="sidebar-link" href="{{ route('book.create') }}">
 						<span class="align-middle">Insert New Book</span>
 					</a>
@@ -58,11 +63,11 @@
 						<span class="align-middle">Forum List</span>
 					</a>
 				</li>
-				<li class="sidebar-item">
+				{{-- <li class="sidebar-item">
 					<a class="sidebar-link" href="{{ route('forum.create') }}">
 						<span class="align-middle">Create a Forum</span>
 					</a>
-				</li>
+				</li> --}}
 				@if(Auth::user()?->usertype === 'admin')
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('admin.user') }}">

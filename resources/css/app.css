@@ -3300,7 +3300,8 @@ fieldset:disabled .btn {
 .three-dot-dropdown {
     display: flex;
     justify-content: flex-end;
-    bottom: 3rem;
+    margin-top: -3rem;
+    margin-bottom: 1rem;
 }
 .dropdown-toggle {
     white-space: nowrap;
@@ -13670,6 +13671,13 @@ span.flatpickr-weekday {
     position: absolute;
     right: 1rem;
     top: 1rem;
+}
+
+/* comment */
+.border-comment {
+    border-top: 1px solid black !important;
+    border-left: 1px solid black !important;
+    padding: 1.5rem 0 0 1.5rem;
 }
 
 /* landing page */

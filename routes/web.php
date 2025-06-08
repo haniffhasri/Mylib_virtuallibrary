@@ -18,6 +18,7 @@ use App\Http\Middleware\TrackVisitor;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\LibrarianValidationCodeController;
 
 Route::get('/', function () {
@@ -53,7 +54,6 @@ Route::get('/support', [SupportController::class, 'index'])->name('support.index
 
 // Forum Route
 Route::middleware(['auth'])->group(function () {
-    Route::get('/forum/create', [ForumController::class, 'create'])->name('forum.create');
     Route::post('/forum', [ForumController::class, 'store'])->name('forum.store');
 });
 Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
@@ -86,6 +86,11 @@ Route::middleware(['auth'])->group(function () {
 
     // book rate
     Route::post('/book/{book}/rate', [BookController::class, 'rate'])->name('book.rate');
+
+    // wishlist
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/delete/{id}', [WishlistController::class, 'delete'])->name('wishlist.delete');
 
     // thread
     Route::post('/forum/{forum}/threads', [ThreadController::class, 'store'])->name('forum.threads.store');
