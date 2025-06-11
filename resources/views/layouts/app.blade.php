@@ -74,44 +74,44 @@
                           <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             Notifications
                             @if($headerNotifications->count() > 0)
-                              <span class="badge bg-danger">{{ $headerNotifications->count() }}</span>
+                              <span id="notification-badge" class="badge bg-danger">{{ $headerNotifications->count() }}</span>
+                            @else
+                              <span id="notification-badge" class="badge bg-danger d-none">0</span>
                             @endif
                           </a>
 
-                          <div class="dropdown-menu w-max notification-dropdown dropdown-menu-end" aria-labelledby="navbarDropdown">
+                          <div id="notification-list" class="dropdown-menu w-max notification-dropdown dropdown-menu-end" aria-labelledby="navbarDropdown">
                             @forelse($headerNotifications as $notification)
-                                <div class="dropdown-item d-flex justify-content-between align-items-center {{ $notification->read_at ? '' : 'bg-light' }}">
-                                    <div>
-                                        {{ $notification->data['message'] }}
-                                    </div>
-                                    <a href="{{ route('notifications.read', $notification->id) }}" class="btn btn-sm btn-outline-success">
-                                        {{ $notification->read_at ? 'View' : 'Mark as Read & View' }}
-                                    </a>
-                                </div>
+                              <div class="dropdown-item d-flex justify-content-between align-items-center {{ $notification->read_at ? '' : 'bg-light' }}">
+                                  <div>{{ $notification->data['message'] }}</div>
+                                  <a href="{{ route('notifications.read', $notification->id) }}" class="btn btn-sm btn-outline-success">
+                                      {{ $notification->read_at ? 'View' : 'Mark as Read & View' }}
+                                  </a>
+                              </div>
                             @empty
-                                <p class="dropdown-item">No notifications found</p>
+                              <p class="dropdown-item">No notifications found</p>
                             @endforelse
                             <a class="dropdown-item" href="{{ route('notifications.index') }}">View All</a>
                           </div>
                         </li>
-						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown"><i class="align-middle" data-feather="settings"></i></a>
-							<a class="nav-link dropdown-toggle d-none d-sm-inline-block flex gap-2 items-center" href="#" data-bs-toggle="dropdown">
-									<img src="{{ asset('profile_picture/' . Auth::user()->profile_picture) }}" class="object-cover w-10 h-10 bg-blue-500 rounded-full">
-									<span>{{ Auth::user()->username }}</span>
-							</a>
-							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
-								<a class="dropdown-item" href="{{ route('logout') }}"
-								onclick="event.preventDefault();
-												document.getElementById('logout-form').submit();">
-									{{ __('Logout') }}
-								</a>
-								<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-									@csrf
-								</form>
-							</div>
-						</li>
+                        <li class="nav-item dropdown">
+                          <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown"><i class="align-middle" data-feather="settings"></i></a>
+                          <a class="nav-link dropdown-toggle d-none d-sm-inline-block flex gap-2 items-center" href="#" data-bs-toggle="dropdown">
+                              <img src="{{ asset('profile_picture/' . Auth::user()->profile_picture) }}" class="object-cover w-10 h-10 bg-blue-500 rounded-full">
+                              <span>{{ Auth::user()->username }}</span>
+                          </a>
+                          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                            onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">
+                              {{ __('Logout') }}
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                              @csrf
+                            </form>
+                          </div>
+                        </li>
                         @endguest
                     </ul>
                 </div>
@@ -124,6 +124,35 @@
     </div>
 
     @stack('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userId = {{ auth()->id() }};
+            
+            window.Echo.private(`App.Models.User.${userId}`)
+                .notification((notification) => {
+                    console.log('🔔 New Notification:', notification);
+
+                    // Create new dropdown item
+                    const notifList = document.getElementById('notification-list');
+
+                    const notifItem = document.createElement('div');
+                    notifItem.className = 'dropdown-item d-flex justify-content-between align-items-center bg-light';
+                    notifItem.innerHTML = `
+                        <div>${notification.message}</div>
+                        <a href="/notifications/read/${notification.id}" class="btn btn-sm btn-outline-success">Mark as Read & View</a>
+                    `;
+
+                    // Insert at the top of the list
+                    notifList.insertBefore(notifItem, notifList.firstChild);
+
+                    // Update badge count
+                    const badge = document.getElementById('notification-badge');
+                    const currentCount = parseInt(badge.textContent) || 0;
+                    badge.textContent = currentCount + 1;
+                    badge.classList.remove('d-none');
+                });
+        });
+    </script>
     <script type="text/javascript">
       $(function () {
         var $window = $(window),

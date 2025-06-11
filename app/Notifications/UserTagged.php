@@ -7,8 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\BroadcastMessage;
+use App\Models\Thread;
+use App\Models\Book;
 
-class UserTagged extends Notification
+class UserTagged extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -21,15 +23,15 @@ class UserTagged extends Notification
 
     public function via($notifiable)
     {
-        return ['database']; // optional: add 'mail' or 'broadcast'
+        return ['database', 'broadcast']; 
     }
 
     public function toDatabase($notifiable){
         $commentable = $this->comment->commentable;
 
         $route = match (get_class($commentable)) {
-            \App\Models\Thread::class => route('threads.show', $commentable->id),
-            \App\Models\Book::class => route('book.show', $commentable->id),
+            Thread::class => route('threads.show', $commentable->id),
+            Book::class => route('book.show', $commentable->id),
             default => '#',
         };
 
@@ -40,14 +42,19 @@ class UserTagged extends Notification
         ];
     }
 
-    public function toBroadcast($notifiable)
-    {
+    public function toBroadcast($notifiable){
+        $commentable = $this->comment->commentable;
+
+        $route = match (get_class($commentable)) {
+            Thread::class => route('threads.show', $commentable->id),
+            Book::class => route('book.show', $commentable->id),
+            default => '#',
+        };
+
         return new BroadcastMessage([
-            'comment_id' => $this->comment->id,
-            'comment_body' => $this->comment->body,
-            'commenter' => $this->comment->user->name,
-            'url' => url("/comments/{$this->comment->id}")
+            'id' => $this->id, 
+            'message' => "{$this->comment->user->username} mentioned you in a comment.",
+            'url' => $route . '#comment-' . $this->comment->id,
         ]);
     }
-
 }

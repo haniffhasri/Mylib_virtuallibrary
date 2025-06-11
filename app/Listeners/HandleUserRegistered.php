@@ -6,10 +6,6 @@ use App\Events\UserRegistered;
 use App\Notifications\NewUserNotification;
 use App\Notifications\NewWelcomeNotification;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Notification;
-use Illuminate\Queue\InteractsWithQueue;
 
 class HandleUserRegistered
 {
