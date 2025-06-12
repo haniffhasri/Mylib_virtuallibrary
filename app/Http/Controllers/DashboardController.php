@@ -37,16 +37,4 @@ class DashboardController extends Controller
             abort(403, 'Unauthorized');
         }
     }
-
-    public function viewUser($id)
-    {
-        $currentUser = Auth::user();
-
-        if (!in_array($currentUser->usertype, ['admin', 'librarian'])) {
-            abort(403, 'Unauthorized');
-        }
-
-        $user = User::findOrFail($id);
-        return view('admin.view', ['user' => $user]);
-    }
 }

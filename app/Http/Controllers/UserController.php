@@ -31,8 +31,26 @@ class UserController extends Controller
         return view("admin.user", compact("users"));
     }
 
+    public function deactivateSelf(Request $request){
+        $user = Auth::user();
+        $user = User::find($user->id);
+        $user->is_active = false;
+        $user->save();
+
+        Auth::logout(); 
+
+        return redirect('/login')->with('status', 'Your account has been deactivated.');
+    }
+
     public function delete($id){
         $users = User::findOrFail($id);
+        // Delete image file if it exists
+        if ($users->profile_picture) {
+            $imagePath = public_path('profile_picture/' . $users->profile_picture);
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
         $users->delete();
         return redirect()->back();
     }
@@ -59,6 +77,7 @@ class UserController extends Controller
         $query = $request->input('q');
         $username = $request->input('username');
         $usertype = $request->input('usertype');
+        $is_active = $request->input('is_active');
         $name = $request->input('name');
         $sort = $request->input('sort', 'latest');
 
@@ -76,6 +95,10 @@ class UserController extends Controller
         // Apply filters
         if ($usertype) {
             $userQuery->where('usertype', $usertype);
+        }
+
+        if ($is_active) {
+            $userQuery->where('is_active', $is_active);
         }
 
         if ($username) {

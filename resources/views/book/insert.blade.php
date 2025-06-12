@@ -8,11 +8,17 @@
         @csrf
         <div class="form-group mb-3">
             <label for="book_title">Book Name</label>
-            <input type="text" id="book_title" name="book_title" class="form-control" required>
+            <input type="text" id="book_title" name="book_title" value="{{ old('book_title') }}" class="form-control @error('book_title') is-invalid @enderror" required>
+            @error('book_title')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
         <div class="form-group mb-3">
             <label for="author">Author</label>
-            <input type="text" id="author" name="author" class="form-control" required>
+            <input type="text" id="author" name="author" value="{{ old('author') }}" class="form-control @error('author') is-invalid @enderror" required>
+            @error('author')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
         <div class="flex gap-2">
             <div class="form-group mb-3 w-full">
@@ -20,14 +26,20 @@
                 <x-help-icon-blade>
                     Must be unique
                 </x-help-icon-blade>
-                <input type="text" id="item_id" name="item_id" class="form-control" required>
+                <input type="text" id="item_id" name="item_id" value="{{ old('item_id') }}" class="form-control @error('item_id') is-invalid @enderror" required>
+                @error('item_id')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
             <div class="form-group mb-3 w-full">
                 <label for="call_number">Call Number</label>
                 <x-help-icon-blade>
                     Must be unique
                 </x-help-icon-blade>
-                <input type="text" id="call_number" name="call_number" class="form-control" required>
+                <input type="text" id="call_number" name="call_number" value="{{ old('call_number') }}" class="form-control @error('call_number') is-invalid @enderror" required>
+                @error('call_number')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
         </div>
         <div class="flex gap-2">
@@ -36,16 +48,22 @@
                 <x-help-icon-blade>
                     Must be unique
                 </x-help-icon-blade>
-                <input type="text" id="isbn" name="isbn" class="form-control" required>
+                <input type="text" id="isbn" name="isbn" value="{{ old('isbn') }}" class="form-control @error('isbn') is-invalid @enderror" required>
+                @error('isbn')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
             <div class="form-group mb-3 w-full">
                 <label for="book_publication_date">Publication Date</label>
-                <input type="date" id="book_publication_date" name="book_publication_date" class="form-control" required>
+                <input type="date" id="book_publication_date" name="book_publication_date" value="{{ old('book_publication_date') }}" class="form-control @error('book_publication_date') is-invalid @enderror" required>
+                @error('book_publication_date')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
         </div>
         <div class="form-group mb-3">
             <label for="book_description">Book Description</label>
-            <textarea row="5" id="book_description" name="book_description" class="form-control"></textarea>
+            <textarea row="5" id="book_description" name="book_description" value="{{ old('book_description') }}" class="form-control"></textarea>
         </div>
         <div class="flex gap-2">
             <div class="form-group mb-3 w-full">
@@ -112,7 +130,7 @@
         <!-- Repeat for other fields -->
         <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
 
-        @if ($errors->any())
+        {{-- @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
                     @foreach ($errors->all() as $err)
@@ -120,7 +138,7 @@
                     @endforeach
                 </ul>
             </div>
-        @endif
+        @endif --}}
     </form>
 
 <script>
@@ -147,13 +165,13 @@
         updateMediaField(); // initialize on page load
 
 
-        const submitBtn = document.getElementById('submitBtn');
-        const form = document.querySelector('form'); // Make sure this targets your form
-
-        submitBtn.addEventListener('click', function () {
+        submitBtn.addEventListener('click', function (e) {
             const mediaInput = document.getElementById('media_path');
+            const form = submitBtn.closest('form'); // 👈 this gets the actual form element
 
             if (!mediaInput.value) {
+                e.preventDefault(); // Stop regular form submission
+
                 Swal.fire({
                     title: 'Are you sure?',
                     text: 'You didn’t upload a PDF or MP3. This book will be marked as unavailable.',
@@ -165,11 +183,9 @@
                     cancelButtonText: 'No, go back'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        form.submit();
+                        form.submit(); // ✅ Now it's defined and works
                     }
                 });
-            } else {
-                form.submit();
             }
         });
     });

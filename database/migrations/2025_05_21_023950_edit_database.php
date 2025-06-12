@@ -20,7 +20,7 @@ return new class extends Migration
         Schema::table('books', function (Blueprint $table) {
             $table->string('call_number')->unique();
             $table->string('item_id')->unique();
-            $table->string('isbn');
+            $table->string('isbn')->unique();
             $table->string('initial_cataloguer');
         });
     }

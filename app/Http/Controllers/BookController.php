@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\NewBookNotification;
+use Illuminate\Validation\ValidationException;
 
 use function Pest\Laravel\delete;
 
@@ -110,7 +111,7 @@ class BookController extends Controller
                 'format' => 'required|in:pdf,audio',
                 'call_number' => 'required|string|unique:books,call_number,' . $id,
                 'item_id' => 'required|string|unique:books,item_id,' . $id,
-                'isbn' => 'required|string',
+                'isbn' => 'required|string|unique:books,isbn' . $id,
                 'book_publication_date' => 'required|date',
                 'media_path' => 'nullable|mimes:pdf,mp3|max:20480',
                 'image_path' => 'nullable|image|max:2048',
@@ -176,14 +177,14 @@ class BookController extends Controller
 
     public function store(Request $request){
         try{
-            $request->validate([
+            $validated = $request->validate([
                 'book_title' => 'required|string|max:255',
                 'author' => 'required|string|max:255',
                 'genre' => 'required|string|max:100',
                 'format' => 'required|in:pdf,audio',
                 'call_number' => 'required|string|unique:books,call_number',
                 'item_id' => 'required|string|unique:books,item_id',
-                'isbn' => 'required|string',
+                'isbn' => 'required|string|unique:books,isbn',
                 'book_publication_date' => 'required|date',
                 'media_path' => 'nullable|mimes:pdf,mp3|max:20480', // 20MB max
                 'image_path' => 'nullable|image|max:2048', // 2MB max for image
@@ -222,9 +223,18 @@ class BookController extends Controller
             }
 
             return redirect('/book');
+        }  catch (ValidationException $e) {
+            Log::error('Book store validation error: ' . json_encode($e->errors()));
+
+            return redirect()->back()
+                            ->withErrors($e->validator)
+                            ->withInput();
         } catch (Exception $e) {
-            Log::error('Book store error: ' . $e->getMessage());
-            return back()->with('error', 'Failed to save the book.')->withInput();
+            Log::error('Book store general error: ' . $e->getMessage());
+
+            return redirect()->back()
+                            ->with('error', 'An unexpected error occurred. Please try again.')
+                            ->withInput();
         }
     }
 

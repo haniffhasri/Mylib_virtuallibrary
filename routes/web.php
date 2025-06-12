@@ -55,6 +55,8 @@ Route::get('/support', [SupportController::class, 'index'])->name('support.index
 // Forum Route
 Route::middleware(['auth'])->group(function () {
     Route::post('/forum', [ForumController::class, 'store'])->name('forum.store');
+    Route::get('/forum/{id}/edit', [ForumController::class, 'edit'])->name('forum.edit');
+    Route::put('/forum/{id}', [ForumController::class, 'update'])->name('forum.update');
     Route::delete('/forum/{id}', [ForumController::class, 'destroy'])->name('forum.destroy');
 });
 Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
@@ -77,6 +79,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
+    Route::post('/user/deactivate', [UserController::class, 'deactivateSelf'])->middleware('auth')->name('user.deactivate');
 
     // Borrow
     Route::prefix('borrow')->name('borrow.')->group(function () {

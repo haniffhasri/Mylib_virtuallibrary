@@ -218,9 +218,7 @@ h1 {
 
 h2 {
     font-size: clamp(65px, 10.417vw, 10.417vw);
-    letter-spacing: -2px;
     line-height: 1;
-    font-style: italic;
     font-weight: 400;
     color: #494b37;
     text-transform: unset !important;
@@ -13661,16 +13659,6 @@ span.flatpickr-weekday {
 
 .borrowed-book .card p {
     padding: 1rem 0 2rem 1rem;
-}
-
-/* profile */
-.profile-img {
-    object-fit: cover;
-    border-radius: 50%;
-    border: solid 1px;
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
 }
 
 /* card-list */

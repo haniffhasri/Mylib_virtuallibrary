@@ -34,6 +34,28 @@ class ForumController extends Controller
         return redirect()->route('forum.index')->with('success', 'Forum deleted successfully.');
     }
 
+    public function edit($id){
+        $forum = Forum::findOrFail($id);
+        return view('forum.edit', compact('forum'));
+    }
+
+    public function update(Request $request, $id){
+        $request->validate([
+            'forum_title' => 'required|string|max:255',
+            'forum_description' => 'nullable|string',
+        ]);
+
+        $forum = Forum::findOrFail($id);
+
+        $forum->update([
+            'forum_title' => $request->forum_title,
+            'forum_description' => $request->forum_description,
+            'slug' => Str::slug($request->forum_title), 
+        ]);
+
+        return redirect()->route('forum.index')->with('success', 'Forum updated successfully.');
+    }
+
     public function show($slug, Request $request){
         $forum = Forum::where('slug', $slug)->firstOrFail();
 

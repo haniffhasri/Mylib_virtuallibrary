@@ -32,6 +32,12 @@
                     <option value="librarian" {{ request('usertype') == 'librarian' ? 'selected' : '' }}>Librarian</option>
                     <option value="user" {{ request('usertype') == 'user' ? 'selected' : '' }}>User</option>
                 </select>
+                <input type="hidden" name="q" value="{{ request('q') }}">
+                <select name="is_active" class="w-full p-2 border rounded">
+                    <option value="">Status</option>
+                    <option value="true" {{ request('is_active') === 'true' ? 'selected' : '' }}>Active</option>
+                    <option value="false" {{ request('is_active') === 'false' ? 'selected' : '' }}>Deactivated</option>
+                </select>
                 <button type="submit"
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Filter
@@ -97,6 +103,9 @@
                     Role
                 </th>
                 <th scope="col" class="px-6 py-3">
+                    Status
+                </th>
+                <th scope="col" class="px-6 py-3">
                     <span class="sr-only">Drop</span>
                 </th>
             </tr>
@@ -124,6 +133,13 @@
                         </form>
                     @else
                         {{ $singleUser->usertype }}
+                    @endif
+                </td>
+                <td class="px-6 py-4">
+                    @if ($singleUser->is_active === true)
+                        Active
+                    @else
+                        Deactivated
                     @endif
                 </td>
                 <td class="px-6 py-4 text-right">
