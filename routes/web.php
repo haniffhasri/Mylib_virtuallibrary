@@ -143,7 +143,6 @@ Route::middleware(['auth', 'AdminLibrarianAccess'])->group(function () {
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     // view User as Admin
     Route::get('/admin/user/search', [UserController::class, 'search'])->name('admin.user.search');
-    Route::get('/admin/user/{id}', [DashboardController::class, 'viewUser'])->name('admin.view');
     Route::get('admin/user', [UserController::class, 'index'])->name('admin.user');
     Route::put('admin/update-role/{id}', [UserController::class, 'updateRole'])->name('user.updateRole');
     Route::delete('admin/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
