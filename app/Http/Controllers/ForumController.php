@@ -26,6 +26,14 @@ class ForumController extends Controller
         return view('forum.index', compact('forum'));
     }
 
+    public function destroy($id){
+        $forum = Forum::findOrFail($id);
+        
+        $forum->delete();
+
+        return redirect()->route('forum.index')->with('success', 'Forum deleted successfully.');
+    }
+
     public function show($slug, Request $request){
         $forum = Forum::where('slug', $slug)->firstOrFail();
 

@@ -97,9 +97,6 @@
                     Role
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    View
-                </th>
-                <th scope="col" class="px-6 py-3">
                     <span class="sr-only">Drop</span>
                 </th>
             </tr>
@@ -128,12 +125,6 @@
                     @else
                         {{ $singleUser->usertype }}
                     @endif
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <form action="{{ route('admin.view', $singleUser->id) }}" method="GET">
-                        @csrf
-                        <button type="submit" class="btn btn-primary">View</button>
-                    </form>
                 </td>
                 <td class="px-6 py-4 text-right">
                     <form action="{{ route('user.delete', $singleUser->id) }}" method="POST" class="show-confirm">

@@ -12,7 +12,12 @@
 @section('content')
 @if(Auth::check() && Auth::user()->usertype === 'admin') 
     <div class="container">
-        <h4>Manage Support Content</h4>
+        <div class="flex items-center">
+            <h4>Manage Support Content</h4>
+            <x-help-icon-blade>
+                You can add FAQs and a video guide by embedding the link of the video in the content
+            </x-help-icon-blade>
+        </div>
         <a href="{{ route('support.create') }}" class="btn btn-primary mb-3">Add New Support Content</a>
 
         @if(session('success'))

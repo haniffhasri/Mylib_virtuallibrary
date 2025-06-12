@@ -23,9 +23,13 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <label for="username" class="col-md-4 col-form-label text-md-end">{{ __('Username') }}</label>
-
+                        <div class="row mb-3 flex">
+                            <div style="margin-right: -32rem; padding-left: 9.8rem;">
+                                <x-help-icon-blade>
+                                    Your username must be unique and no space
+                                </x-help-icon-blade>
+                                <label for="username" class="col-md-4 col-form-label w-fit">{{ __('Username') }}</label>
+                            </div>
                             <div class="col-md-6">
                                 <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username">
 
@@ -79,7 +83,12 @@
                         </div>
 
                         <div class="row mb-3" id="validation-code-section" style="display: none;">
-                            <label for="validation_code" class="col-md-4 col-form-label text-md-end">Validation Code</label>
+                            <div style="margin-right: -32rem; padding-left: 7.6rem;">
+                                <x-help-icon-blade>
+                                    You have to request the validation code from the admin.
+                                </x-help-icon-blade>
+                                <label for="validation_code" class="col-md-4 col-form-label w-fit">Validation Code</label>
+                            </div>
                             <div class="col-md-6">
                                 <input type="text" name="validation_code" id="validation_code" class="form-control">
                             </div>

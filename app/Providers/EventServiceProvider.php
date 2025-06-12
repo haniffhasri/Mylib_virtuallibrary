@@ -4,9 +4,9 @@ namespace App\Providers;
 
 use App\Listeners\HandleUserRegistered;
 use App\Events\UserRegistered;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Support\ServiceProvider;
+use App\Events\BookAdded;
+use App\Listeners\HandleBookRegister;
 
 class EventServiceProvider extends ServiceProvider
 {

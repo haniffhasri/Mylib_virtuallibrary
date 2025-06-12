@@ -4,39 +4,29 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\User;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Support\Facades\Log;
 use App\Models\Book;
-class NewBookNotification extends Notification
+
+class NewBookNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     */
-    public $book; 
+    public $book;
 
     public function __construct(Book $book)
     {
         $this->book = $book;
     }
 
-    // Send it via database, not mail
     public function via($notifiable)
     {
-        return ['database', 'mail'];
+        Log::info('NewBookNotification fired for user: ' . $notifiable->id);
+        return ['database', 'mail', 'broadcast'];
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
-
-    /**
-     * Get the mail representation of the notification.
-     */
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
@@ -47,17 +37,18 @@ class NewBookNotification extends Notification
             ->line('Happy reading!');
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray($notifiable){
+    public function toArray($notifiable)
+    {
         return [
             'message' => "New Book registered: {$this->book->book_title} by ({$this->book->author})",
             'type' => 'book',
             'resource_id' => $this->book->id,
-            'url' => route('book.index', $this->book->id),
+            'url' => '/book',
         ];
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage($this->toArray($notifiable));
     }
 }

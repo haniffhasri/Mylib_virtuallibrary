@@ -11,6 +11,7 @@ use App\Models\SearchLog;
 use Illuminate\Support\Facades\Log;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\NewBookNotification;
 
 use function Pest\Laravel\delete;
 
@@ -216,6 +217,9 @@ class BookController extends Controller
             }
 
             $book->save();
+            foreach (User::where('usertype','user')->get() as $user) {
+                $user->notify(new NewBookNotification($book));
+            }
 
             return redirect('/book');
         } catch (Exception $e) {

@@ -22,6 +22,10 @@ class Forum extends Model
                 $forum->slug = $originalSlug . '-' . $counter++;
             }
         });
+
+        static::deleting(function ($forum) {
+            $forum->threads()->delete(); 
+        });
     }
 
     public function threads()

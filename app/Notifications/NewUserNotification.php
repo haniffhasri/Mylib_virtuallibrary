@@ -4,11 +4,12 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
-class NewUserNotification extends Notification
+class NewUserNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -19,19 +20,24 @@ class NewUserNotification extends Notification
         $this->user = $user;
     }
 
-    // Send it via database, not mail
     public function via($notifiable)
     {
-        return ['database'];
+        Log::info('NewUserNotification fired for user: ' . $notifiable->id);
+        return ['database', 'broadcast'];
     }
 
-    // Store the notification content in the DB
-    public function toArray($notifiable){
+    public function toArray($notifiable)
+    {
         return [
             'message' => "New user registered: {$this->user->username} ({$this->user->email})",
             'type' => 'user',
             'resource_id' => $this->user->id,
-            'url' => route('admin.view', $this->user->id),
+            'url' => '/admin/user',
         ];
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage($this->toArray($notifiable));
     }
 }

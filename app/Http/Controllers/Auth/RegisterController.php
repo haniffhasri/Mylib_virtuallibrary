@@ -95,15 +95,25 @@ class RegisterController extends Controller
 
         Log::info('Usertype assigned: ' . $usertype);
 
-        // $welcomeMessage = "Welcome to our platform, {$user->name}!";
-        // Mail::to($user->email)->send(new SendWelcomeMail($welcomeMessage));
-
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'usertype' => $usertype,
         ]);
+
+        // Notify all admins/librarians
+        $admins = User::whereIn('usertype', ['admin'])->get();
+
+        foreach ($admins as $admin) {
+            $admin->notify(new \App\Notifications\NewUserNotification($user));
+        }
+
+        // Send welcome notification (database/broadcast)
+        $user->notify(new \App\Notifications\NewWelcomeNotification());
+
+        // Also return the user
+        return $user;
     }
 }

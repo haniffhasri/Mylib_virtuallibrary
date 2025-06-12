@@ -34,7 +34,12 @@
                 @if(Auth::user()->usertype === 'user')
                 <!-- Create Wishlist -->
                     <div class="mb-5 accordion block h-min w-full p-2.5 z-20 text-sm text-gray-900 bg-white shadow-xl focus:ring-blue-500 focus:border-blue-500 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500">
-                        <div class="accordion-header text-black"><strong>Wish a book to be added into our database.</strong></div>
+                        <div class="accordion-header text-black">
+                            <strong>Wish a book</strong>
+                            <x-help-icon-blade>
+                                You can wish any book to be added into our database.
+                            </x-help-icon-blade>
+                        </div>
                         <div class="accordion-content">
                             <form action="{{ route('wishlist.store') }}" method="POST">
                                 @csrf

@@ -55,6 +55,7 @@ Route::get('/support', [SupportController::class, 'index'])->name('support.index
 // Forum Route
 Route::middleware(['auth'])->group(function () {
     Route::post('/forum', [ForumController::class, 'store'])->name('forum.store');
+    Route::delete('/forum/{id}', [ForumController::class, 'destroy'])->name('forum.destroy');
 });
 Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
 Route::get('/forum/search', [ForumController::class, 'search'])->name('forum.search');

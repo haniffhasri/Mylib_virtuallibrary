@@ -2,7 +2,12 @@
 
 @section('content')
 <div class="container">
-    <h4>Backup & Restore</h4>
+    <div class="flex items-center">
+        <h4>Backup & Restore</h4>
+        <x-help-icon-blade>
+            You have to backup the database in case any incident happen
+        </x-help-icon-blade>
+    </div>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>

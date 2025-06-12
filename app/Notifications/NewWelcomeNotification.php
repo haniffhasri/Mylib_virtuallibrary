@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 
 class NewWelcomeNotification extends Notification
 {
@@ -26,6 +27,7 @@ class NewWelcomeNotification extends Notification
      */
     public function via(object $notifiable): array
     {
+        Log::info('NewWelcomeNotification fired for user: ' . $notifiable->id);
         return ['mail'];
     }
 

@@ -116,6 +116,16 @@
         </div>
     </form>
 
+    @if(!Auth::id())
+    
+    @elseif(Auth::id() === $forum->user_id || Auth::user()->usertype === 'admin')
+        <form action="{{ route('forum.destroy', $forum->id) }}" method="POST" class="show-confirm">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger">Delete Forum</button>
+        </form>
+    @endauth
+
     <!-- Threads List -->
     <div class="mt-4">
         <h4>Threads in this forum</h4>

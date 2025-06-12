@@ -64,7 +64,7 @@
         <p><strong>ISBN:</strong> {{ $book->isbn }}</p>
         <p><strong>Item ID:</strong> {{ $book->item_id }}</p>
         <p><strong>Call Number:</strong> {{ $book->call_number }}</p>
-        <p><strong>Initial Cataloguer:</strong>{{ $book->initial_cataloguer }}</p>
+        <p><strong>Initial Cataloguer: </strong>{{ $book->initial_cataloguer }}</p>
 
         @if ($book->status)
             <p><strong>Status: </strong>Available</p>
@@ -74,10 +74,11 @@
         
         {{-- rate --}}
         @auth
-        <p><strong>Your Rating:</strong></p>
+        <div class="flex items-center gap-1" style="margin-top: -3.9rem;">
+            <p class="mb-2"><strong>Your Rating:</strong></p>
             <form action="{{ route('book.rate', $book->id) }}" method="POST">
                 @csrf
-                <div class="flex flex-row-reverse justify-end rating gap-1">
+                <div class="flex flex-row-reverse justify-center rating gap-1">
                     @for ($i = 5; $i >= 1; $i--)
                         <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" class="hidden peer" required />
                         <label for="star{{ $i }}" class="cursor-pointer text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-500">
@@ -91,6 +92,7 @@
                     <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Rate</button>
                 </div>
             </form>
+        </div>
         @endauth
 
         {{-- Check if the book has a media file --}}

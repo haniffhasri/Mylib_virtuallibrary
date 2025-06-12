@@ -3,6 +3,9 @@
 @section('content')
 <div class="mb-3">
     <h4 class="h3 d-inline align-middle">User Wishlist</h4>
+    <x-help-icon-blade class="px-2">
+        What the user wish to have in this website
+    </x-help-icon-blade>
 </div>
 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
     <table class="w-full text-left rtl:text-right">

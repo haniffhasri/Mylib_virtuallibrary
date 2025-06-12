@@ -13673,6 +13673,12 @@ span.flatpickr-weekday {
     top: 1rem;
 }
 
+/* card-list */
+.card-list h4 {
+    height: 3em;
+    overflow: hidden;
+}
+
 /* comment */
 .border-comment {
     /* border-top: 1px solid black !important; */

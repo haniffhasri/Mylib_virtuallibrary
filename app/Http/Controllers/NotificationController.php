@@ -34,10 +34,20 @@ class NotificationController extends Controller
         }
 
         // Check for new user (account) notification
-        if (isset($data['id'])) {
-            $user = \App\Models\User::find($data['id']);
+        if (isset($data['resource_id'])) {
+            $user = \App\Models\User::find($data['resource_id']);
             if (!$user) {
                 return redirect()->route('notifications.index')->with('error', 'User account has been deleted.');
+            }
+
+            return redirect($data['url']);
+        }
+
+        // book add link
+        if (isset($data['resource_id']) && $data['type'] === 'book') {
+            $book = \App\Models\Book::find($data['resource_id']);
+            if (!$book) {
+                return redirect()->route('notifications.index')->with('error', 'Book not found.');
             }
 
             return redirect($data['url']);

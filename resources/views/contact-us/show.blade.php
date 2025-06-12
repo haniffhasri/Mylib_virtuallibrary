@@ -13,6 +13,9 @@
     <div class="container">
         <div class="mb-3">
             <h4 class="h3 d-inline align-middle">Contact Us</h4>
+            <x-help-icon-blade>
+                Page to modify our contact information
+            </x-help-icon-blade>
         </div>
         <div class="mb-4 p-4 bg-light rounded shadow-sm">
             <p><a href="mailto:{{ $contact->email }}">{{ $contact->email }}</a></p>

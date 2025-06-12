@@ -2,7 +2,12 @@
 
 @section('content')
 <div class="container">
-    <h4>Manage Librarian Validation Codes</h4>
+    <div class="flex items-center">
+        <h4>Manage Librarian Validation Codes</h4>
+        <x-help-icon-blade>
+            After a librarian have been hired, you have to give them this code. It can only be used once.
+        </x-help-icon-blade>
+    </div>
 
     @if(session('success'))
         <div class="alert alert-success mt-2">{{ session('success') }}</div>

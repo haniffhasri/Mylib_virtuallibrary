@@ -17,16 +17,25 @@
         <div class="flex gap-2">
             <div class="form-group mb-3 w-full">
                 <label for="item_id">Item ID</label>
+                <x-help-icon-blade>
+                    Must be unique
+                </x-help-icon-blade>
                 <input type="text" id="item_id" name="item_id" class="form-control" required>
             </div>
             <div class="form-group mb-3 w-full">
                 <label for="call_number">Call Number</label>
+                <x-help-icon-blade>
+                    Must be unique
+                </x-help-icon-blade>
                 <input type="text" id="call_number" name="call_number" class="form-control" required>
             </div>
         </div>
         <div class="flex gap-2">
             <div class="form-group mb-3 w-full">
                 <label for="isbn">ISBN</label>
+                <x-help-icon-blade>
+                    Must be unique
+                </x-help-icon-blade>
                 <input type="text" id="isbn" name="isbn" class="form-control" required>
             </div>
             <div class="form-group mb-3 w-full">
