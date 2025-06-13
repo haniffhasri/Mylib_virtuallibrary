@@ -4,9 +4,11 @@
     $maxDepth = $comment->commentable_type === 'App\\Models\\Thread' ? 5 : 3;
     $canNest = $depth < $maxDepth;
     $isFirstDepth = $depth === 1;
+    $isBook = $comment->commentable_type === 'App\\Models\\Book';
+    $showBorderComment = !$isFirstDepth && !$isBook;
 @endphp
 
-<div id="comment-{{ $comment->id }}" class="{{ !$isFirstDepth ? 'border-comment' : '' }} {{ $canNest ? 'ms-5' : '' }} {{ $isFirstDepth ? 'mt-3 border p-2 bg-light rounded' : '' }}">
+<div id="comment-{{ $comment->id }}" class="{{ $showBorderComment ? 'border-comment' : '' }} {{ $canNest ? 'ms-5' : '' }} {{ $isFirstDepth ? 'mt-3 border p-2 bg-light rounded' : '' }}">
     <div>
         <strong>{{ $comment->user->name }}</strong> said:
         <p>{!! nl2br(e($comment->body)) !!}</p>

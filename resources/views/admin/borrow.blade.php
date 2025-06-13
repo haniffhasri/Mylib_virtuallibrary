@@ -70,29 +70,29 @@
             </thead>
             <tbody>
                 @foreach ($borrow as $borrows)
-                    @if ($borrows->is_active === true)
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ $borrows->user->name }}
-                            </th>
-                            <td class="px-6 py-4">
-                                {{ $borrows->user->email }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $borrows->book->book_title }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ $borrows->due_date }}
-                            </td>
-                            <td class="px-6 py-4 text-right">
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            {{ $borrows->user->name }}
+                        </th>
+                        <td class="px-6 py-4">
+                            {{ $borrows->user->email }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $borrows->book->book_title }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ $borrows->due_date }}
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            @if ($borrows->is_active === true)
                                 <form action="{{ route('borrow.delete', $borrows->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
-                            </td>
-                        </tr>
-                    @endif
+                            @endif
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>

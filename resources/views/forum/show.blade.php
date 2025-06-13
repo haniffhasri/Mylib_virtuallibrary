@@ -10,78 +10,101 @@
 @extends($layout)
 
 @section('content')
-<div class="container">
-    <!-- Forum Info -->
-    <div class="mb-4 w-full p-7 flex items-center justify-center flex-col rounded-2xl" style="background-color: #d5d5d5;">
-        <h4><b>Welcome to {{ $forum->forum_title }}<b></h4>
-        <p class="text-muted" style="margin: 0">{{ $forum->forum_description }}</p>
+<div class="container mx-auto px-4 py-6 max-w-6xl">
+    <!-- Forum Header -->
+    <div class="bg-gray-100 rounded-xl p-8 mb-6 text-center">
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Welcome to {{ $forum->forum_title }}</h1>
+        @if($forum->forum_description)
+            <p class="text-gray-600">{{ $forum->forum_description }}</p>
+        @endif
     </div>
 
-    <!-- Create Thread -->
-    <div class="mb-5 accordion block h-min w-full p-2.5 z-20 text-sm text-gray-900 bg-white shadow-xl focus:ring-blue-500 focus:border-blue-500 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500">
-        <div class="accordion-header text-black"><strong>Post a New Thread</strong></div>
-        <div class="accordion-content">
+    <!-- Create Thread Section -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+        <div class="border-b border-gray-200 px-6 py-4 bg-gray-50">
+            <h3 class="text-lg font-medium text-gray-900">Post a New Thread</h3>
+        </div>
+        <div class="p-6">
             @auth
-                <form action="{{ route('forum.threads.store', $forum->id) }}" method="POST">
+                <form action="{{ route('forum.threads.store', $forum->id) }}" method="POST" class="space-y-4">
                     @csrf
-                    <div class="mb-3">
-                        <input type="text" name="thread_title" class="form-control" placeholder="Thread title" required>
+                    <div>
+                        <input type="text" name="thread_title" placeholder="Thread title" required
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
-                    <div class="mb-3">
-                        <textarea name="thread_body" class="form-control" rows="4" placeholder="What do you want to talk about?" required></textarea>
+                    <div>
+                        <textarea name="thread_body" rows="4" placeholder="What do you want to talk about?" required
+                                  class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Post Thread</button>
+                    <button type="submit" 
+                            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Post Thread
+                    </button>
                 </form>
             @else
-                <p class="text-sm">Please <a href="{{ route('login') }}">Sign in</a> to create a thread.</p>
+                <p class="text-gray-600">
+                    Please <a href="{{ route('login') }}" class="text-blue-600 hover:text-blue-800">Sign in</a> to create a thread.
+                </p>
             @endauth
         </div>
     </div>
 
-    <!-- Search & Filters -->
-    <div class="flex justify-center gap-3 bg-white shadow-xl items-center p-3 mb-6">
-        <form action="{{ route('forum.show', $forum->slug) }}" method="GET" class="mb-0 w-full h-min">
-            <div class="flex">
-                <label for="search-dropdown" class="sr-only">Search</label>
-                <div class="relative w-full">
-                    <input type="text" name="q" placeholder="Search threads..." value="{{ request('q') }}" id="search-dropdown"
-                        class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 border-s-gray-50 border-s-2 border border-gray-300" />
-                    <button type="submit"
-                            class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 hover:bg-blue-800">
-                        <svg class="w-4 h-4" aria-hidden="true" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                        </svg>
-                        <span class="sr-only">Search</span>
-                    </button>
+    <!-- Search and Filter Section -->
+    <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+            <!-- Search Form -->
+            <form action="{{ route('forum.show', $forum->slug) }}" method="GET" class="flex-1">
+                <div class="flex">
+                    <label for="search-dropdown" class="sr-only">Search</label>
+                    <div class="relative w-full">
+                        <input type="text" name="q" placeholder="Search threads..." value="{{ request('q') }}" id="search-dropdown"
+                            class="block p-2.5 w-full z-20 text-sm rounded-lg text-gray-900 bg-gray-50 border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:focus:border-blue-500" />
+                        <button type="submit"
+                                class="absolute top-0 end-0 p-2.5 text-sm rounded-tr-lg rounded-br-lg font-medium h-full text-white bg-blue-700 border focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <svg class="w-4 h-4" aria-hidden="true" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                            </svg>
+                            <span class="sr-only">Search</span>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
 
-        <!-- Date Filter -->
-        <div class="accordion block w-full p-2.5 z-20 text-sm text-gray-900 bg-gray-50 border-s-gray-50 border-s-2 border border-gray-300">
-            <div class="accordion-header text-gray-400">Select Time</div>
-            <div class="accordion-content">
-                <form action="{{ route('forum.show', $forum->slug) }}" method="GET" class="space-y-2">
-                    <input type="hidden" name="q" value="{{ request('q') }}">
-                    <select name="created_at" class="w-full p-2 border rounded">
-                        <option value="">Any Time</option>
-                        <option value="today" {{ request('created_at') == 'today' ? 'selected' : '' }}>Today</option>
-                        <option value="this_week" {{ request('created_at') == 'this_week' ? 'selected' : '' }}>This Week</option>
-                        <option value="this_month" {{ request('created_at') == 'this_month' ? 'selected' : '' }}>This Month</option>
-                        <option value="this_year" {{ request('created_at') == 'this_year' ? 'selected' : '' }}>This Year</option>
-                    </select>
-                    <button type="submit"
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Filter
-                    </button>
-                </form>
+            <!-- Time Filter Dropdown -->
+            <div x-data="{ open: false }" class="relative">
+                <button @click="open = !open" type="button"
+                        class="flex items-center justify-between w-full md:w-auto px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <span>Filter by Time</span>
+                    <svg class="ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                
+                <div x-show="open" @click.away="open = false" x-transition
+                     class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                    <form action="{{ route('forum.show', $forum->slug) }}" method="GET" class="p-2 space-y-2">
+                        <input type="hidden" name="q" value="{{ request('q') }}">
+                        <select name="created_at" class="w-full p-2 border rounded">
+                            <option value="">Any Time</option>
+                            <option value="today" {{ request('created_at') == 'today' ? 'selected' : '' }}>Today</option>
+                            <option value="this_week" {{ request('created_at') == 'this_week' ? 'selected' : '' }}>This Week</option>
+                            <option value="this_month" {{ request('created_at') == 'this_month' ? 'selected' : '' }}>This Month</option>
+                            <option value="this_year" {{ request('created_at') == 'this_year' ? 'selected' : '' }}>This Year</option>
+                        </select>
+                        <button type="submit" class="w-full px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            Apply
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Sort -->
-    <form method="GET" action="{{ route('forum.show', $forum->slug) }}" class="mb-4 mt-4 flex justify-end">
+    <!-- Sort Dropdown -->
+    <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-semibold text-gray-800">Threads in this forum</h3>
+        <form method="GET" action="{{ route('forum.show', $forum->slug) }}" class="mb-4 mt-4 flex justify-end">
         <input type="hidden" name="q" value="{{ request('q') }}">
         <input type="hidden" name="created_at" value="{{ request('created_at') }}">
         <div x-data="{ open: false }" class="relative inline-block text-left">
@@ -115,41 +138,53 @@
             </div>
         </div>
     </form>
+    </div>
 
-    @if(!Auth::id())
-
-    @elseif(Auth::id() === $forum->user_id || Auth::user()->usertype === 'admin')
-        <a href="{{ route('forum.edit', $forum->id) }}" class="btn btn-warning">Edit</a>
-        <form action="{{ route('forum.destroy', $forum->id) }}" method="POST" class="show-confirm">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger">Delete Forum</button>
-        </form>
+    <!-- Admin Controls -->
+    @auth
+        @if(Auth::id() === $forum->user_id || Auth::user()->usertype === 'admin')
+            <div class="flex gap-2 mb-6">
+                <a href="{{ route('forum.edit', $forum->id) }}" 
+                   class="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
+                    Edit Forum
+                </a>
+                <form action="{{ route('forum.destroy', $forum->id) }}" method="POST" class="show-confirm">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" 
+                            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        Delete Forum
+                    </button>
+                </form>
+            </div>
+        @endif
     @endauth
 
     <!-- Threads List -->
-    <div class="mt-4">
-        <h4>Threads in this forum</h4>
-        @forelse($threads as $thread)
-            <div class="card mb-3">
-                <div class="card-body">
-                    <p class="text-sm"><b>
-                        <a href="{{ route('threads.show', $thread->id) }}">{{ $thread->thread_title }}</a>
-                    </b></p>
-                    <p class="text-muted text-sm mb-1">
-                        Posted by {{ $thread->user->name }} • {{ $thread->created_at->diffForHumans() }}
-                    </p>
-                    <p class="text-sm">{{ Str::limit($thread->thread_body, 150) }}</p>
-                </div>
-            </div>
-        @empty
-            <p>No Thread yet.</p>
-        @endforelse
-
-        <!-- Pagination -->
-        <div class="mt-4">
-            {{ $threads->appends(request()->query())->links() }}
+    @forelse($threads as $thread)
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-4 hover:shadow-lg transition-shadow duration-200">
+            <a href="{{ route('threads.show', $thread->id) }}" class="block p-6">
+                <h3 class="text-lg font-semibold text-gray-800 hover:text-blue-600 mb-1">{{ $thread->thread_title }}</h3>
+                <p class="text-gray-600 text-sm mb-3">
+                    Posted by <span class="font-medium">{{ $thread->user->name }}</span> • {{ $thread->created_at->diffForHumans() }}
+                </p>
+                @if($thread->thread_body)
+                    <p class="text-gray-700">{{ Str::limit($thread->thread_body, 150) }}</p>
+                @endif
+            </a>
         </div>
+    @empty
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+            <p class="text-gray-600">No threads found in this forum yet.</p>
+            @auth
+                <p class="mt-2">Be the first to <a href="#create-thread" class="text-blue-600 hover:text-blue-800">start a discussion</a>!</p>
+            @endauth
+        </div>
+    @endforelse
+
+    <!-- Pagination -->
+    <div class="mt-6">
+        {{ $threads->appends(request()->query())->links() }}
     </div>
 </div>
 @endsection

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
-    protected $fillable = ['author','book_title','book_description','genre','format','status','book_publication_date','media_path','image_path'];
+    protected $fillable = ['author','book_title','book_description','genre','format','status','book_publication_date','media_path','image_path','call_number','item_id','isbn'];
     /** @use HasFactory<\Database\Factories\BookFactory> */
     use HasFactory;
 
@@ -19,6 +19,11 @@ class Book extends Model
     {
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id')->with('replies.user');
     }    
+
+    public function allComments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 
     public function ratings() {
         return $this->hasMany(Rating::class);

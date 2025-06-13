@@ -13661,12 +13661,6 @@ span.flatpickr-weekday {
     padding: 1rem 0 2rem 1rem;
 }
 
-/* card-list */
-.card-list h4 {
-    height: 3em;
-    overflow: hidden;
-}
-
 /* comment */
 .border-comment {
     /* border-top: 1px solid black !important; */

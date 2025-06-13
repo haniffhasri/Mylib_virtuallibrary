@@ -28,7 +28,9 @@ class AnalyticsController extends Controller
             'daily_visits' => Visitor::whereDate('created_at', $today)->count(),
             'weekly_visits' => Visitor::whereBetween('created_at', [$weekAgo, now()])->count(),
             'monthly_visits' => Visitor::whereBetween('created_at', [$monthAgo, now()])->count(),
-            
+            'user_count' => User::count(),
+            'active_user_count' => User::where('is_active', true)->count(),
+           
             // registration
             'registration_users' => User::selectRaw("TO_CHAR(created_at, 'YYYY-MM') as month, COUNT(*) as total")
                 ->where('created_at', '>=', now()->subYear())
@@ -50,7 +52,7 @@ class AnalyticsController extends Controller
             // Forums and Engagement
             'forum_count' => Forum::count(),
             'thread_count' => Thread::count(),
-            'comment_count' => DB::table('comments')->count(),
+            'comment_count' => Comment::where('commentable_type', 'App\Models\Thread')->count(),
 
             // Search
             'book_search_trends' => DB::table('search_logs')
@@ -79,16 +81,19 @@ class AnalyticsController extends Controller
             'search_failures' => $searchFailures,
             'search_failure_rate' => $searchFailureRate,
 
-            // most commented thread & book
-            'most_commented_threads' => Thread::withCount('comments')
-                ->orderByDesc('comments_count')
-                ->take(5)
+            'threads_count_per_forum' => Forum::withCount('threads')
+                ->orderByDesc('threads_count')
+                ->take(10)
                 ->get(),
 
-            'most_commented_books' => Book::withCount('comments')
-                ->orderByDesc('comments_count')
-                ->take(5)
-                ->get(),
+            // most book
+            'most_commented_books' => Book::whereHas('allComments', function ($q) {
+                $q->where('commentable_type', Book::class);
+            })
+            ->withCount('allComments')
+            ->orderByDesc('all_comments_count')
+            ->take(10)
+            ->get(),
 
             // top borrower
             'top_borrowers' => Borrow::select('user_id', DB::raw('count(*) as total'))
@@ -124,18 +129,21 @@ class AnalyticsController extends Controller
                 ->with('book')
                 ->take(5)
                 ->get(),
+            'user_count' => User::count(),
             'forum_count' => Forum::count(),
-            'thread_count' => Thread::count(),
-            'comment_count' => Comment::count(),
+            'thread_count' => Thread::with('forum')->count(),
+            'comment_count' => Comment::whereHas('thread.forum')->count(),
+            'top_forum' => Forum::withCount('threads')->orderByDesc('threads_count')->first(),
+
             'top_searches' => DB::table('search_logs')
                 ->select('term', DB::raw('count(*) as total'))
                 ->groupBy('term')
                 ->orderByDesc('total')
                 ->limit(10)
                 ->get(),
-            'most_commented_threads' => Thread::withCount('comments')
+            'most_commented_forum' => Forum::withCount('comments')
             ->orderByDesc('comments_count')
-            ->take(5)
+            ->take(10)
             ->get(),
             'most_commented_books' => Book::withCount('comments')
                 ->orderByDesc('comments_count')

@@ -109,9 +109,6 @@ class BookController extends Controller
                 'author' => 'required|string|max:255',
                 'genre' => 'required|string|max:100',
                 'format' => 'required|in:pdf,audio',
-                'call_number' => 'required|string|unique:books,call_number,' . $id,
-                'item_id' => 'required|string|unique:books,item_id,' . $id,
-                'isbn' => 'required|string|unique:books,isbn' . $id,
                 'book_publication_date' => 'required|date',
                 'media_path' => 'nullable|mimes:pdf,mp3|max:20480',
                 'image_path' => 'nullable|image|max:2048',
@@ -124,9 +121,6 @@ class BookController extends Controller
             $book->book_description = $request->book_description;
             $book->genre = $request->genre;
             $book->format = $request->format;
-            $book->call_number = $request->call_number;
-            $book->item_id = $request->item_id;
-            $book->isbn = $request->isbn;
             $book->book_publication_date = $request->book_publication_date;
         
             // Delete media if requested
