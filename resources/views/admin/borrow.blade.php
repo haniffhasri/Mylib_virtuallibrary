@@ -47,54 +47,74 @@
             List of borrowed book by the user
         </x-help-icon-blade>
     </div>
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        User Name
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Email
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Book Title
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Due
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        <span class="sr-only">Drop</span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($borrow as $borrows)
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            {{ $borrows->user->name }}
+    <!-- Borrowers Table -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            User Name
                         </th>
-                        <td class="px-6 py-4">
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Email
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Book Title
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Due Date
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach ($borrow as $borrows)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ $borrows->user->name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ $borrows->user->email }}
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ $borrows->book->book_title }}
                         </td>
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ $borrows->due_date }}
                         </td>
-                        <td class="px-6 py-4 text-right">
+                        <td class="px-6 py-4 whitespace-nowrap">
                             @if ($borrows->is_active === true)
-                                <form action="{{ route('borrow.delete', $borrows->id) }}" method="POST">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Active
+                                </span>
+                            @else
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                    Removed
+                                </span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            @if ($borrows->is_active === true)
+                                <form action="{{ route('borrow.delete', $borrows->id) }}" method="POST" class="inline show-confirm">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    <button type="submit" class="w-full px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-200">
+                                        Remove
+                                    </button>
                                 </form>
                             @endif
                         </td>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
+</div>
 @endsection

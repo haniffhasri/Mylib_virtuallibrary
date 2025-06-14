@@ -18,42 +18,53 @@
                 You can add FAQs and a video guide by embedding the link of the video in the content
             </x-help-icon-blade>
         </div>
-        <a href="{{ route('support.create') }}" class="btn btn-primary mb-3">Add New Support Content</a>
+        <a href="{{ route('support.create') }}" class="mb-6 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+            Add New Support Content
+        </a>
 
         @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+            <div class="mb-6 p-4 bg-green-100 text-green-800 rounded-md">{{ session('success') }}</div>
         @endif
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Content</th>
-                    <th>Type</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($contents as $content)
+        <div class="overflow-x-auto bg-white rounded-lg shadow">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
                     <tr>
-                        <td>{{ $content->support_title }}</td>
-                        <td>{{ $content->content }}</td>
-                        <td>{{ ucfirst(str_replace('_', ' ', $content->support_type)) }}</td>
-                        <td><a href="{{ route('support.edit', $content) }}" class="btn btn-sm btn-warning w-full mb-1">Edit</a>
-                            <form method="POST" action="{{ route('support.destroy', $content) }}" class="w-full show-confirm">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-sm btn-danger">Delete</button>
-                            </form>
-                        </td>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><b>Title</b></th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><b>Content</b></th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><b>Type</b></th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><b>Actions</b></th>
                     </tr>
-                @empty
-                    <tr><td colspan="3">No support content available.</td></tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse ($contents as $content)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $content->support_title }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{{ $content->content }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ ucfirst(str_replace('_', ' ', $content->support_type)) }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-y-2">
+                                <a href="{{ route('support.edit', $content) }}" class="block px-3 py-1 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition duration-200 text-center">Edit</a>
+                                <form method="POST" action="{{ route('support.destroy', $content) }}" class="show-confirm">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="w-full px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-200">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">No support content available.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
 
-        {{ $contents->links() }}
+        <div class="mt-6">
+            {{ $contents->links() }}
+        </div>
     </div>
 @else
 <div class="gh-section seventh">

@@ -13,37 +13,45 @@
     <div class="container">
         <h4>Notifications</h4>
 
-        @if(session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
-        @if(session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
-        @endif
-        
-        @if(Auth::user()->unreadNotifications()->count() > 0)
-            <form action="{{ route('notifications.readAll') }}" method="POST">
-                @csrf
-                <button class="btn btn-sm btn-primary mb-3">Mark All as Read</button>
-            </form>
-        @endif
+        <!-- Alert Messages -->
+    @if(session('error'))
+        <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded">
+            <p>{{ session('error') }}</p>
+        </div>
+    @endif
 
-        <ul class="list-group">
+    @if(session('status'))
+        <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded">
+            <p>{{ session('status') }}</p>
+        </div>
+    @endif
+
+    <!-- Notifications List -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <ul class="divide-y divide-gray-200">
             @forelse($notifications as $notification)
-                <li class="list-group-item d-flex justify-content-between align-items-center {{ $notification->read_at ? '' : 'bg-light' }}">
-                    <div>
-                        {{ $notification->data['message'] }}
+                <li class="{{ $notification->read_at ? 'bg-white' : 'bg-blue-50' }} hover:bg-gray-50 transition duration-150">
+                    <div class="px-4 py-4 sm:px-6 flex justify-between items-center">
+                        <div class="text-sm text-gray-800">
+                            {{ $notification->data['message'] }}
+                            <p class="text-xs text-gray-500 mt-1">
+                                {{ $notification->created_at->diffForHumans() }}
+                            </p>
+                        </div>
+                        <a href="{{ route('notifications.read', $notification->id) }}" 
+                           class="px-3 py-1 border border-green-500 rounded-md text-sm font-medium 
+                                  {{ $notification->read_at ? 'text-green-600 hover:bg-green-50' : 'bg-green-100 text-green-700 hover:bg-green-200' }}
+                                  transition duration-200">
+                            {{ $notification->read_at ? 'View' : 'Mark as Read & View' }}
+                        </a>
                     </div>
-                    <a href="{{ route('notifications.read', $notification->id) }}" class="btn btn-sm btn-outline-success">
-                        {{ $notification->read_at ? 'View' : 'Mark as Read & View' }}
-                    </a>
                 </li>
             @empty
-                <li class="list-group-item">No notifications found.</li>
+                <li class="px-4 py-6 sm:px-6 text-center text-gray-500">
+                    No notifications found.
+                </li>
             @endforelse
         </ul>
     </div>
+</div>
 @endsection

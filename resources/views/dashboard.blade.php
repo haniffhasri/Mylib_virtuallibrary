@@ -170,11 +170,12 @@
                     <div class="p-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             @foreach($borrows->take(4) as $borrowed)
-                            <div class="flex items-start space-x-4 p-3 hover:bg-gray-50 rounded-lg transition duration-200">
-                                <img src="{{ asset('image/' . $borrowed->book->image_path) }}" alt="{{ $borrowed->book->book_title }}" 
-                                     class="w-20 h-28 object-cover rounded-md shadow">
-                                <div class="flex-1">
-                                    <h4 class="font-medium text-gray-900">{{ $borrowed->book->book_title }}</h4>
+                            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                                <div class="h-48 overflow-hidden">
+                                    <img src="{{ asset('image/' . $borrowed->book->image_path) }}" alt="{{ $borrowed->book->book_title }}" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-1 flex flex-column items-center pb-3">
+                                    <h4 class="font-medium text-2xl text-gray-900">{{ $borrowed->book->book_title }}</h4>
                                     <p class="text-sm text-gray-500 mb-2">Borrowed on {{ $borrowed->created_at->format('M d, Y') }}</p>
                                     <a href="{{ asset('media/' . $borrowed->book->media_path) }}" target="_blank" 
                                        class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full hover:bg-blue-200 transition duration-200">

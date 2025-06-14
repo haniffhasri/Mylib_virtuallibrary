@@ -89,88 +89,103 @@
 <div class="mb-3">
     <h4 class="h3 d-inline align-middle">List of Users</h4>
 </div>
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-left rtl:text-right">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                    User Name
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Email
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Role
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Status
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    <span class="sr-only">Drop</span>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($users as $singleUser)
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                    {{ $singleUser->name }}
-                </th>
-                <td class="px-6 py-4">
-                    {{ $singleUser->email }}
-                </td>
-                <td class="px-6 py-4">
-                    @if (Auth::user()->usertype == 'admin')
-                        <form action="{{ route('user.updateRole', $singleUser->id) }}" method="POST" style="display: flex; align-items: center;">
-                            @csrf
-                            @method('PUT')
-                            <select name="usertype" class="form-select form-select-sm me-2" onchange="confirmWithSwal(this)">
-                                <option value="">Select user type</option>
-                                <option value="admin" {{ $singleUser->usertype == 'admin' ? 'selected' : '' }}>Admin</option>
-                                <option value="librarian" {{ $singleUser->usertype == 'librarian' ? 'selected' : '' }}>Librarian</option>
-                                <option value="user" {{ $singleUser->usertype == 'user' ? 'selected' : '' }}>User</option>
-                            </select>
-                        </form>
-                    @else
-                        {{ $singleUser->usertype }}
-                    @endif
-                </td>
-                <td class="px-6 py-4">
-                    @if ($singleUser->is_active === true)
-                        Active
-                    @else
-                        Deactivated
-                    @endif
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <form action="{{ route('user.delete', $singleUser->id) }}" method="POST" class="show-confirm">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+<!-- Users Table -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            User Name
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Email
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Role
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach ($users as $singleUser)
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                            {{ $singleUser->name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ $singleUser->email }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            @if (Auth::user()->usertype == 'admin')
+                                <form action="{{ route('user.updateRole', $singleUser->id) }}" method="POST" class="flex items-center">
+                                    @csrf
+                                    @method('PUT')
+                                    <select name="usertype" onchange="confirmWithSwal(this)" 
+                                            class="text-sm border-gray-300 rounded-md focus:border-blue-500 focus:ring-blue-500">
+                                        <option value="admin" {{ $singleUser->usertype == 'admin' ? 'selected' : '' }}>Admin</option>
+                                        <option value="librarian" {{ $singleUser->usertype == 'librarian' ? 'selected' : '' }}>Librarian</option>
+                                        <option value="user" {{ $singleUser->usertype == 'user' ? 'selected' : '' }}>User</option>
+                                    </select>
+                                </form>
+                            @else
+                                {{ ucfirst($singleUser->usertype) }}
+                            @endif
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @if ($singleUser->is_active === true)
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Active
+                                </span>
+                            @else
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                    Deactivated
+                                </span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <form action="{{ route('user.delete', $singleUser->id) }}" method="POST" class="show-confirm">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="w-full px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-200">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+@endsection
+
+@push('scripts')
 <script>
+    // SweetAlert confirmation for role changes
     function confirmWithSwal(selectElement) {
         Swal.fire({
             title: 'Are you sure?',
-            text: "Do you want to change the user type?",
+            text: "Do you want to change this user's role?",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, change it!',
-            cancelButtonText: 'Cancel'
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, change it!'
         }).then((result) => {
             if (result.isConfirmed) {
                 selectElement.form.submit();
             } else {
-                selectElement.selectedIndex = 0;
+                // Reset to original value
+                selectElement.value = "{{ $singleUser->usertype }}";
             }
         });
     }
 </script>
-@endsection
+@endpush

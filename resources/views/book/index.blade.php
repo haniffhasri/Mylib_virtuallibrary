@@ -108,72 +108,105 @@
                 </div>
             </div>
         </form>
-         <!-- Books List -->
-    <div class="mb-8">
-        <h2 class="text-xl font-bold text-gray-800 mb-4">Available Books</h2>
-        
-        @if ($book->isEmpty())
-            <div class="bg-white rounded-lg shadow-sm p-8 text-center">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-                <h3 class="mt-2 text-lg font-medium text-gray-900">No books found</h3>
-                <p class="mt-1 text-gray-500">Try adjusting your search or filter criteria</p>
-            </div>
-        @else
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                @foreach ($book as $book_item)
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-200">
-                        <div class="h-48 overflow-hidden">
-                            <img src="{{ asset('image/' . $book_item->image_path) }}" alt="{{ $book_item->book_title }}" 
-                                class="w-full h-full object-cover">
+        <!-- Books List -->
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">Available Books</h2>
+    
+    @if ($book->isEmpty())
+        <div class="bg-white rounded-lg shadow p-6 text-center">
+            <p class="text-lg font-semibold text-gray-700">No books found matching your criteria.</p>
+            <a href="{{ route('book.index') }}" class="mt-4 inline-block text-blue-600 hover:text-blue-800">Clear filters</a>
+        </div>
+    @else
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            @foreach ($book as $book_item)
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                    <!-- Book Image -->
+                    <div class="h-48 overflow-hidden">
+                        <img src="{{ asset('image/' . $book_item->image_path) }}" alt="{{ $book_item->book_title }}" class="w-full h-full object-cover">
+                    </div>
+                    
+                    <!-- Book Content -->
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">{{ $book_item->book_title }}</h3>
+
+                        <!-- Rating Section -->
+                        <div class="flex items-center mb-4">
+                            @php
+                                $average = $book_item->averageRating();
+                                $fullStars = floor($average);
+                                $halfStar = ($average - $fullStars) >= 0.25 && ($average - $fullStars) < 0.75;
+                                $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
+                            @endphp
+
+                            <div class="flex items-center mr-2">
+                                @for ($i = 0; $i < $fullStars; $i++)
+                                    <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 22 20">
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                    </svg>
+                                @endfor
+
+                                @if ($halfStar)
+                                    <svg class="w-6 h-6 text-yellow-400" viewBox="0 0 22 20" fill="currentColor">
+                                        <defs>
+                                            <linearGradient id="half">
+                                                <stop offset="50%" stop-color="currentColor"/>
+                                                <stop offset="50%" stop-color="#E5E7EB"/>
+                                            </linearGradient>
+                                        </defs>
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" fill="url(#half)" />
+                                    </svg>
+                                @endif
+
+                                @for ($i = 0; $i < $emptyStars; $i++)
+                                    <svg class="w-6 h-6 text-gray-300" fill="currentColor" viewBox="0 0 22 20">
+                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                    </svg>
+                                @endfor
+                            </div>
                         </div>
-                        <div class="p-4">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">{{ $book_item->book_title }}</h3>
-                            
-                            <!-- Admin/Librarian Actions -->
-                            @if($layout == 'layouts.backend')
-                                <div class="flex gap-2 mt-4">
-                                    <a href="{{ route('book.edit', $book_item->id) }}" 
-                                       class="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition duration-200">
-                                        Edit
+                        
+                        <!-- Admin Controls -->
+                        @if($layout == 'layouts.backend')
+                            <div class="flex space-x-2 mt-4">
+                                <a href="{{ route('book.edit', $book_item->id) }}" class="flex-1 text-center px-3 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition duration-200">
+                                    Edit
+                                </a>
+                                <a href="{{ route('book.destroy', $book_item->id) }}" class="flex-1 text-center px-3 py-2 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700 transition duration-200">
+                                    Delete
+                                </a>
+                            </div>
+                        @else
+                            <!-- User Actions -->
+                            @if ($book_item->media_path)
+                                @if ($borrowedBookIds->contains($book_item->id))
+                                    <a href="{{ asset('media/' . $book_item->media_path) }}" target="_blank" class="block w-full mt-4 px-4 py-2 bg-green-600 text-white text-center text-sm font-medium rounded hover:bg-green-700 transition duration-200">
+                                        {{ $book_item->format === 'audio' ? 'Listen Now' : 'Read PDF' }}
                                     </a>
-                                    <a href="{{ route('book.destroy', $book_item->id) }}" 
-                                       class="flex-1 text-center bg-red-600 hover:bg-red-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition duration-200">
-                                        Delete
-                                    </a>
-                                </div>
-                            @else
-                                <!-- User Actions -->
-                                @if ($book_item->media_path)
-                                    @if ($borrowedBookIds->contains($book_item->id))
-                                        <a href="{{ asset('media/' . $book_item->media_path) }}" target="_blank"
-                                           class="mt-4 w-full block text-center bg-green-600 hover:bg-green-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition duration-200">
-                                            {{ $book_item->format === 'audio' ? 'Listen Now' : 'Read PDF' }}
+                                @else
+                                    @auth
+                                        <a href="{{ route('borrow.book', $book_item->id) }}" class="block w-full mt-4 px-4 py-2 bg-blue-600 text-white text-center text-sm font-medium rounded hover:bg-blue-700 transition duration-200">
+                                            Borrow
                                         </a>
                                     @else
-                                        @auth
-                                            <a href="{{ route('borrow.book', $book_item->id) }}"
-                                               class="mt-4 w-full block text-center bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition duration-200">
-                                                Borrow
-                                            </a>
-                                        @else
-                                            <a href="{{ route('login') }}"
-                                               class="mt-4 w-full block text-center bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition duration-200">
-                                                Login to Borrow
-                                            </a>
-                                        @endauth
-                                    @endif
-                                @else
-                                    <p class="mt-2 text-sm text-gray-500 italic">Currently unavailable</p>
+                                        <a href="{{ route('login') }}" class="block w-full mt-4 px-4 py-2 bg-blue-600 text-white text-center text-sm font-medium rounded hover:bg-blue-700 transition duration-200">
+                                            Login to Borrow
+                                        </a>
+                                    @endauth
                                 @endif
+                            @else
+                                <p class="mt-4 text-sm text-gray-500 text-center">Currently unavailable</p>
                             @endif
-                        </div>
+                        @endif
+                        
+                        <!-- View Details Button -->
+                        <a href="{{ route('book.show', $book_item->id) }}" class="block w-full mt-3 px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded hover:bg-gray-50 transition duration-200 text-center">
+                            View Details
+                        </a>
                     </div>
-                @endforeach
-            </div>
-        @endif
-    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
 
     <!-- Pagination -->
     <div class="mt-8">

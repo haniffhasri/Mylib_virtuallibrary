@@ -10,123 +10,166 @@
 @extends($layout)
 
 @section('content')
-    <div class="book-show">
-        <h4>{{ $book->book_title }}</h4>
-        
-        <img src="{{ asset('image/' . $book->image_path) }}" alt="Cover Image" width="200">
-
-        @php
-            $average = $book->averageRating(); // e.g. 3.7
-            $fullStars = floor($average);
-            $halfStar = ($average - $fullStars) >= 0.25 && ($average - $fullStars) < 0.75;
-            $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
-        @endphp
-
-        <div class="flex items-center space-x-1">
-            {{-- Full Stars --}}
-            @for ($i = 0; $i < $fullStars; $i++)
-                <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 22 20">
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                </svg>
-            @endfor
-
-            {{-- Half Star --}}
-            @if ($halfStar)
-                <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 22 20" fill="currentColor">
-                    <defs>
-                        <linearGradient id="half">
-                            <stop offset="50%" stop-color="currentColor"/>
-                            <stop offset="50%" stop-color="#E5E7EB"/> <!-- Tailwind gray-300 -->
-                        </linearGradient>
-                    </defs>
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" fill="url(#half)" />
-                </svg>
-            @endif
-
-            {{-- Empty Stars --}}
-            @for ($i = 0; $i < $emptyStars; $i++)
-                <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 22 20">
-                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                </svg>
-            @endfor
-
-            <span class="ml-2 text-sm text-gray-700">
-                {{ number_format($average, 1) ?? 'N/A' }} / 5
-                ({{ $book->ratings->count() }} ratings)
-            </span>
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Book Header Section -->
+    <div class="flex flex-col md:flex-row gap-8 mb-8">
+        <!-- Book Cover -->
+        <div class="w-full md:w-1/3">
+            <img src="{{ asset('image/' . $book->image_path) }}" alt="Cover Image" class="w-full rounded-lg shadow-md">
         </div>
-
-        <p>{{ $book->book_description }}</p>
-        <p><strong>Genre:</strong> {{ $book->genre }}</p>
-        <p><strong>Written by:</strong> {{ $book->author }}</p>
-        <p><strong>Format:</strong> {{ $book->format }}</p>
-        <p><strong>Published:</strong> {{ $book->book_publication_date }}</p>
-        <p><strong>ISBN:</strong> {{ $book->isbn }}</p>
-        <p><strong>Item ID:</strong> {{ $book->item_id }}</p>
-        <p><strong>Call Number:</strong> {{ $book->call_number }}</p>
-        <p><strong>Initial Cataloguer: </strong>{{ $book->initial_cataloguer }}</p>
-
-        @if ($book->status)
-            <p><strong>Status: </strong>Available</p>
-        @else
-            <p><strong>Status: </strong>Unavailable</p>
-        @endif
         
-        {{-- rate --}}
-        @auth
-        <div class="flex items-center gap-1" style="margin-top: -3.9rem;">
-            <p class="mb-2"><strong>Your Rating:</strong></p>
-            <form action="{{ route('book.rate', $book->id) }}" method="POST">
-                @csrf
-                <div class="flex flex-row-reverse justify-center rating gap-1">
-                    @for ($i = 5; $i >= 1; $i--)
-                        <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" class="hidden peer" required />
-                        <label for="star{{ $i }}" class="cursor-pointer text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-500">
-                            <svg class="w-6 h-6 transition-colors duration-200" fill="currentColor" viewBox="0 0 22 20">
-                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                            </svg>
-                        </label>
+        <!-- Book Details -->
+        <div class="w-full md:w-2/3">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ $book->book_title }}</h1>
+            
+            <!-- Rating Section -->
+            <div class="flex items-center mb-4">
+                @php
+                    $average = $book->averageRating();
+                    $fullStars = floor($average);
+                    $halfStar = ($average - $fullStars) >= 0.25 && ($average - $fullStars) < 0.75;
+                    $emptyStars = 5 - $fullStars - ($halfStar ? 1 : 0);
+                @endphp
+
+                <div class="flex items-center mr-2">
+                    @for ($i = 0; $i < $fullStars; $i++)
+                        <svg class="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>
+                    @endfor
+
+                    @if ($halfStar)
+                        <svg class="w-6 h-6 text-yellow-400" viewBox="0 0 22 20" fill="currentColor">
+                            <defs>
+                                <linearGradient id="half">
+                                    <stop offset="50%" stop-color="currentColor"/>
+                                    <stop offset="50%" stop-color="#E5E7EB"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" fill="url(#half)" />
+                        </svg>
+                    @endif
+
+                    @for ($i = 0; $i < $emptyStars; $i++)
+                        <svg class="w-6 h-6 text-gray-300" fill="currentColor" viewBox="0 0 22 20">
+                            <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                        </svg>
                     @endfor
                 </div>
-                <div class="mt-2">
-                    <button type="submit" class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Rate</button>
-                </div>
-            </form>
-        </div>
-        @endauth
+                
+                <span class="text-gray-700">
+                    {{ number_format($average, 1) ?? 'N/A' }} ({{ $book->ratings->count() }} ratings)
+                </span>
+            </div>
 
-        {{-- Check if the book has a media file --}}
-        @if ($book->media_path)
-            @auth
-                @if ($layout == 'layouts.backend')
-                    {{-- Admin or Librarian View --}}
-                    <p>
-                        <a class="btn btn-info" href="{{ asset('media/' . $book->media_path) }}" target="_blank" id="media_label">
-                            {{ $book->format === 'audio' ? 'Listen to Audiophile' : 'Read PDF' }}
-                        </a>
-                        <a class="btn btn-info" href="{{ route('book.edit', $book->id) }}">Update</a>
-                        <a class="btn btn-danger" href="{{ route('book.destroy', $book->id) }}">Delete</a>
+            <!-- Book Description -->
+            <p class="text-gray-700 mb-6">{{ $book->book_description }}</p>
+
+            <!-- Metadata Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>
+                    <p class="text-sm text-gray-500">Genre</p>
+                    <p class="text-gray-800">{{ $book->genre }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Author</p>
+                    <p class="text-gray-800">{{ $book->author }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Format</p>
+                    <p class="text-gray-800">{{ $book->format }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Published</p>
+                    <p class="text-gray-800">{{ $book->book_publication_date }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">ISBN</p>
+                    <p class="text-gray-800">{{ $book->isbn }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Item ID</p>
+                    <p class="text-gray-800">{{ $book->item_id }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Call Number</p>
+                    <p class="text-gray-800">{{ $book->call_number }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Cataloguer</p>
+                    <p class="text-gray-800">{{ $book->initial_cataloguer }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Status</p>
+                    <p class="text-gray-800 font-medium {{ $book->status ? 'text-green-600' : 'text-red-600' }}">
+                        {{ $book->status ? 'Available' : 'Unavailable' }}
                     </p>
-                @elseif (Auth::user()->usertype === 'user')
-                    {{-- Regular User View --}}
-                    @if ($borrowedBookIds->contains($book->id))
-                        <p>
-                            <a class="btn btn-primary" href="{{ asset('media/' . $book->media_path) }}" target="_blank" id="media_label">
-                                {{ $book->format === 'audio' ? 'Listen to Audiophile' : 'Read PDF' }}
-                            </a>
-                        </p>
-                    @else
-                        <a class="btn btn-primary" href="{{ route('borrow.book', $book->id) }}">Borrow</a>
-                    @endif
-                @endif
-            @else
-                {{-- Guests (not logged in) --}}
-                <a class="btn btn-primary" href="{{ route('login') }}">Borrow</a>
+                </div>
+            </div>
+
+            <!-- Rating Form -->
+            @auth
+            <div class="mb-6">
+                <p class="text-sm font-medium text-gray-700 mb-2">Your Rating:</p>
+                <form action="{{ route('book.rate', $book->id) }}" method="POST">
+                    @csrf
+                    <div class="flex flex-row-reverse justify-end items-center gap-1">
+                        @for ($i = 5; $i >= 1; $i--)
+                            <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" class="hidden peer" required />
+                            <label for="star{{ $i }}" class="cursor-pointer text-gray-300 peer-checked:text-yellow-400 hover:text-yellow-500">
+                                <svg class="w-8 h-8 transition-colors duration-200" fill="currentColor" viewBox="0 0 22 20">
+                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                </svg>
+                            </label>
+                        @endfor
+                    </div>
+                    <button type="submit" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+                        Submit Rating
+                    </button>
+                </form>
+            </div>
             @endauth
-        @endif
+
+            <!-- Action Buttons -->
+            @if ($book->media_path)
+                @auth
+                    @if ($layout == 'layouts.backend')
+                        <div class="flex flex-wrap gap-3">
+                            <a href="{{ asset('media/' . $book->media_path) }}" target="_blank" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+                                {{ $book->format === 'audio' ? 'Listen to Audiobook' : 'Read PDF' }}
+                            </a>
+                            <a href="{{ route('book.edit', $book->id) }}" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200">
+                                Edit Book
+                            </a>
+                            <a href="{{ route('book.destroy', $book->id) }}" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-200">
+                                Delete Book
+                            </a>
+                        </div>
+                    @elseif (Auth::user()->usertype === 'user')
+                        @if ($borrowedBookIds->contains($book->id))
+                            <a href="{{ asset('media/' . $book->media_path) }}" target="_blank" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+                                {{ $book->format === 'audio' ? 'Listen to Audiobook' : 'Read PDF' }}
+                            </a>
+                        @else
+                            <a href="{{ route('borrow.book', $book->id) }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+                                Borrow This Book
+                            </a>
+                        @endif
+                    @endif
+                @else
+                    <a href="{{ route('login') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+                        Login to Borrow
+                    </a>
+                @endauth
+            @endif
+        </div>
     </div>
 
-    <x-comment :model="$book" />
+    <!-- Comments Section -->
+    <div class="mt-8">
+        <x-comment :model="$book" />
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -141,7 +184,7 @@
             const commentId = editBtn.dataset.commentId;
             const form = document.getElementById('edit-form-' + commentId);
             if (form) {
-                form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+                form.classList.toggle('hidden');
             }
         }
 
@@ -149,7 +192,7 @@
             const commentId = cancelBtn.dataset.commentId;
             const form = document.getElementById('edit-form-' + commentId);
             if (form) {
-                form.style.display = 'none';
+                form.classList.add('hidden');
             }
         }
 
@@ -157,7 +200,7 @@
             const commentId = replyBtn.dataset.commentId;
             const form = document.getElementById('reply-form-' + commentId);
             if (form) {
-                form.style.display = (form.style.display === 'none') ? 'block' : 'none';
+                form.classList.toggle('hidden');
             }
         }
 
@@ -165,7 +208,7 @@
             const commentId = cancelReplyBtn.dataset.commentId;
             const form = document.getElementById('reply-form-' + commentId);
             if (form) {
-                form.style.display = 'none';
+                form.classList.add('hidden');
             }
         }
     });

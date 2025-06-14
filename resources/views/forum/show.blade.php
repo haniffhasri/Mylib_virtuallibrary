@@ -20,7 +20,7 @@
     </div>
 
     <!-- Create Thread Section -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6" id="create-thread">
         <div class="border-b border-gray-200 px-6 py-4 bg-gray-50">
             <h3 class="text-lg font-medium text-gray-900">Post a New Thread</h3>
         </div>

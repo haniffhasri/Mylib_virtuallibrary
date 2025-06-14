@@ -8,7 +8,7 @@
     $showBorderComment = !$isFirstDepth && !$isBook;
 @endphp
 
-<div id="comment-{{ $comment->id }}" class="{{ $showBorderComment ? 'border-comment' : '' }} {{ $canNest ? 'ms-5' : '' }} {{ $isFirstDepth ? 'mt-3 border p-2 bg-light rounded' : '' }}">
+<div id="comment-{{ $comment->id }}" class="{{ $showBorderComment ? 'border-comment' : '' }} {{ $canNest ? 'ms-5' : '' }} {{ $isFirstDepth ? 'mt-3 p-2 bg-white rounded' : '' }}">
     <div>
         <strong>{{ $comment->user->name }}</strong> said:
         <p>{!! nl2br(e($comment->body)) !!}</p>
@@ -17,7 +17,7 @@
     @auth
         @if(Auth::id() === $comment->user_id || Auth::user()->usertype === 'admin')
             <div class="dropdown three-dot-dropdown">
-                <a class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 dark:text-gray-400 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:hover:bg-gray-700 dark:focus:ring-gray-600" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
                         <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
                     </svg>
@@ -62,3 +62,45 @@
     @endforeach
 </div>
 
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Toggle Update Form
+        document.querySelectorAll('.toggle-edit').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const commentId = this.dataset.commentId;
+                const form = document.getElementById(`edit-form-${commentId}`);
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            });
+        });
+
+        // Cancel Update
+        document.querySelectorAll('.cancel-edit').forEach(button => {
+            button.addEventListener('click', function () {
+                const commentId = this.dataset.commentId;
+                const form = document.getElementById(`edit-form-${commentId}`);
+                form.style.display = 'none';
+            });
+        });
+
+        // Toggle Reply Form
+        document.querySelectorAll('.toggle-reply').forEach(button => {
+            button.addEventListener('click', function () {
+                const commentId = this.dataset.commentId;
+                const form = document.getElementById(`reply-form-${commentId}`);
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            });
+        });
+
+        // Cancel Reply
+        document.querySelectorAll('.cancel-reply').forEach(button => {
+            button.addEventListener('click', function () {
+                const commentId = this.dataset.commentId;
+                const form = document.getElementById(`reply-form-${commentId}`);
+                form.style.display = 'none';
+            });
+        });
+    });
+</script>
+@endpush

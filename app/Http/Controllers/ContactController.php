@@ -12,13 +12,20 @@ class ContactController extends Controller
     }
 
     public function update($id, Request $request){
-        $contact = Contact::findOrFail($id);
-        $contactid = $contact->id;
-        $contact->email = $request->email;
-        $contact->contact = $request->contact;
+        // Validate input fields
+        $validated = $request->validate([
+            'email' => 'required|email|max:255',
+            'contact' => 'required|string|max:20',
+        ]);
 
+        // Fetch and update contact info
+        $contact = Contact::findOrFail($id);
+        $contact->email = $validated['email'];
+        $contact->contact = $validated['contact'];
         $contact->save();
 
-        return redirect()->route('contact-us.show', $contactid)->with('success', 'Contact updated');
+        return redirect()
+            ->route('contact-us.show', $contact->id)
+            ->with('success', 'Contact updated successfully.');
     }
 }
