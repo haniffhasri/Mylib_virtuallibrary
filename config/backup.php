@@ -26,6 +26,7 @@ return [
                 'exclude' => [
                     base_path('vendor'),
                     base_path('node_modules'),
+                    storage_path('app/backup-temp'),
                 ],
 
                 /*
@@ -43,7 +44,7 @@ return [
                  * Set to `null` to include complete absolute path
                  * Example: base_path()
                  */
-                'relative_path' => null,
+                'relative_path' => base_path(),
             ],
 
             /*
@@ -211,10 +212,10 @@ return [
         'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
 
         'mail' => [
-            'to' => 'your@example.com',
+            'to' => 'mylibdigitallibrary@example.com',
 
             'from' => [
-                'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+                'address' => env( 'system@mylib.my'),
                 'name' => env('MAIL_FROM_NAME', 'Example'),
             ],
         ],

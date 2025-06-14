@@ -171,8 +171,9 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/backup', [BackupController::class, 'index'])->name('backup.index');
     Route::post('/backup/create', [BackupController::class, 'create'])->name('backup.create');
     Route::get('/backup/download/{file}', [BackupController::class, 'download'])->name('backup.download');
-    Route::post('/backup/restore/{file}', [BackupController::class, 'restore'])->name('backup.restore');
-
+    Route::post('/backup/restore/', [BackupController::class, 'restore'])->name('backup.restore');
+    Route::get('/backup/restore/preview/{file}', [BackupController::class, 'previewRestore'])->name('backup.restore.preview');
+    Route::delete('/backup/delete/{file}', [BackupController::class, 'delete'])->name('backup.delete');
     // Admin - Contact Us
     Route::post('/contact-us/update/{id}', [ContactController::class, 'update'])->name('contact-us.update');
 });

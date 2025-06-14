@@ -95,12 +95,41 @@
                         <optgroup label="Fiction">
                             <option value="literary-fiction">Literary Fiction</option>
                             <option value="historical-fiction">Historical Fiction</option>
-                            <!-- Other fiction options -->
+                            <option value="contemporary-fiction">Contemporary Fiction</option>
+                            <option value="coming-of-age">Coming-of-Age</option>
+                            <option value="mystery">Mystery</option>
+                            <option value="crime-fiction">Crime Fiction</option>
+                            <option value="detective-noir">Detective / Noir</option>
+                            <option value="psychological-thriller">Psychological Thriller</option>
+                            <option value="legal-thriller">Legal Thriller</option>
+                            <option value="spy-espionage">Spy / Espionage</option>
+                            <option value="adventure">Adventure</option>
+                            <option value="survival">Survival</option>
+                            <option value="war-fiction">War & Military Fiction</option>
+                            <option value="science-fiction">Science Fiction</option>
+                            <option value="fantasy">Fantasy</option>
+                            <option value="dystopian">Dystopian</option>
+                            <option value="post-apocalyptic">Post-Apocalyptic</option>
+                            <option value="alternate-history">Alternate History</option>
+                            <option value="paranormal">Supernatural / Paranormal</option>
+                            <option value="romance">Romance</option>
+                            <option value="horror">Horror</option>
+                            <option value="drama">Drama / Family Saga</option>
+                            <option value="young-adult">Young Adult (YA)</option>
+                            <option value="children">Children’s / Middle Grade</option>
                         </optgroup>
+                        
                         <optgroup label="Non-Fiction">
                             <option value="biography">Biography & Memoir</option>
                             <option value="history">History & Culture</option>
-                            <!-- Other non-fiction options -->
+                            <option value="self-help">Self-Help & Personal Development</option>
+                            <option value="business">Business & Economics</option>
+                            <option value="education">Education & Reference</option>
+                            <option value="science">Science & Technology</option>
+                            <option value="lifestyle">Lifestyle</option>
+                            <option value="philosophy">Philosophy & Psychology</option>
+                            <option value="religion">Religion & Spirituality</option>
+                            <option value="politics">Politics & Society</option>
                         </optgroup>
                     </select>
                 </div>

@@ -15,6 +15,9 @@ class Kernel extends ConsoleKernel
     {
         // Schedule your command here
         $schedule->command('borrows:update-expired')->daily();
+        $schedule->command('backup:run')->daily()->at('5:00');
+        $schedule->command('backup:clean')->daily()->at('5:00');
+        $schedule->command('backup:monitor')->daily()->at('5:00');
     }
 
     protected function commands()

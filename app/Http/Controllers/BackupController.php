@@ -4,43 +4,81 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 class BackupController extends Controller
 {
-    public function index()
-    {
-        $backups = Storage::disk('local')->files('private');
-        return view('backup.index', compact('backups'));
+    public function index(){
+        $backupDisk = Storage::disk(config('backup.backup.destination.disks')[0]);
+        $backupFiles = $backupDisk->files(config('backup.backup.name'));
+        
+        // Sort files by modified time, newest first
+        $backupFiles = collect($backupFiles)
+            ->filter(function ($file) {
+                return pathinfo($file, PATHINFO_EXTENSION) === 'zip';
+            })
+            ->sortByDesc(function ($file) use ($backupDisk) {
+                return $backupDisk->lastModified($file);
+            })
+            ->values()
+            ->all();
+        
+        return view('backup.index', compact('backupFiles', 'backupDisk'));
     }
 
-    public function create()
-    {
-        Artisan::call('backup:run', ['--only-db' => true]);
-        return redirect()->back()->with('success', 'Backup created.');
-    }
+    // public function create()
+    // {
+    //     try {
+    //     $process = new Process([
+    //         PHP_BINARY, // Uses the same PHP binary that's running the current script
+    //         base_path('artisan'), // base_path() points to project root
+    //         'backup:run'
+    //     ]);
+        
+    //     $process->setTimeout(null);
+    //     $process->run();
+        
+    //     if (!$process->isSuccessful()) {
+    //         throw new ProcessFailedException($process);
+    //     }
+        
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Backup created successfully!',
+    //         'output' => $process->getOutput()
+    //     ]);
+    // } catch (\Exception $e) {
+    //     return response()->json([
+    //         'success' => false,
+    //         'message' => 'Backup failed: ' . $e->getMessage(),
+    //         'output' => isset($process) ? $process->getErrorOutput() : ''
+    //     ], 500);
+    // }
+    // }
 
-    public function download($file)
-    {
-        $path = storage_path("app/private/{$file}");
-        if (!file_exists($path)) {
+    public function download($file){
+        $backupDisk = Storage::disk(config('backup.backup.destination.disks')[0]);
+        $filePath = config('backup.backup.name') . '/' . $file;
+        
+        if (!$backupDisk->exists($filePath)) {
             abort(404);
         }
-
-        return response()->download($path);
+        
+        return $backupDisk->download($filePath);
     }
 
-    public function restore($file)
-    {
-        $path = storage_path("app/private/{$file}");
-        $dbName = config('database.connections.pgsql.database');
-        $username = config('database.connections.pgsql.username');
-        $password = config('database.connections.pgsql.password');
-
-        $command = "pgsql -u {$username} -p{$password} {$dbName} < {$path}";
-        exec($command);
-
-        return redirect()->back()->with('success', 'Database restored.');
+    public function delete($file){
+        $backupDisk = Storage::disk(config('backup.backup.destination.disks')[0]);
+        $filePath = config('backup.backup.name') . '/' . $file;
+        
+        if (!$backupDisk->exists($filePath)) {
+            abort(404);
+        }
+        
+        $backupDisk->delete($filePath);
+        
+        return redirect()->route('backup.index')
+            ->with('success', 'Backup deleted successfully');
     }
 }
 
