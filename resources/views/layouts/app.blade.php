@@ -194,11 +194,13 @@
             // Mobile menu toggle
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            
+
             mobileMenuButton.addEventListener('click', function() {
                 if (mobileMenu.classList.contains('hidden')) {
                     // Open menu
                     mobileMenu.classList.remove('hidden');
+                    // Reset height to auto before animating
+                    gsap.set(mobileMenu, { height: 'auto' });
                     gsap.from(mobileMenu, {
                         height: 0,
                         opacity: 0,
@@ -212,7 +214,11 @@
                         opacity: 0,
                         duration: 0.3,
                         ease: "power2.in",
-                        onComplete: () => mobileMenu.classList.add('hidden')
+                        onComplete: () => {
+                            mobileMenu.classList.add('hidden');
+                            // Reset inline styles after animation completes
+                            gsap.set(mobileMenu, { clearProps: 'height,opacity' });
+                        }
                     });
                 }
             });

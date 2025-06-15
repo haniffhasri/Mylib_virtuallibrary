@@ -28,7 +28,7 @@
 
     <!-- Notifications List -->
     <div class="bg-white rounded-lg shadow overflow-hidden">
-        <ul class="divide-y divide-gray-200">
+        <ul class="divide-y divide-gray-200 list-none">
             @forelse($notifications as $notification)
                 <li class="{{ $notification->read_at ? 'bg-white' : 'bg-blue-50' }} hover:bg-gray-50 transition duration-150">
                     <div class="px-4 py-4 sm:px-6 flex justify-between items-center">

@@ -170,47 +170,46 @@
         <x-comment :model="$book" />
     </div>
 </div>
-@endsection
-
 @push('scripts')
 <script>
-    document.addEventListener('click', function (e) {
-        const editBtn = e.target.closest('.toggle-edit');
-        const cancelBtn = e.target.closest('.cancel-edit');
-        const replyBtn = e.target.closest('.toggle-reply');
-        const cancelReplyBtn = e.target.closest('.cancel-reply');
+    document.addEventListener('DOMContentLoaded', function () {
+        // Toggle Update Form
+        document.querySelectorAll('.toggle-edit').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const commentId = this.dataset.commentId;
+                const form = document.getElementById(`edit-form-${commentId}`);
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            });
+        });
 
-        if (editBtn) {
-            const commentId = editBtn.dataset.commentId;
-            const form = document.getElementById('edit-form-' + commentId);
-            if (form) {
-                form.classList.toggle('hidden');
-            }
-        }
+        // Cancel Update
+        document.querySelectorAll('.cancel-edit').forEach(button => {
+            button.addEventListener('click', function () {
+                const commentId = this.dataset.commentId;
+                const form = document.getElementById(`edit-form-${commentId}`);
+                form.style.display = 'none';
+            });
+        });
 
-        if (cancelBtn) {
-            const commentId = cancelBtn.dataset.commentId;
-            const form = document.getElementById('edit-form-' + commentId);
-            if (form) {
-                form.classList.add('hidden');
-            }
-        }
+        // Toggle Reply Form
+        document.querySelectorAll('.toggle-reply').forEach(button => {
+            button.addEventListener('click', function () {
+                const commentId = this.dataset.commentId;
+                const form = document.getElementById(`reply-form-${commentId}`);
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            });
+        });
 
-        if (replyBtn) {
-            const commentId = replyBtn.dataset.commentId;
-            const form = document.getElementById('reply-form-' + commentId);
-            if (form) {
-                form.classList.toggle('hidden');
-            }
-        }
-
-        if (cancelReplyBtn) {
-            const commentId = cancelReplyBtn.dataset.commentId;
-            const form = document.getElementById('reply-form-' + commentId);
-            if (form) {
-                form.classList.add('hidden');
-            }
-        }
+        // Cancel Reply
+        document.querySelectorAll('.cancel-reply').forEach(button => {
+            button.addEventListener('click', function () {
+                const commentId = this.dataset.commentId;
+                const form = document.getElementById(`reply-form-${commentId}`);
+                form.style.display = 'none';
+            });
+        });
     });
 </script>
 @endpush
+@endsection

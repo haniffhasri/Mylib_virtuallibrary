@@ -67,7 +67,7 @@
         </div>
     </div>
 @else
-<div class="gh-section seventh">
+<div class="gh-section seventh support">
     <h4>Frequently Asked Questions</h4>
     <br />
     <div class="accordion" id="faq">

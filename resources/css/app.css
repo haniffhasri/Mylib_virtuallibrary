@@ -256,7 +256,7 @@ h6 {
 }
 
 p {
-    font-size: clamp(11px, 1.042vw, 1.042vw);
+    font-size: clamp(16px, 1.042vw, 1.042vw);
     line-height: 1.5;
     margin-bottom: 1rem;
     font-family: "Avenir", sans-serif;
@@ -12024,11 +12024,11 @@ p.dropdown-item {
 @keyframes dropdownAnimation {
     0% {
         opacity: 0;
-        transform: translateY(-8px);
+        /* transform: translateY(-8px); */
     }
     to {
         opacity: 1;
-        transform: translate(0);
+        /* transform: translate(0); */
     }
 }
 .dropdown-toggle:after {
@@ -13670,10 +13670,6 @@ span.flatpickr-weekday {
 /*# sourceMappingURL=app.css.map*/
 
 /* comment */
-.comment {
-    width: 50%;
-    padding: 0 0 5rem 7rem;
-}
 
 .NestedDepth {
     border-bottom: var(--bs-border-width) var(--bs-border-style)
@@ -13891,12 +13887,6 @@ img.hero-model-img {
 .gh-section.third *,
 .gh-section.ninth * {
     color: white;
-}
-
-.wrapper {
-    display: grid;
-    grid-template-columns: 50% auto;
-    background-color: #fbfdf1;
 }
 .wrapper .l-wrap {
     width: 90%;
@@ -14141,11 +14131,8 @@ button.block.w-full.text-left.px-4.py-2.text-sm.border-none.bg-white.text-gray-7
     .container {
     width: 100% !important;
     }
-
-}
-@media (max-width: 969px) {
-    .gh-section.seventh {
-        padding: 7.292vw 9.615vw;
+    .wrapper .l-wrap {
+        padding-left: 2rem;
     }
 }
 
@@ -14166,6 +14153,12 @@ button.block.w-full.text-left.px-4.py-2.text-sm.border-none.bg-white.text-gray-7
 }
 
 @media (max-width: 565px) {
+    main.py-4.px-6 {
+        padding: 0 1rem 1.5rem 1rem !important;
+    }
+    .container.px-4.py-6 {
+        padding: 0 !important;
+    }
     .wrapper .l-wrap h1 {
         font-size: 18px;
     }
@@ -14184,7 +14177,97 @@ button.block.w-full.text-left.px-4.py-2.text-sm.border-none.bg-white.text-gray-7
     .top-content {
         padding: 0;
     }
+    .column-img {
+        display: none;
+        width: 0;
+    }
+    .gh-section.seventh.support {
+        z-index: 1;
+        padding: 0 !important;
+    }
+    .gh-section.ninth .column-desc {
+        width: 100%;
+    }
+    .gh-section.ninth .column-inner-desc {
+        width: 100%;
+    }
+    .gh-section.ninth .contact-info {
+        top: 1rem;
+    }
+    .comment {
+        margin-left: 0 !important;
+    }
+    .flex.flex-col.md\:flex-row.items-start.md\:items-end.-mt-16.md\:-mt-12.px-6.pb-6 {
+        padding: 1rem 0 !important;
+    }
+    .relative img.h-32.w-32.rounded-full.border-4.border-white.bg-white.shadow-lg.object-cover {
+        left: 2rem;
+        position: relative;
+        height: 15rem;
+        width: 15rem;
+        top: -6rem;
+    }
+    .relative span.absolute.bottom-0.right-0.bg-green-500.rounded-full.w-4.h-4.border-2.border-white {
+        top: 8rem;
+    }
+    .relative .mt-4.md\:mt-0.md\:ml-6 {
+        margin: 0 !important;
+    }
+    .relative .flex.items-center, .mt-4.flex.flex-wrap.gap-3 {
+        justify-content: center;
+    }
+    .relative .text-gray-600, .relative p.mt-2.text-gray-700 {
+        justify-content: center;
+        display: flex;
+    }
+    .p-6 {
+        padding: 1rem !important;
+    }
+    .relative.group.inline-block {
+        right: 2.5rem;
+        bottom: 0.5rem;
+    }
+    .gh-section.seventh.support {
+        z-index: 1;
+    }
+    .flex.justify-center.gap-3.bg-white.shadow-xl.items-center.p-3 {
+        flex-direction: column;
+    }
+    .min-h-screen.flex.items-center.justify-center.py-12.px-4.sm\:px-6.lg\:px-8 {
+        padding: 0 !important;
+        align-items: flex-start;
+    }
+    .container .menu .logo a {
+        top: -3.5rem !important;
+    }
+    .wrapper .l-wrap p {
+        width: 16rem;
+    }
+    .gh-section.ninth {
+        padding: 0;
+    }
+    .gh-section.ninth .section-inner {
+        border-bottom-left-radius: unset !important;
+        border-bottom-right-radius: unset !important;
+    }
+    .wrapper .l-wrap {
+        padding-left: 1rem;
+    }
+    svg.h-5.w-5.text-gray-500.cursor-pointer {
+        left: 2.5rem;
+        position: relative;
+        top: 0.5rem;
+    }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 360px) {
+    .relative img.h-32.w-32.rounded-full.border-4.border-white.bg-white.shadow-lg.object-cover {
+        left: 1rem;
+    }
+    .gh-section.ninth h4 {
+        font-size: 16px !important;
+    }
+    .gh-section.ninth h3 {
+        font-size: 18px !important;
+    }
 }

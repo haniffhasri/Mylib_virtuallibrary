@@ -8,7 +8,7 @@
     $showBorderComment = !$isFirstDepth && !$isBook;
 @endphp
 
-<div id="comment-{{ $comment->id }}" class="{{ $showBorderComment ? 'border-comment' : '' }} {{ $canNest ? 'ms-5' : '' }} {{ $isFirstDepth ? 'mt-3 p-2 bg-white rounded' : '' }}">
+<div id="comment-{{ $comment->id }}" class="{{ $showBorderComment ? 'border-comment' : '' }} {{ $canNest ? 'ms-5' : '' }} {{ $isFirstDepth ? 'mt-3 p-2 bg-white rounded' : '' }} comment">
     <div>
         <strong>{{ $comment->user->name }}</strong> said:
         <p>{!! nl2br(e($comment->body)) !!}</p>
@@ -62,7 +62,7 @@
     @endforeach
 </div>
 
-@push('scripts')
+{{-- @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Toggle Update Form
@@ -103,4 +103,4 @@
         });
     });
 </script>
-@endpush
+@endpush --}}

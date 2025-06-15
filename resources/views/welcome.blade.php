@@ -29,6 +29,11 @@
       body * {
         font-family: 'Avenir', sans-serif;
       }
+      .wrapper {
+          display: grid;
+          grid-template-columns: 50% auto;
+          background-color: #fbfdf1;
+      }
     </style>
     <link rel="stylesheet" />
     <div class="relative">

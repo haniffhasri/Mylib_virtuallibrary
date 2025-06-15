@@ -16,33 +16,38 @@
         <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-semibold text-gray-800">Create New Forum</h3>
         </div>
-        
-        <form action="{{ route('forum.store') }}" method="POST" class="space-y-4">
-            @csrf
-            <div>
-                <label for="forum_title" class="block text-sm font-medium text-gray-700 mb-1">Forum Name</label>
-                <input type="text" id="forum_title" name="forum_title" placeholder="Forum Name" required
-                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            </div>
-            
-            <div>
-                <label for="forum_description" class="block text-sm font-medium text-gray-700 mb-1">Forum Description</label>
-                <textarea rows="5" id="forum_description" name="forum_description" placeholder="Describe the forum"
-                          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
-            </div>
-            
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                Create Forum
-            </button>
-            
-            @if ($errors->any())
-                <div class="mt-4 space-y-1">
-                    @foreach ($errors->all() as $error)
-                        <p class="text-sm text-red-600">{{ $error }}</p>
-                    @endforeach
+        @auth
+            <form action="{{ route('forum.store') }}" method="POST" class="space-y-4">
+                @csrf
+                <div>
+                    <label for="forum_title" class="block text-sm font-medium text-gray-700 mb-1">Forum Name</label>
+                    <input type="text" id="forum_title" name="forum_title" placeholder="Forum Name" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
-            @endif
-        </form>
+                
+                <div>
+                    <label for="forum_description" class="block text-sm font-medium text-gray-700 mb-1">Forum Description</label>
+                    <textarea rows="5" id="forum_description" name="forum_description" placeholder="Describe the forum"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+                
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Create Forum
+                </button>
+                
+                @if ($errors->any())
+                    <div class="mt-4 space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <p class="text-sm text-red-600">{{ $error }}</p>
+                        @endforeach
+                    </div>
+                @endif
+            </form>
+        @else
+            <p class="text-gray-600">
+                Please <a href="{{ route('login') }}" class="text-blue-600 hover:text-blue-800">Sign in</a> to create a forum.
+            </p>
+        @endauth
     </div>
 
     <!-- Forum List Header -->
