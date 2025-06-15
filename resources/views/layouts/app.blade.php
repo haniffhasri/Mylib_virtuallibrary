@@ -16,114 +16,274 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.3.4/dist/lenis.min.js"></script> 
     <script src="//unpkg.com/alpinejs" defer></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+      @if (Request::is('/')) 
+      @else
+        <nav id="navbar" class="fixed w-full z-40 bg-white shadow-sm transition-all duration-300 transform -translate-y-full">
+          <div class="container mx-auto px-4">
+              <div class="flex justify-between items-center h-16">
+                  <!-- Logo/Brand -->
+                  <div class="flex-shrink-0 flex items-center">
+                      <a href="{{ url('/') }}" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors duration-200">
+                          {{ config('app.name', 'Laravel') }}
+                      </a>
+                  </div>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-                        <a class="nav-link"href="{{ route('book.index') }}">Book List</a>
-                        <a class="nav-link"href="{{ route('forum.index') }}">Forum List</a>
-                        <a class="nav-link" href="{{ route('contact-us.show', ['id' => 1]) }}">Contact Us</a>
-                        <a class="nav-link" href="{{ route('support.index') }}">Support</a>
-                        @auth
-                            @if(Auth::user()?->usertype === 'user')
-                            <a class="nav-link" href="{{ route('borrow.index') }}">My Borrowed Books</a>
-                            @elseif(Auth::user()?->usertype === 'admin' || Auth::user()?->usertype === 'librarian')
-                                <a class="nav-link" href="{{ route('admin.borrow') }}">Borrow List</a>
-                                <a class="nav-link" href="{{ route('book.create') }}">Insert New Book</a>
-                            @elseif(Auth::user()?->usertype === 'admin')
-                                <a class="nav-link" href="{{ route('admin.user') }}">User List</a>
-                                <a class="nav-link" href="{{ route('analytics.index') }}">Analytics</a>
-                            @endif
-                        @endauth
-                    </ul>
+                  <!-- Mobile menu button -->
+                  <div class="md:hidden flex items-center">
+                      <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none transition duration-150 ease-in-out">
+                          <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                          </svg>
+                      </button>
+                  </div>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+                  <!-- Desktop Menu -->
+                  <div class="hidden md:flex md:items-center md:space-x-1">
+                      <!-- Left Side Links -->
+                      <div class="flex space-x-1">
+                          <a href="{{ route('book.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Book List</a>
+                          <a href="{{ route('forum.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Forum List</a>
+                          <a href="{{ route('contact-us.show', ['id' => 1]) }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Contact Us</a>
+                          <a href="{{ route('support.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Support</a>
+                          
+                          @auth
+                              @if(Auth::user()?->usertype === 'user')
+                              <a href="{{ route('borrow.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">My Books</a>
+                              @elseif(Auth::user()?->usertype === 'admin' || Auth::user()?->usertype === 'librarian')
+                                  <a href="{{ route('admin.borrow') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Borrow List</a>
+                                  <a href="{{ route('book.create') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Add Book</a>
+                              @elseif(Auth::user()?->usertype === 'admin')
+                                  <a href="{{ route('admin.user') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Users</a>
+                                  <a href="{{ route('analytics.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Analytics</a>
+                              @endif
+                          @endauth
+                      </div>
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                        <li class="nav-item dropdown flex items-center">
-                          <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Notifications
-                            @if($headerNotifications->count() > 0)
-                              <span id="notification-badge" class="badge bg-danger">{{ $headerNotifications->count() }}</span>
-                            @else
-                              <span id="notification-badge" class="badge bg-danger d-none">0</span>
-                            @endif
-                          </a>
+                      <!-- Right Side Links -->
+                      <div class="ml-4 flex items-center space-x-4">
+                          @guest
+                              @if (Route::has('login'))
+                                  <a href="{{ route('login') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Login</a>
+                              @endif
 
-                          <div id="notification-list" class="dropdown-menu w-max notification-dropdown dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            @forelse($headerNotifications as $notification)
-                              <div class="dropdown-item d-flex justify-content-between align-items-center {{ $notification->read_at ? '' : 'bg-light' }}">
-                                  <div>{{ $notification->data['message'] }}</div>
-                                  <a href="{{ route('notifications.read', $notification->id) }}" class="btn btn-sm btn-outline-success">
-                                      {{ $notification->read_at ? 'View' : 'Mark as Read & View' }}
-                                  </a>
+                              @if (Route::has('register'))
+                                  <a href="{{ route('register') }}" class="px-3 py-2 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200">Register</a>
+                              @endif
+                          @else
+                              <!-- Notifications -->
+                              <div class="relative" x-data="{ open: false }">
+                                  <button @click="open = !open" class="p-1 rounded-full text-gray-600 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none transition duration-150 ease-in-out relative">
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                      </svg>
+                                      @if($headerNotifications->count() > 0)
+                                          <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{{ $headerNotifications->count() }}</span>
+                                      @endif
+                                  </button>
+                                  
+                                  <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-72 md:w-96 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 z-50">
+                                      <div class="py-1">
+                                          @forelse($headerNotifications as $notification)
+                                              <div class="px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex justify-between items-center {{ $notification->read_at ? '' : 'bg-indigo-50' }}">
+                                                  <div>{{ $notification->data['message'] }}</div>
+                                                  <a href="{{ route('notifications.read', $notification->id) }}" class="text-xs px-2 py-1 rounded bg-indigo-100 text-indigo-800 hover:bg-indigo-200 transition-colors duration-200">
+                                                      {{ $notification->read_at ? 'View' : 'Mark as Read' }}
+                                                  </a>
+                                              </div>
+                                          @empty
+                                              <div class="px-4 py-3 text-sm text-gray-700">No notifications found</div>
+                                          @endforelse
+                                      </div>
+                                      <div class="py-1">
+                                          <a href="{{ route('notifications.index') }}" class="block px-4 py-2 text-sm text-center text-indigo-700 hover:bg-gray-100 transition-colors duration-200">View All Notifications</a>
+                                      </div>
+                                  </div>
                               </div>
-                            @empty
-                              <p class="dropdown-item">No notifications found</p>
-                            @endforelse
-                            <a class="dropdown-item" href="{{ route('notifications.index') }}">View All</a>
-                          </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                          <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown"><i class="align-middle" data-feather="settings"></i></a>
-                          <a class="nav-link dropdown-toggle d-none d-sm-inline-block flex gap-2 items-center" href="#" data-bs-toggle="dropdown">
-                              <img src="{{ asset('profile_picture/' . Auth::user()->profile_picture) }}" class="object-cover w-10 h-10 bg-blue-500 rounded-full">
-                              <span>{{ Auth::user()->username }}</span>
-                          </a>
-                          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                            onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">
-                              {{ __('Logout') }}
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                              @csrf
-                            </form>
-                          </div>
-                        </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
 
-        <main class="py-4 px-6">
-            @yield('content')
-        </main>
+                              <!-- Profile dropdown -->
+                              <div class="relative ml-3" x-data="{ open: false }">
+                                  <div>
+                                      <button @click="open = !open" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out" id="user-menu">
+                                          <img class="h-8 w-8 rounded-full object-cover" src="{{ asset('profile_picture/' . Auth::user()->profile_picture) }}" alt="{{ Auth::user()->username }}">
+                                          <span class="ml-2 text-gray-700 font-medium hidden lg:inline">{{ Auth::user()->username }}</span>
+                                          <svg class="ml-1 h-4 w-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                          </svg>
+                                      </button>
+                                  </div>
+                                  
+                                  <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                      <div class="py-1">
+                                          <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200">Dashboard</a>
+                                          <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200">Logout</a>
+                                          <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                                              @csrf
+                                          </form>
+                                      </div>
+                                  </div>
+                              </div>
+                          @endguest
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Mobile menu -->
+          <div id="mobile-menu" class="md:hidden hidden">
+              <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg">
+                  <a href="{{ route('book.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Book List</a>
+                  <a href="{{ route('forum.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Forum List</a>
+                  <a href="{{ route('contact-us.show', ['id' => 1]) }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Contact Us</a>
+                  <a href="{{ route('support.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Support</a>
+                  
+                  @auth
+                      @if(Auth::user()?->usertype === 'user')
+                      <a href="{{ route('borrow.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">My Books</a>
+                      @elseif(Auth::user()?->usertype === 'admin' || Auth::user()?->usertype === 'librarian')
+                          <a href="{{ route('admin.borrow') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Borrow List</a>
+                          <a href="{{ route('book.create') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Add Book</a>
+                      @elseif(Auth::user()?->usertype === 'admin')
+                          <a href="{{ route('admin.user') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Users</a>
+                          <a href="{{ route('analytics.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Analytics</a>
+                      @endif
+                  @endauth
+                  
+                  @guest
+                      @if (Route::has('login'))
+                          <a href="{{ route('login') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Login</a>
+                      @endif
+
+                      @if (Route::has('register'))
+                          <a href="{{ route('register') }}" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200">Register</a>
+                      @endif
+                  @else
+                      <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Dashboard</a>
+                      <a href="{{ route('notifications.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Notifications</a>
+                      <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Logout</a>
+                      <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" class="hidden">
+                          @csrf
+                      </form>
+                  @endguest
+              </div>
+          </div>
+      </nav>
+      @endif
+        <main @if (!Request::is('/')) class="py-4 px-6" style="padding-top: 8rem !important" @endif>
+          @yield('content')
+      </main>
     </div>
 
     @stack('scripts')
+    <!-- GSAP Animation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navbar slide-in animation
+            gsap.fromTo("#navbar", 
+                { y: -100, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }
+            );
+
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                if (mobileMenu.classList.contains('hidden')) {
+                    // Open menu
+                    mobileMenu.classList.remove('hidden');
+                    gsap.from(mobileMenu, {
+                        height: 0,
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                } else {
+                    // Close menu
+                    gsap.to(mobileMenu, {
+                        height: 0,
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.in",
+                        onComplete: () => mobileMenu.classList.add('hidden')
+                    });
+                }
+            });
+
+            // Scroll behavior - hide/show navbar on scroll
+            let lastScroll = 0;
+            window.addEventListener('scroll', function() {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll <= 0) {
+                    // At top of page
+                    gsap.to("#navbar", { y: 0, duration: 0.3 });
+                } else if (currentScroll > lastScroll) {
+                    // Scrolling down
+                    gsap.to("#navbar", { y: -80, duration: 0.3 });
+                } else {
+                    // Scrolling up
+                    gsap.to("#navbar", { y: 0, duration: 0.3 });
+                }
+                
+                lastScroll = currentScroll;
+            });
+
+            // Notification badge animation when count changes
+            const notificationBadge = document.querySelector('.notification-badge');
+            if (notificationBadge) {
+                gsap.from(notificationBadge, {
+                    scale: 1.5,
+                    duration: 0.5,
+                    ease: "elastic.out(1, 0.5)"
+                });
+            }
+        });
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          if ($('div').is('.accordion')) {
+          // Initially, hide all accordion content
+          $('.accordion-content').hide();
+
+          // When an accordion header is clicked
+          $('.accordion-header').click(function () {
+            // Toggle the content
+            var content = $(this).next('.accordion-content');
+            content.slideToggle(200);
+
+            // Toggle the active class to change the style
+            $(this).toggleClass('active');
+
+            // Close other open accordions
+            $('.accordion-content').not(content).slideUp(200);
+            $('.accordion-header').not(this).removeClass('active');
+          });
+        }
+      });
+    </script>
+    <script>
+      const lenis = new Lenis({
+        duration: 1.2,       // scroll speed (lower = faster)
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easing function
+        smooth: true,
+        smoothTouch: true,
+      })
+
+      function raf(time) {
+        lenis.raf(time)
+        requestAnimationFrame(raf)
+      }
+
+      requestAnimationFrame(raf)
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const userId = {{ auth()->id() }};
@@ -154,159 +314,31 @@
         });
     </script>
     <script type="text/javascript">
-      $(function () {
-        var $window = $(window),
-          win_height_padded = $window.height() * 0.8;
+      document.addEventListener('DOMContentLoaded', () => {
+        $(function () {
+          var $window = $(window),
+            win_height_padded = $window.height() * 0.8;
 
-        $window.on('scroll', setInterval(maskinleftload, 100));
+          $window.on('scroll', setInterval(maskinleftload, 100));
 
-        function maskinleftload() {
-          var scrolled = $window.scrollTop();
-          $('.element-fade-up:not(.animated)').each(function () {
-            var $this = $(this),
-              offsetTop = $this.offset().top;
-            if (scrolled + win_height_padded > offsetTop) {
-              if ($this.data('timeout')) {
-                window.setTimeout(function () {
+          function maskinleftload() {
+            var scrolled = $window.scrollTop();
+            $('.element-fade-up:not(.animated)').each(function () {
+              var $this = $(this),
+                offsetTop = $this.offset().top;
+              if (scrolled + win_height_padded > offsetTop) {
+                if ($this.data('timeout')) {
+                  window.setTimeout(function () {
+                    $this.addClass('triggered ' + $this.data('animation'));
+                  }, parseInt($this.data('timeout'), 10));
+                } else {
                   $this.addClass('triggered ' + $this.data('animation'));
-                }, parseInt($this.data('timeout'), 10));
-              } else {
-                $this.addClass('triggered ' + $this.data('animation'));
+                }
               }
-            }
-          });
-        }
-      });
-    </script>
-
-    <script>
-      $('.testimonial-slider').slick({
-        infinite: true,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        responsive: [
-          {
-            breakpoint: 1024,
-            settings: {
-              slidesToShow: 3,
-              slidesToScroll: 1,
-              infinite: true,
-            },
-          },
-          {
-            breakpoint: 800,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 1,
-              infinite: true,
-            },
-          },
-          {
-            breakpoint: 565,
-            settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1,
-            },
-          },
-          // You can unslick at a given breakpoint now by adding:
-          // settings: "unslick"
-          // instead of a settings object
-        ],
-      });
-
-      if ($('div').is('.accordion')) {
-        // Initially, hide all accordion content
-        $('.accordion-content').hide();
-
-        // When an accordion header is clicked
-        $('.accordion-header').click(function () {
-          // Toggle the content
-          var content = $(this).next('.accordion-content');
-          content.slideToggle(200);
-
-          // Toggle the active class to change the style
-          $(this).toggleClass('active');
-
-          // Close other open accordions
-          $('.accordion-content').not(content).slideUp(200);
-          $('.accordion-header').not(this).removeClass('active');
+            });
+          }
         });
-      }
-
-      $('.timeline-tab .inner').on('click', function () {
-        $('.timeline-tab .inner').removeClass('active');
-        $(this).addClass('active');
-
-        let currentActive = $(this).data('tab');
-        $('.timeline-content .content-holder').removeClass('active');
-        $('.timeline-content .content-holder.' + currentActive).addClass('active');
       });
-
-      if ($(window).width() < 767) {
-        $('.timeline-tab').click(function () {
-          $('.inner-holder').toggleClass('active');
-        });
-
-        $('.inner-holder h3').click(function () {
-          let currentActive = $(this).text();
-          $('.timeline-tab > .mobile > h3').text(currentActive);
-        });
-      }
-    </script>
-
-    <script>
-      gsap.registerPlugin(ScrollTrigger);
-
-      if ($(window).width() > 768) {
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: '.did-you-know-col',
-              pin: '.did-you-know-col',
-              start: 'top top',
-              end: 'bottom top',
-              scrub: true,
-              toggleActions: 'play reverse play reverse',
-              ease: 'none',
-            },
-          })
-          .to('.dyk-col-1', { opacity: 1 })
-          .to('.dyk-col-3', { opacity: 1 })
-          .to('.dyk-col-4', { opacity: 1 });
-      } else {
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: '.did-you-know-col',
-              // pin: ".did-you-know-col",
-              start: 'top 40%',
-              end: 'center top',
-              scrub: true,
-              toggleActions: 'play reverse play reverse',
-              ease: 'none',
-            },
-          })
-          .to('.dyk-col-1', { opacity: 1 })
-          .to('.dyk-col-3', { opacity: 1 })
-          .to('.dyk-col-4', { opacity: 1 });
-      }
-
-      if ($(window).width() < 565) {
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: '.gh-section eighth',
-              start: 'bottom bottom',
-              toggleActions: 'play reverse play reverse',
-              scrub: true,
-              ease: 'linear',
-            },
-          })
-          .to('.floating-widget', {
-            opacity: 0,
-            pointerEvents: 'none',
-          });
-      }
     </script>
 </body>
 </html>

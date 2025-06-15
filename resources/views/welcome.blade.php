@@ -16,99 +16,104 @@
 
   <body>
     <style>
+      *{
+        margin: 0;
+        padding: 0;
+        font-family: poppins !important;
+      }
       body {
         color: #494b37;
         background-color: #fbfdf1;
         overflow-x: hidden;
       }
-
-      body p {
+      body * {
         font-family: 'Avenir', sans-serif;
-        color: #494b37;
       }
     </style>
     <link rel="stylesheet" />
-    <div class="hero__wrapper">
-      <div class="hero-top-container text-center">
-        <img class="title-img element-fade-up" src="/image/logo-removebg-preview.png" alt="" />
-      </div>
-    </div>
-
-    <!-- Section 1 -->
-    <div class="gh-section first">
-      <div class="top-content">
-        <h4 class="element-fade-up">📚 Explore Featured Books in Our</h4>
-        <h3 class="element-fade-up">Book List</h3>
-        <p class="py-3 element-fade-up">Discover our newest additions, trending favorites, and timeless classics.</p>
-      </div>
-      <div class="carousel-holder">
-        <div class="looping-carousel">
-          @foreach ($books as $book)
-          <div class="carousel-item">
-            <img src="{{ asset('image/' . $book->image_path) }}" alt="{{ $book->book_title }}">
-            <div class="front-img">
-              <div class="desc">
-                <img src="{{ asset('image/' . $book->image_path) }}" alt="{{ $book->book_title }}">
-                <span>{{ $book->book_title }}</span>
-                <h5><span>by {{ $book->author }}</span></h5>
-                <a href="{{ route('book.show', $book->id) }}" class="btn btn-sm btn-primary">View Details</a>
+    <div class="relative">
+      <div class="overlay"></div>
+      <div class="gh-section first">
+        <div class="container">
+          <div class="menu">
+            <div class="logo">
+              <a href="/" style="top: -2rem; position: relative;"><img class="title-img element-fade-up" src="/image/logo-removebg-preview.png" alt="" /></a>
+            </div>
+          </div>
+          <div class="wrapper">
+            <div class="l-wrap">
+              <h1 class="elmt">The Future Of <span> Virtual Library</span> is way better than anything</h1>
+              <p class="elmt">Read, Share, Connect — Where Readers Belong</p>
+              <div class="button elmt">
+                <a href="{{ route('book.index') }}">Read Now</a>
+                <div class="vidBtn">
+                  @if (!Auth::check())
+                    <a class="normal-link" href="{{ route('login') }}"><p>Sign In</p></a>
+                  @else
+                    <a class="normal-link" href="{{ route('dashboard') }}"><p>Dashboard</p></a>
+                  @endif
+                </div>
               </div>
             </div>
-        </div>
-          @endforeach
-        </div>
-        <!-- Loopinhgg Carousel Clone -->
-        <div class="looping-carousel">
-          <!-- Carousel Item -->
-          @foreach ($books as $book)
-            <div class="carousel-item">
-                <img src="{{ asset('image/' . $book->image_path) }}" alt="{{ $book->book_title }}">
-                <div class="front-img">
-                  <div class="desc">
-                    <img src="{{ asset('image/' . $book->image_path) }}" alt="{{ $book->book_title }}">
-                    <span>{{ $book->book_title }}</span>
-                    <h5><span>by {{ $book->author }}</span></h5>
-                    <a href="{{ route('book.show', $book->id) }}" class="btn btn-sm btn-primary">View Details</a>
-                  </div>
-                </div>
+            <div class="r-wrap">
+              <div class="img-1">
+                @foreach ($books->shuffle() as $book)
+                  <a href="{{ route('book.show', $book->id) }}"><img src="{{ asset('image/' . $book->image_path) }}" alt="{{ $book->book_title }}"></a>
+                @endforeach
+              </div>
+              <div class="img-1">
+                @foreach ($books->shuffle() as $book)
+                  <a href="{{ route('book.show', $book->id) }}"><img src="{{ asset('image/' . $book->image_path) }}" alt="{{ $book->book_title }}"></a>
+                @endforeach
+              </div>
+              <div class="img-1">
+                @foreach ($books->shuffle() as $book)
+                  <a href="{{ route('book.show', $book->id) }}"><img src="{{ asset('image/' . $book->image_path) }}" alt="{{ $book->book_title }}"></a>
+                @endforeach
+              </div>
             </div>
-          @endforeach
+          </div>
         </div>
-      </div>
-      <div class="carousel-bottom-desc">
-        <a href="{{ route('book.index') }}" class="button center">See more of our books</a>
       </div>
     </div>
     <!-- Section 3 -->
     <div class="gh-section third">
       <div class="top-content">
-        <h4>📚 Join the Conversation in Our</h4>
-        <h3>Library Forum</h3>
-        <p class="py-3">Have thoughts on a book? Looking for recommendations? Want to connect with other readers?
-          Our <em>Library Forum</em> is the perfect place to ask questions, share insights, and explore discussions with fellow book lovers.</p>
-        <a href="{{ route('forum.index') }}" class="button center my-7">Check Out Our Forum</a>
+        <h3>
+          <span>Have thoughts on a book?</span><br />
+          <span>Looking for recommendations?</span><br />
+          <span>Want to connect with other readers?</span><br />
+          <span>Join the conversation — from book reviews</span>
+          <span>to hot takes, your voice matters here.</span>
+        </h3>
+        <a href="{{ route('forum.index') }}" class="button center my-7"><span>Check Out Our Forum</span></a>
+      </div>
+    </div>
+    <!-- Section 7 -->
+    <div class="gh-section seventh">
+      <h3 class="text-center text-white font-bold italic">FAQ</h3>
+      <br />
+      <div class="flip-container">
+        @forelse ($faqs as $faq)
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <p class="text-xl">{{ $faq->support_title }}</p>
+              </div>
+              <div class="flip-card-back">
+                <p>{{ $faq->content }}</p>
+              </div>
+            </div>
+          </div>
+        @empty
+          <p>No FAQs available.</p>
+        @endforelse
+      </div>
+      <div class="inner">
+        <a href="{{ route('support.index') }}" class="button center my-7"><span>See More</span></a>
       </div>
     </div>
 
-    <!-- Section 7 -->
-    <div class="gh-section seventh">
-      <h3 class="text-center">FAQ</h3>
-      <br />
-      <div class="accordion">
-        @forelse ($faqs as $faq)
-            <div class="accordion-item">
-                <div class="accordion-header">
-                    <p><b>{{ $faq->support_title }}</b></p>
-                </div>
-                <div class="accordion-content">
-                    <p>{{ $faq->content }}</p>
-                </div>
-            </div>
-        @empty
-            <p>No FAQs available.</p>
-        @endforelse
-    </div>
-    </div>
 
     <!-- Section 9 -->
     <div class="gh-section ninth">
@@ -116,19 +121,129 @@
         <div class="column-desc">
           <div class="column-inner-desc">
             <h4>Let’s Keep the Pages Turning!</h4>
-            <h3>Join Us Now</h3>
-            {{-- <h4><b>Join Us Now</b></h4> --}}
-            <span><a href="{{ route('register') }}" class="button">Register</b></a><p style="font-size: 80%;">*Already a Member? <a href="{{ route('login') }}">Sign In.</a></p></span>
+            @if (!Auth::check())
+              <h3>Join Us Now</h3>
+            @else
+             <h3>Go To Your Dashboard</h3>
+            @endif
+            <div class="inner">
+              @if (!Auth::check())
+                <a href="{{ route('register') }}">Register</a>
+                <p class="text-xs">*Already a Member? <a href="{{ route('login') }}" class="normal-link" style="font-size: 0.75rem !important; padding-left: 0 !important;">Sign In.</a></p>
+              @else
+                <a href="{{ route('dashboard') }}">Dashboard</a>
+              @endif
+            </div>
+            <!-- Contact Details -->
+            <div class="contact-info">
+              <p class="text-xs">For any inquiry or report, you can reach out here:</p>
+              <p class="text-xs">Email: 
+                <a href="mailto:{{ $contact->email }}">
+                    {{ $contact->email }}
+                </a>
+              </p>
+              <p class="text-xs">Contact: 
+                <a href="tel:{{ $contact->contact }}">
+                    {{ $contact->contact }}
+                </a>
+              </p>
+            </div>
           </div>
         </div>
+
         <div class="column-img">
           <div class="image-frame">
-            <img src="/image/man-people-reading-a-book-vector.png" alt="" />
+            <img src="/image/man-people-reading-a-book-vector.png" alt="Reading Illustration" />
           </div>
         </div>
       </div>
     </div>
   </body>
 </html>
- 
+ <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tl = gsap.timeline();
+
+    // Entrance animations
+    tl.from(".logo", 1, {
+      y: 200,
+      opacity: 0
+    });
+    tl.from(".elmt", 1, {
+      y: 500,
+      stagger: 0.2,
+      opacity: 0
+    });
+    tl.from(".img-1 img", 1, {
+      y: 500,
+      scale: 1.4,
+      stagger: 0.2,
+      opacity: 0
+    });
+    tl.to(".img-1 img", 1, {
+      y: "-=50",
+      ease: "power1.inOut",
+      stagger: 0.2
+    });
+
+    // Animate the overlay to cover the first section as we scroll to .third
+    gsap.to(".overlay", {
+      scale: 40, // Grow the circle to cover screen
+      ease: "power2.inOut",
+      scrollTrigger: {
+        trigger: ".gh-section.first",
+        start: "top top",
+        endTrigger: ".gh-section.third",
+        end: "top 20%",
+        scrub: true,
+        pin: true, // optional if you want freeze effect
+        // markers: true
+      }
+    });
+
+    gsap.fromTo(
+      ".gh-section.third h3 span",
+      {
+        opacity: 0,
+        y: 30
+      },
+      {
+        opacity: 1,
+        y: 0,
+        stagger: 0.2,
+        duration: 0.8,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: ".gh-section.third",
+          start: "top 70%",
+          end: "bottom 60%",
+          scrub: true, 
+      }
+    });
+
+    gsap.from(".gh-section.ninth .column-desc", {
+      y: 80,
+      opacity: 0,
+      duration: 1.2,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".gh-section.ninth",
+        start: "top 80%",
+        toggleActions: "play none none reverse"
+      }
+    });
+
+    gsap.from(".gh-section.ninth .column-img", {
+      x: 100,
+      opacity: 0,
+      duration: 1,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: ".gh-section.ninth",
+        start: "top 80%",
+        toggleActions: "play none none reverse"
+      }
+    });
+  });
+ </script>
 @endsection

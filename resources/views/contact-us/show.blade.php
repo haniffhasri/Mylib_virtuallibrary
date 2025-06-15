@@ -13,7 +13,8 @@
     <div class="container">
         <div class="mb-3">
             <h4 class="h3 d-inline align-middle">Contact Us</h4>
-            @if (Auth::user()->usertype === 'admin')
+            @if (!Auth::check())
+            @elseif (Auth::user()->usertype === 'admin')
                 <x-help-icon-blade>
                     Page to modify our contact information
                 </x-help-icon-blade>

@@ -70,7 +70,7 @@
 <div class="gh-section seventh">
     <h4>Frequently Asked Questions</h4>
     <br />
-    <div class="accordion">
+    <div class="accordion" id="faq">
         @forelse ($faqs as $faq)
             <div class="accordion-item">
                 <div class="accordion-header">
@@ -84,7 +84,7 @@
             <p>No FAQs available.</p>
         @endforelse
     </div>
-    <div class="container">
+    <div class="container" id="tutorialvideos">
         <h4 class="mt-5">Tutorial Videos</h4>
         @forelse ($videos as $video)
             <div class="mb-4">
@@ -97,25 +97,4 @@
     </div>
 </div>
 @endif
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script>
-    if ($('div').is('.accordion')) {
-        // Initially, hide all accordion content
-        $('.accordion-content').hide();
-
-        // When an accordion header is clicked
-        $('.accordion-header').click(function () {
-          // Toggle the content
-          var content = $(this).next('.accordion-content');
-          content.slideToggle(200);
-
-          // Toggle the active class to change the style
-          $(this).toggleClass('active');
-
-          // Close other open accordions
-          $('.accordion-content').not(content).slideUp(200);
-          $('.accordion-header').not(this).removeClass('active');
-        });
-      }
-</script>
 @endsection

@@ -15,10 +15,9 @@
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.3.4/dist/lenis.min.js"></script> 
 	<script src="//unpkg.com/alpinejs" defer></script>
 </head>
 
@@ -163,34 +162,49 @@
 	</div>
 
 	@stack('scripts')
-	<script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const userId = {{ auth()->id() }};
-            
-            window.Echo.private(`App.Models.User.${userId}`)
-                .notification((notification) => {
-                    console.log('🔔 New Notification:', notification);
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          const userId = {{ auth()->id() }};
+          
+          window.Echo.private(`App.Models.User.${userId}`)
+              .notification((notification) => {
+                  console.log('🔔 New Notification:', notification);
 
-                    // Create new dropdown item
-                    const notifList = document.getElementById('notification-list');
+                  // Create new dropdown item
+                  const notifList = document.getElementById('notification-list');
 
-                    const notifItem = document.createElement('div');
-                    notifItem.className = 'dropdown-item d-flex justify-content-between align-items-center bg-light';
-                    notifItem.innerHTML = `
-                        <div>${notification.message}</div>
-                        <a href="/notifications/read/${notification.id}" class="btn btn-sm btn-outline-success">Mark as Read & View</a>
-                    `;
+                  const notifItem = document.createElement('div');
+                  notifItem.className = 'dropdown-item d-flex justify-content-between align-items-center bg-light';
+                  notifItem.innerHTML = `
+                      <div>${notification.message}</div>
+                      <a href="/notifications/read/${notification.id}" class="btn btn-sm btn-outline-success">Mark as Read & View</a>
+                  `;
 
-                    // Insert at the top of the list
-                    notifList.insertBefore(notifItem, notifList.firstChild);
+                  // Insert at the top of the list
+                  notifList.insertBefore(notifItem, notifList.firstChild);
 
-                    // Update badge count
-                    const badge = document.getElementById('notification-badge');
-                    const currentCount = parseInt(badge.textContent) || 0;
-                    badge.textContent = currentCount + 1;
-                    badge.classList.remove('d-none');
-                });
+                  // Update badge count
+                  const badge = document.getElementById('notification-badge');
+                  const currentCount = parseInt(badge.textContent) || 0;
+                  badge.textContent = currentCount + 1;
+                  badge.classList.remove('d-none');
+              });
         });
+    </script>
+    <script>
+      const lenis = new Lenis({
+        duration: 1.2,       // scroll speed (lower = faster)
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easing function
+        smooth: true,
+        smoothTouch: true,
+      })
+
+      function raf(time) {
+        lenis.raf(time)
+        requestAnimationFrame(raf)
+      }
+
+      requestAnimationFrame(raf)
     </script>
 	<script>
 		document.addEventListener('DOMContentLoaded', function () {
@@ -222,160 +236,124 @@
 		});
 	</script>
 	<script type="text/javascript">
-      $(function () {
-        var $window = $(window),
-          win_height_padded = $window.height() * 0.8;
+    $(function () {
+      var $window = $(window),
+        win_height_padded = $window.height() * 0.8;
 
-        $window.on('scroll', setInterval(maskinleftload, 100));
+      $window.on('scroll', setInterval(maskinleftload, 100));
 
-        function maskinleftload() {
-          var scrolled = $window.scrollTop();
-          $('.element-fade-up:not(.animated)').each(function () {
-            var $this = $(this),
-              offsetTop = $this.offset().top;
-            if (scrolled + win_height_padded > offsetTop) {
-              if ($this.data('timeout')) {
-                window.setTimeout(function () {
-                  $this.addClass('triggered ' + $this.data('animation'));
-                }, parseInt($this.data('timeout'), 10));
-              } else {
+      function maskinleftload() {
+        var scrolled = $window.scrollTop();
+        $('.element-fade-up:not(.animated)').each(function () {
+          var $this = $(this),
+            offsetTop = $this.offset().top;
+          if (scrolled + win_height_padded > offsetTop) {
+            if ($this.data('timeout')) {
+              window.setTimeout(function () {
                 $this.addClass('triggered ' + $this.data('animation'));
-              }
+              }, parseInt($this.data('timeout'), 10));
+            } else {
+              $this.addClass('triggered ' + $this.data('animation'));
             }
-          });
-        }
-      });
-    </script>
-
-    <script>
-      $('.testimonial-slider').slick({
-        infinite: true,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        responsive: [
-          {
-            breakpoint: 1024,
-            settings: {
-              slidesToShow: 3,
-              slidesToScroll: 1,
-              infinite: true,
-            },
-          },
-          {
-            breakpoint: 800,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 1,
-              infinite: true,
-            },
-          },
-          {
-            breakpoint: 565,
-            settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1,
-            },
-          },
-          // You can unslick at a given breakpoint now by adding:
-          // settings: "unslick"
-          // instead of a settings object
-        ],
-      });
-
-      if ($('div').is('.accordion')) {
-        // Initially, hide all accordion content
-        $('.accordion-content').hide();
-
-        // When an accordion header is clicked
-        $('.accordion-header').click(function () {
-          // Toggle the content
-          var content = $(this).next('.accordion-content');
-          content.slideToggle(200);
-
-          // Toggle the active class to change the style
-          $(this).toggleClass('active');
-
-          // Close other open accordions
-          $('.accordion-content').not(content).slideUp(200);
-          $('.accordion-header').not(this).removeClass('active');
+          }
         });
       }
+    });
+  </script>
+  <script>
+    if ($('div').is('.accordion')) {
+      // Initially, hide all accordion content
+      $('.accordion-content').hide();
 
-      $('.timeline-tab .inner').on('click', function () {
-        $('.timeline-tab .inner').removeClass('active');
-        $(this).addClass('active');
+      // When an accordion header is clicked
+      $('.accordion-header').click(function () {
+        // Toggle the content
+        var content = $(this).next('.accordion-content');
+        content.slideToggle(200);
 
-        let currentActive = $(this).data('tab');
-        $('.timeline-content .content-holder').removeClass('active');
-        $('.timeline-content .content-holder.' + currentActive).addClass('active');
+        // Toggle the active class to change the style
+        $(this).toggleClass('active');
+
+        // Close other open accordions
+        $('.accordion-content').not(content).slideUp(200);
+        $('.accordion-header').not(this).removeClass('active');
+      });
+    }
+
+    $('.timeline-tab .inner').on('click', function () {
+      $('.timeline-tab .inner').removeClass('active');
+      $(this).addClass('active');
+
+      let currentActive = $(this).data('tab');
+      $('.timeline-content .content-holder').removeClass('active');
+      $('.timeline-content .content-holder.' + currentActive).addClass('active');
+    });
+
+    if ($(window).width() < 767) {
+      $('.timeline-tab').click(function () {
+        $('.inner-holder').toggleClass('active');
       });
 
-      if ($(window).width() < 767) {
-        $('.timeline-tab').click(function () {
-          $('.inner-holder').toggleClass('active');
+      $('.inner-holder h3').click(function () {
+        let currentActive = $(this).text();
+        $('.timeline-tab > .mobile > h3').text(currentActive);
+      });
+    }
+  </script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    if ($(window).width() > 768) {
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: '.did-you-know-col',
+            pin: '.did-you-know-col',
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+            toggleActions: 'play reverse play reverse',
+            ease: 'none',
+          },
+        })
+        .to('.dyk-col-1', { opacity: 1 })
+        .to('.dyk-col-3', { opacity: 1 })
+        .to('.dyk-col-4', { opacity: 1 });
+    } else {
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: '.did-you-know-col',
+            // pin: ".did-you-know-col",
+            start: 'top 40%',
+            end: 'center top',
+            scrub: true,
+            toggleActions: 'play reverse play reverse',
+            ease: 'none',
+          },
+        })
+        .to('.dyk-col-1', { opacity: 1 })
+        .to('.dyk-col-3', { opacity: 1 })
+        .to('.dyk-col-4', { opacity: 1 });
+    }
+
+    if ($(window).width() < 565) {
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: '.gh-section eighth',
+            start: 'bottom bottom',
+            toggleActions: 'play reverse play reverse',
+            scrub: true,
+            ease: 'linear',
+          },
+        })
+        .to('.floating-widget', {
+          opacity: 0,
+          pointerEvents: 'none',
         });
-
-        $('.inner-holder h3').click(function () {
-          let currentActive = $(this).text();
-          $('.timeline-tab > .mobile > h3').text(currentActive);
-        });
-      }
-    </script>
-
-    <script>
-      gsap.registerPlugin(ScrollTrigger);
-
-      if ($(window).width() > 768) {
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: '.did-you-know-col',
-              pin: '.did-you-know-col',
-              start: 'top top',
-              end: 'bottom top',
-              scrub: true,
-              toggleActions: 'play reverse play reverse',
-              ease: 'none',
-            },
-          })
-          .to('.dyk-col-1', { opacity: 1 })
-          .to('.dyk-col-3', { opacity: 1 })
-          .to('.dyk-col-4', { opacity: 1 });
-      } else {
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: '.did-you-know-col',
-              // pin: ".did-you-know-col",
-              start: 'top 40%',
-              end: 'center top',
-              scrub: true,
-              toggleActions: 'play reverse play reverse',
-              ease: 'none',
-            },
-          })
-          .to('.dyk-col-1', { opacity: 1 })
-          .to('.dyk-col-3', { opacity: 1 })
-          .to('.dyk-col-4', { opacity: 1 });
-      }
-
-      if ($(window).width() < 565) {
-        gsap
-          .timeline({
-            scrollTrigger: {
-              trigger: '.gh-section eighth',
-              start: 'bottom bottom',
-              toggleActions: 'play reverse play reverse',
-              scrub: true,
-              ease: 'linear',
-            },
-          })
-          .to('.floating-widget', {
-            opacity: 0,
-            pointerEvents: 'none',
-          });
-      }
-    </script>
+    }
+  </script>
 </body>
 </html>
 @endif
