@@ -11,7 +11,7 @@
 	
 	<title>{{ config('app.name', 'Mylib') }}</title>
 
-	@vite(['resources/css/app.css', 'resources/js/app.js'])
+	@vite(['resources/sass/app.scss', 'resources/js/app.js'])
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -298,60 +298,6 @@
         let currentActive = $(this).text();
         $('.timeline-tab > .mobile > h3').text(currentActive);
       });
-    }
-  </script>
-  <script>
-    gsap.registerPlugin(ScrollTrigger);
-
-    if ($(window).width() > 768) {
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: '.did-you-know-col',
-            pin: '.did-you-know-col',
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-            toggleActions: 'play reverse play reverse',
-            ease: 'none',
-          },
-        })
-        .to('.dyk-col-1', { opacity: 1 })
-        .to('.dyk-col-3', { opacity: 1 })
-        .to('.dyk-col-4', { opacity: 1 });
-    } else {
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: '.did-you-know-col',
-            // pin: ".did-you-know-col",
-            start: 'top 40%',
-            end: 'center top',
-            scrub: true,
-            toggleActions: 'play reverse play reverse',
-            ease: 'none',
-          },
-        })
-        .to('.dyk-col-1', { opacity: 1 })
-        .to('.dyk-col-3', { opacity: 1 })
-        .to('.dyk-col-4', { opacity: 1 });
-    }
-
-    if ($(window).width() < 565) {
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: '.gh-section eighth',
-            start: 'bottom bottom',
-            toggleActions: 'play reverse play reverse',
-            scrub: true,
-            ease: 'linear',
-          },
-        })
-        .to('.floating-widget', {
-          opacity: 0,
-          pointerEvents: 'none',
-        });
     }
   </script>
 </body>

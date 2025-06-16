@@ -20,7 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/lenis@1.3.4/dist/lenis.min.js"></script> 
     <script src="//unpkg.com/alpinejs" defer></script>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
     <div id="app">
@@ -292,8 +292,10 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const userId = {{ auth()->id() }};
-            
+            const userId = @json(auth()->check() ? auth()->id() : null);
+
+            if (!userId) return; // 🚫 Skip if guest
+
             window.Echo.private(`App.Models.User.${userId}`)
                 .notification((notification) => {
                     console.log('🔔 New Notification:', notification);

@@ -1,4 +1,6 @@
 /*! For license information please see app.js.LICENSE.txt */
+import '../css/app.css';
+
 !(function () {
     var e = {
             5657: function () {
@@ -49128,7 +49130,7 @@
             n(1163), n(7386);
         })();
 })();
-//# sourceMappingURL=app.js.map
+// # sourceMappingURL=app.js.map
 
 //countdown
 // document.addEventListener('DOMContentLoaded', () => {
