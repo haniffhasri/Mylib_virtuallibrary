@@ -32,7 +32,7 @@
                   <!-- Logo/Brand -->
                   <div class="flex-shrink-0 flex items-center">
                       <a href="{{ url('/') }}" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors duration-200">
-                          {{ config('app.name', 'Laravel') }}
+                          <img class="title-img" src="/image/logo-removebg-preview.png" alt="" />
                       </a>
                   </div>
 
