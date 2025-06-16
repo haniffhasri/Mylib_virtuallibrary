@@ -3,14 +3,11 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\BroadcastMessage;
 use App\Models\Thread;
 use App\Models\Book;
 
-class UserTagged extends Notification implements ShouldQueue
+class UserTagged extends Notification
 {
     use Queueable;
 
@@ -23,7 +20,7 @@ class UserTagged extends Notification implements ShouldQueue
 
     public function via($notifiable)
     {
-        return ['database', 'broadcast']; 
+        return ['database']; 
     }
 
     public function toDatabase($notifiable){
@@ -40,21 +37,5 @@ class UserTagged extends Notification implements ShouldQueue
             'comment_id' => $this->comment->id,
             'url' => $route . '#comment-' . $this->comment->id,
         ];
-    }
-
-    public function toBroadcast($notifiable){
-        $commentable = $this->comment->commentable;
-
-        $route = match (get_class($commentable)) {
-            Thread::class => route('threads.show', $commentable->id),
-            Book::class => route('book.show', $commentable->id),
-            default => '#',
-        };
-
-        return new BroadcastMessage([
-            'id' => $this->id, 
-            'message' => "{$this->comment->user->username} mentioned you in a comment.",
-            'url' => $route . '#comment-' . $this->comment->id,
-        ]);
     }
 }

@@ -65,14 +65,6 @@
             textarea.value = '';
             actionButtons.classList.add('hidden');
         });
-
-        // Optional: if user clicks outside, close it
-        document.addEventListener('click', function(e) {
-            if (!document.getElementById('main-comment-form').contains(e.target)) {
-                textarea.value = '';
-                actionButtons.classList.add('hidden');
-            }
-        });
     });
 </script>
 @endpush

@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
-class NewUserNotification extends Notification implements ShouldQueue
+class NewUserNotification extends Notification
 {
     use Queueable;
 
@@ -23,7 +23,7 @@ class NewUserNotification extends Notification implements ShouldQueue
     public function via($notifiable)
     {
         Log::info('NewUserNotification fired for user: ' . $notifiable->id);
-        return ['database', 'broadcast'];
+        return ['database'];
     }
 
     public function toArray($notifiable)
@@ -34,10 +34,5 @@ class NewUserNotification extends Notification implements ShouldQueue
             'resource_id' => $this->user->id,
             'url' => '/admin/user',
         ];
-    }
-
-    public function toBroadcast($notifiable)
-    {
-        return new BroadcastMessage($this->toArray($notifiable));
     }
 }

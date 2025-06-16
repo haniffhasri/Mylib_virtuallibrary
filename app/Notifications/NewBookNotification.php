@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Support\Facades\Log;
 use App\Models\Book;
 
-class NewBookNotification extends Notification implements ShouldQueue
+class NewBookNotification extends Notification
 {
     use Queueable;
 
@@ -24,7 +24,7 @@ class NewBookNotification extends Notification implements ShouldQueue
     public function via($notifiable)
     {
         Log::info('NewBookNotification fired for user: ' . $notifiable->id);
-        return ['database', 'mail', 'broadcast'];
+        return ['database', 'mail'];
     }
 
     public function toMail(object $notifiable): MailMessage
@@ -45,10 +45,5 @@ class NewBookNotification extends Notification implements ShouldQueue
             'resource_id' => $this->book->id,
             'url' => '/book',
         ];
-    }
-
-    public function toBroadcast($notifiable)
-    {
-        return new BroadcastMessage($this->toArray($notifiable));
     }
 }

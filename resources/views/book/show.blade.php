@@ -196,8 +196,19 @@
         document.querySelectorAll('.toggle-reply').forEach(button => {
             button.addEventListener('click', function () {
                 const commentId = this.dataset.commentId;
+                const username = this.dataset.username;
                 const form = document.getElementById(`reply-form-${commentId}`);
-                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+                const textarea = form.querySelector('textarea');
+
+                // Show the form
+                const isHidden = form.style.display === 'none';
+                form.style.display = isHidden ? 'block' : 'none';
+
+                if (isHidden && textarea.value.trim() === '') {
+                    textarea.value = `${username} `;
+                    textarea.focus();
+                    textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+                }
             });
         });
 

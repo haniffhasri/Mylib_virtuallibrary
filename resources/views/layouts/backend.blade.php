@@ -163,32 +163,39 @@
 
 	@stack('scripts')
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-          const userId = {{ auth()->id() }};
-          
-          window.Echo.private(`App.Models.User.${userId}`)
-              .notification((notification) => {
-                  console.log('🔔 New Notification:', notification);
+        document.addEventListener('DOMContentLoaded', () => {
+            const fetchNotifications = async () => {
+                try {
+                    const response = await fetch('/notifications/unread'); 
+                    const notifications = await response.json();
 
-                  // Create new dropdown item
-                  const notifList = document.getElementById('notification-list');
+                    const notifList = document.getElementById('notification-list');
+                    const badge = document.getElementById('notification-badge');
 
-                  const notifItem = document.createElement('div');
-                  notifItem.className = 'dropdown-item d-flex justify-content-between align-items-center bg-light';
-                  notifItem.innerHTML = `
-                      <div>${notification.message}</div>
-                      <a href="/notifications/read/${notification.id}" class="btn btn-sm btn-outline-success">Mark as Read & View</a>
-                  `;
+                    notifList.innerHTML = '';
 
-                  // Insert at the top of the list
-                  notifList.insertBefore(notifItem, notifList.firstChild);
+                    notifications.forEach(notification => {
+                        const notifItem = document.createElement('div');
+                        notifItem.className = 'dropdown-item d-flex justify-content-between align-items-center bg-light';
+                        notifItem.innerHTML = `
+                            <div>${notification.message}</div>
+                            <a href="/notifications/read/${notification.id}" class="btn btn-sm btn-outline-success">Mark as Read & View</a>
+                        `;
+                        notifList.appendChild(notifItem);
+                    });
 
-                  // Update badge count
-                  const badge = document.getElementById('notification-badge');
-                  const currentCount = parseInt(badge.textContent) || 0;
-                  badge.textContent = currentCount + 1;
-                  badge.classList.remove('d-none');
-              });
+                    badge.textContent = notifications.length;
+                    badge.classList.toggle('d-none', notifications.length === 0);
+                } catch (error) {
+                    console.error('Failed to load notifications', error);
+                }
+            };
+
+            // Initial fetch
+            fetchNotifications();
+
+            // Optional: Refresh every 60 seconds
+            setInterval(fetchNotifications, 60000);
         });
     </script>
     <script>

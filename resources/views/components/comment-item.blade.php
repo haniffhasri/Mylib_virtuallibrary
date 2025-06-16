@@ -42,7 +42,7 @@
         @endif
 
         {{-- Reply Toggle Button --}}
-        <button type="button" class="btn btn-sm btn-link toggle-reply mt-3 mb-2 relative" style="top:-1rem" data-comment-id="{{ $comment->id }}"><b>Reply</b></button>
+        <button type="button" class="btn btn-sm btn-link toggle-reply mt-3 mb-2 relative" style="top:-1rem" data-comment-id="{{ $comment->id }}" data-username="{{ '@' . $comment->user->username }}"><b>Reply</b></button>
 
         {{-- Reply Form (Initially Hidden) --}}
         <form action="{{ route('comments.store') }}" method="POST" class="{{ $canNest ? 'ms-4' : '' }} mt-2 mb-3" id="reply-form-{{ $comment->id }}" style="display: none;">
@@ -62,45 +62,3 @@
     @endforeach
 </div>
 
-{{-- @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Toggle Update Form
-        document.querySelectorAll('.toggle-edit').forEach(button => {
-            button.addEventListener('click', function (e) {
-                e.preventDefault();
-                const commentId = this.dataset.commentId;
-                const form = document.getElementById(`edit-form-${commentId}`);
-                form.style.display = form.style.display === 'none' ? 'block' : 'none';
-            });
-        });
-
-        // Cancel Update
-        document.querySelectorAll('.cancel-edit').forEach(button => {
-            button.addEventListener('click', function () {
-                const commentId = this.dataset.commentId;
-                const form = document.getElementById(`edit-form-${commentId}`);
-                form.style.display = 'none';
-            });
-        });
-
-        // Toggle Reply Form
-        document.querySelectorAll('.toggle-reply').forEach(button => {
-            button.addEventListener('click', function () {
-                const commentId = this.dataset.commentId;
-                const form = document.getElementById(`reply-form-${commentId}`);
-                form.style.display = form.style.display === 'none' ? 'block' : 'none';
-            });
-        });
-
-        // Cancel Reply
-        document.querySelectorAll('.cancel-reply').forEach(button => {
-            button.addEventListener('click', function () {
-                const commentId = this.dataset.commentId;
-                const form = document.getElementById(`reply-form-${commentId}`);
-                form.style.display = 'none';
-            });
-        });
-    });
-</script>
-@endpush --}}
