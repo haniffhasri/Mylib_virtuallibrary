@@ -7,7 +7,7 @@
             Create your account
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600">
-            Or <a href="{{ route('login') }}" class="font-medium text-indigo-600 hover:text-indigo-500">sign in to your existing account</a>
+            Or <a href="{{ route('login') }}" class="font-medium">sign in to your existing account</a>
         </p>
     </div>
 
@@ -135,7 +135,7 @@
                 <!-- Submit Button -->
                 <div>
                     <button type="submit"
-                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white pink-btn focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Register
                     </button>
                 </div>

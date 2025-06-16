@@ -7,7 +7,7 @@
             Sign in to your account
         </h2>
         <p class="mt-2 text-center text-sm text-gray-600">
-            Or <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">create a new account</a>
+            Or <a href="{{ route('register') }}" class="font-medium">create a new account</a>
         </p>
     </div>
 
@@ -67,7 +67,7 @@
 
                     @if (Route::has('password.request'))
                         <div class="text-sm">
-                            <a href="{{ route('password.request') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
+                            <a href="{{ route('password.request') }}" class="font-medium">
                                 Forgot your password?
                             </a>
                         </div>
@@ -77,7 +77,7 @@
                 <!-- Submit Button -->
                 <div>
                     <button type="submit"
-                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white pink-btn focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Sign in
                     </button>
                 </div>

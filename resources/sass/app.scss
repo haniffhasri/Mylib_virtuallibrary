@@ -10965,6 +10965,12 @@ a.normal-link {
     width: fit-content !important;
 }
 
+.flex.space-x-1 .pink:hover{
+    color: #ff2f2f !important;
+}
+.pink-btn {
+    background-color: #ff2f2f !important;
+}
 /*------------------------------------- Animation -------------------------------------*/
 .element-fade-up.triggered {
     transform: translateY(0px);

@@ -9,6 +9,11 @@
 
     <title>{{ config('app.name', 'Mylib') }}</title>
 
+    {{-- logo --}}
+    <link rel="icon" type="image/png" href="{{ asset('favicon-96x96.png')}}" sizes="96x96" />
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png')}}" />
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
@@ -31,14 +36,14 @@
               <div class="flex justify-between items-center h-16">
                   <!-- Logo/Brand -->
                   <div class="flex-shrink-0 flex items-center">
-                      <a href="{{ url('/') }}" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors duration-200">
+                      <a href="{{ url('/') }}" class="text-xl font-bold transition-colors duration-200">
                           <img class="title-img" src="/image/logo-removebg-preview.png" alt="" />
                       </a>
                   </div>
 
                   <!-- Mobile menu button -->
                   <div class="md:hidden flex items-center">
-                      <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none transition duration-150 ease-in-out">
+                      <button id="mobile-menu-button" type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 pink hover:bg-gray-100 focus:outline-none transition duration-150 ease-in-out">
                           <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                           </svg>
@@ -49,20 +54,20 @@
                   <div class="hidden md:flex md:items-center md:space-x-1">
                       <!-- Left Side Links -->
                       <div class="flex space-x-1">
-                          <a href="{{ route('book.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Book List</a>
-                          <a href="{{ route('forum.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Forum List</a>
-                          <a href="{{ route('contact-us.show', ['id' => 1]) }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Contact Us</a>
-                          <a href="{{ route('support.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Support</a>
+                          <a href="{{ route('book.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Book List</a>
+                          <a href="{{ route('forum.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Forum List</a>
+                          <a href="{{ route('contact-us.show', ['id' => 1]) }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Contact Us</a>
+                          <a href="{{ route('support.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Support</a>
                           
                           @auth
                               @if(Auth::user()?->usertype === 'user')
-                              <a href="{{ route('borrow.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">My Books</a>
+                              <a href="{{ route('borrow.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">My Books</a>
                               @elseif(Auth::user()?->usertype === 'admin' || Auth::user()?->usertype === 'librarian')
-                                  <a href="{{ route('admin.borrow') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Borrow List</a>
-                                  <a href="{{ route('book.create') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Add Book</a>
+                                  <a href="{{ route('admin.borrow') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Borrow List</a>
+                                  <a href="{{ route('book.create') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Add Book</a>
                               @elseif(Auth::user()?->usertype === 'admin')
-                                  <a href="{{ route('admin.user') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Users</a>
-                                  <a href="{{ route('analytics.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Analytics</a>
+                                  <a href="{{ route('admin.user') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Users</a>
+                                  <a href="{{ route('analytics.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Analytics</a>
                               @endif
                           @endauth
                       </div>
@@ -71,16 +76,16 @@
                       <div class="ml-4 flex items-center space-x-4">
                           @guest
                               @if (Route::has('login'))
-                                  <a href="{{ route('login') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Login</a>
+                                  <a href="{{ route('login') }}" class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Login</a>
                               @endif
 
                               @if (Route::has('register'))
-                                  <a href="{{ route('register') }}" class="px-3 py-2 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200">Register</a>
+                                  <a href="{{ route('register') }}" class="px-3 py-2 rounded-md text-sm font-medium text-white transition-colors duration-200" style="background-color: #ff2f2f;">Register</a>
                               @endif
                           @else
                               <!-- Notifications -->
                               <div class="relative" x-data="{ open: false }">
-                                  <button @click="open = !open" class="p-1 rounded-full text-gray-600 hover:text-indigo-600 hover:bg-gray-100 focus:outline-none transition duration-150 ease-in-out relative">
+                                  <button @click="open = !open" class="p-1 rounded-full text-gray-600 pink hover:bg-gray-100 focus:outline-none transition duration-150 ease-in-out relative">
                                       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                       </svg>
@@ -139,35 +144,35 @@
           <!-- Mobile menu -->
           <div id="mobile-menu" class="md:hidden hidden">
               <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg">
-                  <a href="{{ route('book.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Book List</a>
-                  <a href="{{ route('forum.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Forum List</a>
-                  <a href="{{ route('contact-us.show', ['id' => 1]) }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Contact Us</a>
-                  <a href="{{ route('support.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Support</a>
+                  <a href="{{ route('book.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Book List</a>
+                  <a href="{{ route('forum.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Forum List</a>
+                  <a href="{{ route('contact-us.show', ['id' => 1]) }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Contact Us</a>
+                  <a href="{{ route('support.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Support</a>
                   
                   @auth
                       @if(Auth::user()?->usertype === 'user')
-                      <a href="{{ route('borrow.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">My Books</a>
+                      <a href="{{ route('borrow.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">My Books</a>
                       @elseif(Auth::user()?->usertype === 'admin' || Auth::user()?->usertype === 'librarian')
-                          <a href="{{ route('admin.borrow') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Borrow List</a>
-                          <a href="{{ route('book.create') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Add Book</a>
+                          <a href="{{ route('admin.borrow') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Borrow List</a>
+                          <a href="{{ route('book.create') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Add Book</a>
                       @elseif(Auth::user()?->usertype === 'admin')
-                          <a href="{{ route('admin.user') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Users</a>
-                          <a href="{{ route('analytics.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Analytics</a>
+                          <a href="{{ route('admin.user') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Users</a>
+                          <a href="{{ route('analytics.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Analytics</a>
                       @endif
                   @endauth
                   
                   @guest
                       @if (Route::has('login'))
-                          <a href="{{ route('login') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Login</a>
+                          <a href="{{ route('login') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Login</a>
                       @endif
 
                       @if (Route::has('register'))
                           <a href="{{ route('register') }}" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200">Register</a>
                       @endif
                   @else
-                      <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Dashboard</a>
-                      <a href="{{ route('notifications.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Notifications</a>
-                      <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-100 transition-colors duration-200">Logout</a>
+                      <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Dashboard</a>
+                      <a href="{{ route('notifications.index') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Notifications</a>
+                      <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 pink hover:bg-gray-100 transition-colors duration-200">Logout</a>
                       <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" class="hidden">
                           @csrf
                       </form>
