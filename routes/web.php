@@ -107,7 +107,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.readAll'); 
     Route::get('/notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
-    // Route::get('/notifications/unread', function () {return Auth::user()->unreadNotifications;});
     // Profile (picture and bio)
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/edit/{id}', [ProfileController::class, 'edit'])->name('edit');

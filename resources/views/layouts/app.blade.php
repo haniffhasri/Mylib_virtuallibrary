@@ -299,7 +299,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const fetchNotifications = async () => {
                 try {
-                    const notifications = await response.json();
+                    const response = await fetch('/notifications/fetch');
 
                     const notifList = document.getElementById('notification-list');
                     const badge = document.getElementById('notification-badge');

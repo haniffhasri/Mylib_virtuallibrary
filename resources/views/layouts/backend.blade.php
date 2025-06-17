@@ -172,8 +172,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const fetchNotifications = async () => {
                 try {
-                    const response = await fetch('/notifications/unread'); 
-                    const notifications = await response.json();
+                    const response = await fetch('/notifications/fetch');
 
                     const notifList = document.getElementById('notification-list');
                     const badge = document.getElementById('notification-badge');
