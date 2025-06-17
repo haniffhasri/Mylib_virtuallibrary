@@ -173,7 +173,9 @@
             const fetchNotifications = async () => {
                 try {
                     const response = await fetch('/notifications/fetch');
+                    const data = await response.json();
 
+                    const notifications = data.notifications;
                     const notifList = document.getElementById('notification-list');
                     const badge = document.getElementById('notification-badge');
 
@@ -183,14 +185,14 @@
                         const notifItem = document.createElement('div');
                         notifItem.className = 'dropdown-item d-flex justify-content-between align-items-center bg-light';
                         notifItem.innerHTML = `
-                            <div>${notification.message}</div>
+                            <div>${notification.data.message}</div>
                             <a href="/notifications/read/${notification.id}" class="btn btn-sm btn-outline-success">Mark as Read & View</a>
                         `;
                         notifList.appendChild(notifItem);
                     });
 
-                    badge.textContent = notifications.length;
-                    badge.classList.toggle('d-none', notifications.length === 0);
+                    badge.textContent = data.count;
+                    badge.classList.toggle('d-none', data.count === 0);
                 } catch (error) {
                     console.error('Failed to load notifications', error);
                 }
