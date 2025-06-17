@@ -199,7 +199,7 @@
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: 'You didn't upload a PDF or MP3. This book will be marked as unavailable.',
+                    text: "You didn't upload a PDF or MP3. This book will be marked as unavailable.",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
