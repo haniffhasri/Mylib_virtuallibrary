@@ -9,9 +9,9 @@
                 This is the backup page. The system will automatically backup itself. You just have to download the file.
             </x-help-icon-blade>
         </div>
-        <button id="createBackupBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+        {{-- <button id="createBackupBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
             Create Backup
-        </button>
+        </button> --}}
     </div>
 
     @if(session('output'))

@@ -27,37 +27,37 @@ class BackupController extends Controller
         return view('backup.index', compact('backupFiles', 'backupDisk'));
     }
 
-    public function create(){
-        try {
-            $process = new Process([
-                PHP_BINARY,
-                base_path('artisan'),
-                'backup:run',
-                '--only-db' 
-            ]);
+    // public function create(){
+    //     try {
+    //         $process = new Process([
+    //             PHP_BINARY,
+    //             base_path('artisan'),
+    //             'backup:run',
+    //             '--only-db' 
+    //         ]);
             
-            $process->setTimeout(300); // 5 minutes timeout
-            $process->run();
+    //         $process->setTimeout(300); // 5 minutes timeout
+    //         $process->run();
             
-            if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
-            }
+    //         if (!$process->isSuccessful()) {
+    //             throw new ProcessFailedException($process);
+    //         }
             
-            return response()->json([
-                'success' => true,
-                'message' => 'Backup created successfully!',
-                'output' => $process->getOutput()
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Backup failed: ' . $e->getMessage());
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Backup created successfully!',
+    //             'output' => $process->getOutput()
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         Log::error('Backup failed: ' . $e->getMessage());
             
-            return response()->json([
-                'success' => false,
-                'message' => 'Backup failed: ' . $e->getMessage(),
-                'output' => isset($process) ? $process->getErrorOutput() : $e->getTraceAsString()
-            ], 500);
-        }
-    }
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Backup failed: ' . $e->getMessage(),
+    //             'output' => isset($process) ? $process->getErrorOutput() : $e->getTraceAsString()
+    //         ], 500);
+    //     }
+    // }
 
     public function download($file){
         $backupDisk = Storage::disk(config('backup.backup.destination.disks')[0]);
