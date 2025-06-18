@@ -114,49 +114,58 @@
 
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
-						<li class="nav-item dropdown flex items-center">
-                          <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Notifications
-                            @if($headerNotifications->count() > 0)
-                              <span id="notification-badge" class="badge bg-danger">{{ $headerNotifications->count() }}</span>
-                            @else
-                              <span id="notification-badge" class="badge bg-danger d-none">0</span>
-                            @endif
-                          </a>
-
-                          <div id="notification-list" class="dropdown-menu w-max notification-dropdown dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            @forelse($headerNotifications as $notification)
-                              <div class="dropdown-item d-flex justify-content-between align-items-center {{ $notification->read_at ? '' : 'bg-light' }}">
-                                  <div>{{ $notification->data['message'] }}</div>
-                                  <a href="{{ route('notifications.read', $notification->id) }}" class="btn btn-sm btn-outline-success">
-                                      {{ $notification->read_at ? 'View' : 'Mark as Read & View' }}
-                                  </a>
-                              </div>
-                            @empty
-                              <p class="dropdown-item">No notifications found</p>
-                            @endforelse
-                            <a class="dropdown-item" href="{{ route('notifications.index') }}">View All</a>
-                          </div>
-                        </li>
-						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown"><i class="align-middle" data-feather="settings"></i></a>
-							<a class="nav-link dropdown-toggle d-none d-sm-inline-block flex gap-2 items-center" href="#" data-bs-toggle="dropdown">
-									<img src="{{ asset('profile_picture/' . Auth::user()->profile_picture) }}" class="object-cover w-10 h-10 bg-blue-500 rounded-full">
-									<span>{{ Auth::user()->username }}</span>
-							</a>
-							<div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="{{ route('dashboard') }}">Dashboard</a>
-								<a class="dropdown-item" href="{{ route('book.index') }}">Book List</a>
-								<a class="dropdown-item" href="{{ route('logout') }}"
-								onclick="event.preventDefault();
-												document.getElementById('logout-form').submit();">
-									{{ __('Logout') }}
-								</a>
-								<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-									@csrf
-								</form>
+						<!-- Notifications -->
+						<div class="relative" x-data="{ open: false }">
+							<button @click="open = !open" class="p-1 rounded-full text-gray-600 pink hover:bg-gray-100 focus:outline-none transition duration-150 ease-in-out relative">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+								</svg>
+								@if($headerNotifications->count() > 0)
+									<span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{{ $headerNotifications->count() }}</span>
+								@endif
+							</button>
+							
+							<div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-72 md:w-96 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 z-50">
+								<div class="py-1">
+									@forelse($headerNotifications as $notification)
+										<div class="px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex justify-between items-center {{ $notification->read_at ? '' : 'bg-indigo-50' }}">
+											<div>{{ $notification->data['message'] }}</div>
+											<a href="{{ route('notifications.read', $notification->id) }}" class="text-xs px-2 py-1 rounded bg-indigo-100 text-indigo-800 hover:bg-indigo-200 transition-colors duration-200">
+												{{ $notification->read_at ? 'View' : 'Mark as Read' }}
+											</a>
+										</div>
+									@empty
+										<div class="px-4 py-3 text-sm text-gray-700">No notifications found</div>
+									@endforelse
+								</div>
+								<div class="py-1">
+									<a href="{{ route('notifications.index') }}" class="block px-4 py-2 text-sm text-center text-indigo-700 hover:bg-gray-100 transition-colors duration-200">View All Notifications</a>
+								</div>
 							</div>
-						</li>
+						</div>
+
+						<!-- Profile dropdown -->
+						<div class="relative ml-3" x-data="{ open: false }">
+							<div>
+								<button @click="open = !open" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out" id="user-menu">
+									<img class="h-8 w-8 rounded-full object-cover" src="{{ asset('profile_picture/' . Auth::user()->profile_picture) }}" alt="{{ Auth::user()->username }}">
+									<span class="ml-2 text-gray-700 font-medium hidden lg:inline">{{ Auth::user()->username }}</span>
+									<svg class="ml-1 h-4 w-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+										<path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+									</svg>
+								</button>
+							</div>
+							
+							<div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+								<div class="py-1">
+									<a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200">Dashboard</a>
+									<a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200">Logout</a>
+									<form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+										@csrf
+									</form>
+								</div>
+							</div>
+						</div>
 					</ul>
 				</div>
 			</nav>

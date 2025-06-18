@@ -33,21 +33,21 @@ class NotificationController extends Controller
             return redirect($data['url']);
         }
 
-        // Check for new user (account) notification
-        if (isset($data['resource_id'])) {
-            $user = \App\Models\User::find($data['resource_id']);
-            if (!$user) {
-                return redirect()->route('notifications.index')->with('error', 'User account has been deleted.');
-            }
-
-            return redirect($data['url']);
-        }
-
         // book add link
         if (isset($data['resource_id']) && $data['type'] === 'book') {
             $book = \App\Models\Book::find($data['resource_id']);
             if (!$book) {
                 return redirect()->route('notifications.index')->with('error', 'Book not found.');
+            }
+
+            return redirect($data['url']);
+        }
+
+        // Check for new user (account) notification
+        if (isset($data['resource_id']) && $data['type'] === 'user') {
+            $user = \App\Models\User::find($data['resource_id']);
+            if (!$user) {
+                return redirect()->route('notifications.index')->with('error', 'User account has been deleted.');
             }
 
             return redirect($data['url']);
@@ -66,13 +66,16 @@ class NotificationController extends Controller
         return back()->with('status', 'All notifications marked as read.');
     }
 
-    public function fetch()
-    {
+    public function fetch(){
         $notifications = Auth::user()->unreadNotifications()->take(5)->get();
 
-        return response()->json([
-            'notifications' => $notifications,
-            'count' => $notifications->count(),
-        ]);
+        if (request()->wantsJson()) {
+            return response()->json([
+                'notifications' => $notifications,
+                'count' => $notifications->count(),
+            ]);
+        }
+
+        return redirect()->back();
     }
 }
