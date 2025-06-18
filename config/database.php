@@ -96,8 +96,9 @@ return [
             'search_path' => 'public',
             'sslmode' => 'prefer',
             'dump' => [
-                'dump_binary_path' => 'C:\Program Files\PostgreSQL\17\bin', // <-- Important
-                'use_single_transaction' => true, // Optional but recommended
+                'dump_binary_path' => 'C:\Program Files\PostgreSQL\17\bin',
+                'use_single_transaction' => true, 
+                'timeout' => 300
             ],
         ],
 

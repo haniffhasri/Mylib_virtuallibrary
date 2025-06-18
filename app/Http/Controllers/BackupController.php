@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 class BackupController extends Controller
@@ -26,35 +27,37 @@ class BackupController extends Controller
         return view('backup.index', compact('backupFiles', 'backupDisk'));
     }
 
-    // public function create()
-    // {
-    //     try {
-    //     $process = new Process([
-    //         PHP_BINARY, // Uses the same PHP binary that's running the current script
-    //         base_path('artisan'), // base_path() points to project root
-    //         'backup:run'
-    //     ]);
-        
-    //     $process->setTimeout(null);
-    //     $process->run();
-        
-    //     if (!$process->isSuccessful()) {
-    //         throw new ProcessFailedException($process);
-    //     }
-        
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => 'Backup created successfully!',
-    //         'output' => $process->getOutput()
-    //     ]);
-    // } catch (\Exception $e) {
-    //     return response()->json([
-    //         'success' => false,
-    //         'message' => 'Backup failed: ' . $e->getMessage(),
-    //         'output' => isset($process) ? $process->getErrorOutput() : ''
-    //     ], 500);
-    // }
-    // }
+    public function create(){
+        try {
+            $process = new Process([
+                PHP_BINARY,
+                base_path('artisan'),
+                'backup:run',
+                '--only-db' 
+            ]);
+            
+            $process->setTimeout(300); // 5 minutes timeout
+            $process->run();
+            
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+            }
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Backup created successfully!',
+                'output' => $process->getOutput()
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Backup failed: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Backup failed: ' . $e->getMessage(),
+                'output' => isset($process) ? $process->getErrorOutput() : $e->getTraceAsString()
+            ], 500);
+        }
+    }
 
     public function download($file){
         $backupDisk = Storage::disk(config('backup.backup.destination.disks')[0]);

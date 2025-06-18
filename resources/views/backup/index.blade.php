@@ -2,11 +2,16 @@
 
 @section('content')
 <div class="container">
-    <div class="flex items-center">
-        <h4>Backup</h4>
-        <x-help-icon-blade>
-            This is the backup page. The system will automatically backup itself. You just have to download the file.
-        </x-help-icon-blade>
+    <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center">
+            <h4>Backup</h4>
+            <x-help-icon-blade>
+                This is the backup page. The system will automatically backup itself. You just have to download the file.
+            </x-help-icon-blade>
+        </div>
+        <button id="createBackupBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+            Create Backup
+        </button>
     </div>
 
     @if(session('output'))
@@ -77,6 +82,41 @@
         </div>
     </div>
 </div>
+@push('scripts')
+<script>
+    document.getElementById('createBackupBtn').addEventListener('click', function() {
+        this.disabled = true;
+        this.textContent = 'Creating Backup...';
+        
+        fetch('{{ route("backup.create") }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Backup created successfully!');
+                window.location.reload();
+            } else {
+                alert('Error: ' + data.message);
+                console.error(data.output);
+            }
+        })
+        .catch(error => {
+            alert('An error occurred: ' + error.message);
+            console.error(error);
+        })
+        .finally(() => {
+            this.disabled = false;
+            this.textContent = 'Create Backup';
+        });
+    });
+</script>
+@endpush
 @endsection
 
 @php

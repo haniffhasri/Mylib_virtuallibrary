@@ -214,10 +214,31 @@
         </form>
     </div>
 </div>
-@endsection
-
-@section('scripts')
 <script>
+    function toggleMediaUpload() {
+        const mediaPreview = document.getElementById('mediaPreview');
+        const mediaUpload = document.getElementById('mediaUpload');
+        const deleteMedia = document.getElementById('delete_media');
+        
+        if (mediaPreview && mediaUpload && deleteMedia) {
+            mediaPreview.classList.add('hidden');
+            mediaUpload.classList.remove('hidden');
+            deleteMedia.value = '1';
+        }
+    }
+
+    function toggleImageUpload() {
+        const imagePreview = document.getElementById('imagePreview');
+        const imageUpload = document.getElementById('imageUpload');
+        const deleteImage = document.getElementById('delete_image');
+        
+        if (imagePreview && imageUpload && deleteImage) {
+            imagePreview.classList.add('hidden');
+            imageUpload.classList.remove('hidden');
+            deleteImage.value = '1';
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         const formatSelect = document.getElementById('format');
         const fileInput = document.getElementById('media_path');
@@ -237,20 +258,10 @@
             fileInput.value = ''; // clear previously selected file
         }
 
-        formatSelect.addEventListener('change', updateMediaField);
-        updateMediaField(); // initialize on page load
+        if (formatSelect && fileInput && mediaLabel) {
+            formatSelect.addEventListener('change', updateMediaField);
+            updateMediaField(); // initialize on page load
+        }
     });
-
-    function toggleMediaUpload() {
-        document.getElementById('mediaPreview').classList.add('hidden');
-        document.getElementById('mediaUpload').classList.remove('hidden');
-        document.getElementById('delete_media').value = '1';
-    }
-
-    function toggleImageUpload() {
-        document.getElementById('imagePreview').classList.add('hidden');
-        document.getElementById('imageUpload').classList.remove('hidden');
-        document.getElementById('delete_image').value = '1';
-    }
 </script>
 @endsection
