@@ -63,17 +63,17 @@
             <div class="r-wrap">
               <div class="img-1">
                 @foreach ($books->shuffle() as $book)
-                  <a href="{{ route('book.show', $book->id) }}"><img src="{{ asset('image/' . $book->image_path) }}" alt="{{ $book->book_title }}"></a>
+                  <a href="{{ route('book.show', $book->id) }}"><img src="{{ Storage::disk('s3')->url($book->image_path) }}" alt="{{ $book->book_title }}"></a>
                 @endforeach
               </div>
               <div class="img-1">
                 @foreach ($books->shuffle() as $book)
-                  <a href="{{ route('book.show', $book->id) }}"><img src="{{ asset('image/' . $book->image_path) }}" alt="{{ $book->book_title }}"></a>
+                  <a href="{{ route('book.show', $book->id) }}"><img src="{{ Storage::disk('s3')->url($book->image_path) }}" alt="{{ $book->book_title }}"></a>
                 @endforeach
               </div>
               <div class="img-1">
                 @foreach ($books->shuffle() as $book)
-                  <a href="{{ route('book.show', $book->id) }}"><img src="{{ asset('image/' . $book->image_path) }}" alt="{{ $book->book_title }}"></a>
+                  <a href="{{ route('book.show', $book->id) }}"><img src="{{ Storage::disk('s3')->url($book->image_path) }}" alt="{{ $book->book_title }}"></a>
                 @endforeach
               </div>
             </div>

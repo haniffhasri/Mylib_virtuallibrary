@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Borrow;
 use Carbon\Carbon;
+use  Illuminate\Support\Facades\Log;
 
 class UpdateExpiredBorrows extends Command
 {
@@ -27,12 +28,23 @@ class UpdateExpiredBorrows extends Command
      */
     public function handle()
     {
-        $now = Carbon::now();
+        Log::info('Command is running at ' . now());
 
+        $now = now();
         $expiredBorrows = Borrow::where('is_active', true)
             ->where('due_date', '<', $now)
-            ->update(['is_active' => false]);
+            ->get();
 
-        $this->info("Expired borrows updated successfully!");
+        if ($expiredBorrows->isEmpty()) {
+            $this->info('No expired borrows found.');
+            Log::info('No expired borrows found.');
+        } else {
+            Borrow::whereIn('id', $expiredBorrows->pluck('id'))->update(['is_active' => false]);
+            $this->info("Updated " . $expiredBorrows->count() . " expired borrows.");
+            Log::info("Updated " . $expiredBorrows->count() . " expired borrows.");
+        }
+
+        return 0; 
     }
+
 }

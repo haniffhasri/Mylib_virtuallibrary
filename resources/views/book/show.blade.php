@@ -15,7 +15,7 @@
     <div class="flex flex-col md:flex-row gap-8 mb-8">
         <!-- Book Cover -->
         <div class="w-full md:w-1/3">
-            <img src="{{ asset('image/' . $book->image_path) }}" alt="Cover Image" class="w-full rounded-lg shadow-md">
+            <img src="{{ Storage::disk('s3')->url($book->image_path) }}" alt="book cover" class="w-full rounded-lg shadow-md">
         </div>
         
         <!-- Book Details -->
@@ -135,7 +135,7 @@
                 @auth
                     @if ($layout == 'layouts.backend')
                         <div class="flex flex-wrap gap-3">
-                            <a href="{{ asset('media/' . $book->media_path) }}" target="_blank" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+                            <img src="{{ Storage::disk('s3')->url($book->media_path) }}" target="_blank" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
                                 {{ $book->format === 'audio' ? 'Listen to Audiobook' : 'Read PDF' }}
                             </a>
                             <a href="{{ route('book.edit', $book->id) }}" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200">

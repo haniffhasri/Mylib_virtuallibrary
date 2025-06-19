@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\NewBookNotification;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Storage;
 
 use function Pest\Laravel\delete;
 
@@ -74,27 +75,21 @@ class BookController extends Controller
 
     public function destroy($id){
         $book = Book::findOrFail($id);
-    
-        // Delete media file if it exists
-        if ($book->media_path) {
-            $mediaPath = public_path('media/' . $book->media_path);
-            if (file_exists($mediaPath)) {
-                unlink($mediaPath);
-            }
+
+        // Delete media file from S3 if it exists
+        if ($book->media_path && Storage::disk('s3')->exists($book->media_path)) {
+            Storage::disk('s3')->delete($book->media_path);
         }
-    
-        // Delete image file if it exists
-        if ($book->image_path) {
-            $imagePath = public_path('image/' . $book->image_path);
-            if (file_exists($imagePath)) {
-                unlink($imagePath);
-            }
+
+        // Delete image file from S3 if it exists
+        if ($book->image_path && Storage::disk('s3')->exists($book->image_path)) {
+            Storage::disk('s3')->delete($book->image_path);
         }
-    
+
         // Now delete the book record itself
         $book->delete();
-    
-        return redirect()->back()->with('success', 'Media deleted');
+
+        return redirect()->back()->with('success', 'Book and media deleted.');
     }
 
     public function edit($id){
@@ -115,53 +110,51 @@ class BookController extends Controller
             ]);
 
             $book = Book::findOrFail($id);
-        
+
             $book->book_title = $request->book_title;
             $book->author = $request->author;
             $book->book_description = $request->book_description;
             $book->genre = $request->genre;
             $book->format = $request->format;
             $book->book_publication_date = $request->book_publication_date;
-        
-            // Delete media if requested
+
+            // Delete old media if requested
             if ($request->delete_media == '1' && $book->media_path) {
-                $mediaPath = public_path('media/' . $book->media_path);
-                if (file_exists($mediaPath)) {
-                    unlink($mediaPath);
+                if (Storage::disk('s3')->exists($book->media_path)) {
+                    Storage::disk('s3')->delete($book->media_path);
                 }
                 $book->media_path = null;
             }
-        
-            // Delete image if requested
+
+            // Delete old image if requested
             if ($request->delete_image == '1' && $book->image_path) {
-                $imagePath = public_path('image/' . $book->image_path);
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
+                if (Storage::disk('s3')->exists($book->image_path)) {
+                    Storage::disk('s3')->delete($book->image_path);
                 }
                 $book->image_path = null;
             }
-        
-            // Upload new media if any
+
+            // Upload new media
             if ($request->hasFile('media_path')) {
                 $media = $request->file('media_path');
-                $mediaName = time() . '.' . $media->getClientOriginalExtension();
-                $media->move('media', $mediaName);
+                $mediaName = 'media/' . time() . '.' . $media->getClientOriginalExtension();
+                Storage::disk('s3')->put($mediaName, file_get_contents($media));
                 $book->media_path = $mediaName;
             }
-        
-            // Upload new image if any
+
+            // Upload new image
             if ($request->hasFile('image_path')) {
                 $image = $request->file('image_path');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move('image', $imageName);
+                $imageName = 'images/' . time() . '.' . $image->getClientOriginalExtension();
+                Storage::disk('s3')->put($imageName, file_get_contents($image));
                 $book->image_path = $imageName;
             }
-        
-            // Set status based on whether media_path exists
+
+            // Set status
             $book->status = $book->media_path ? true : false;
-        
+
             $book->save();
-        
+
             return redirect('/book')->with('success', 'Book updated!');
         } catch(Exception $e){
             Log::error('Book update error: ' . $e->getMessage());
@@ -199,15 +192,15 @@ class BookController extends Controller
 
             if ($request->hasFile('media_path')) {
                 $media = $request->file('media_path');
-                $mediaName = time() . '.' . $media->getClientOriginalExtension();
-                $media->move(public_path('media'), $mediaName); 
+                $mediaName = 'media/' . time() . '.' . $media->getClientOriginalExtension();
+                Storage::disk('s3')->put($mediaName, file_get_contents($media));
                 $book->media_path = $mediaName;
             }
         
             if ($request->hasFile('image_path')) {
                 $image = $request->file('image_path');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('image'), $imageName);
+                $imageName = 'images/' . time() . '.' . $image->getClientOriginalExtension();
+                Storage::disk('s3')->put($imageName, file_get_contents($image));
                 $book->image_path = $imageName;
             }
 

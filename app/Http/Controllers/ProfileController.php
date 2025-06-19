@@ -5,8 +5,10 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
+use Soap\Sdl;
 
 class ProfileController extends Controller
 {
@@ -18,6 +20,7 @@ class ProfileController extends Controller
         /** @var \App\Models\User $user */
         
         $user = Auth::user();
+
         // If user pressed skip
         if ($request->input('skip') == '1') {
             $user->profile_picture = 'default.jpg'; 
@@ -31,14 +34,17 @@ class ProfileController extends Controller
 
         if ($request->hasFile('profile_picture')) {
             $profile_picture = $request->file('profile_picture');
-            $image = time() . '.' . $profile_picture->getClientOriginalExtension();
-            $profile_picture->move(public_path('profile_picture'), $image);
-            $user->profile_picture = $image;
+            $imageName = 'profile_picture/' . time() . '.' . $profile_picture->getClientOriginalExtension();
+
+            $result = Storage::disk('s3')->put($imageName, file_get_contents($profile_picture));
+            Log::info('S3 upload result:', ['path' => $imageName, 'result' => $result]);
+
+            $user->profile_picture = $imageName;
         }
 
         $user->save();
 
-        return redirect()->route('dashboard')->with('success');
+        return redirect()->route('dashboard')->with('success', 'Profile picture uploaded.');
     }
     
     public function edit($id){
@@ -60,16 +66,18 @@ class ProfileController extends Controller
             $users->bio = $request->bio;
 
             if ($request->hasFile('profile_picture')) {
-                // Delete old file if exists
-                $oldProfile = public_path('profile_picture/' . $users->profile_picture);
-                if (file_exists($oldProfile) && $users->profile_picture != 'default.jpg') {
-                    unlink($oldProfile);
+                // Delete old profile picture if not default
+                if ($users->profile_picture && $users->profile_picture !== 'default.jpg') {
+                    if (Storage::disk('s3')->exists($users->profile_picture)) {
+                        Storage::disk('s3')->delete($users->profile_picture);
+                    }
                 }
 
+                // Upload new profile picture
                 $profile_picture = $request->file('profile_picture');
-                $image = time() . '_profile.' . $profile_picture->getClientOriginalExtension();
-                $profile_picture->move(public_path('profile_picture'), $image);
-                $users->profile_picture = $image;
+                $imageName = 'profile_picture/' . time() . '_profile.' . $profile_picture->getClientOriginalExtension();
+                Storage::disk('s3')->put($imageName, file_get_contents($profile_picture));
+                $users->profile_picture = $imageName;
             }
 
             $users->save();

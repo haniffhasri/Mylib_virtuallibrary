@@ -21,8 +21,11 @@
                 <!-- Profile Picture and Basic Info -->
                 <div class="flex flex-col md:flex-row items-start md:items-end -mt-16 md:-mt-12 px-6 pb-6">
                     <div class="relative">
-                        <img src="{{ asset('profile_picture/' . $users->profile_picture) }}" alt="Profile Picture" 
-                             class="h-32 w-32 rounded-full border-4 border-white bg-white shadow-lg object-cover">
+                        @if ($user->profile_picture === 'default.jpg')
+                            <img class="h-32 w-32 rounded-full border-4 border-white bg-white shadow-lg object-cover" src="{{ asset('profile_picture/default.jpg') }}" alt="Default Profile">
+                        @else
+                            <img class="h-32 w-32 rounded-full border-4 border-white bg-white shadow-lg object-cover" src="{{ Storage::disk('s3')->url($user->profile_picture) }}" alt="{{ Auth::user()->username }}">
+                        @endif 
                         <span class="absolute bottom-0 right-0 bg-green-500 rounded-full w-4 h-4 border-2 border-white"></span>
                     </div>
                     
@@ -172,12 +175,12 @@
                             @foreach($borrows->take(4) as $borrowed)
                             <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                                 <div class="h-48 overflow-hidden">
-                                    <img src="{{ asset('image/' . $borrowed->book->image_path) }}" alt="{{ $borrowed->book->book_title }}" class="w-full h-full object-cover">
+                                    <img src="{{ Storage::disk('s3')->url($borrowed->book->image_path) }}" alt="{{ $borrowed->book->book_title }}" class="w-full h-full object-cover">
                                 </div>
                                 <div class="flex-1 flex flex-column items-center pb-3">
                                     <h4 class="font-medium text-2xl text-gray-900">{{ $borrowed->book->book_title }}</h4>
                                     <p class="text-sm text-gray-500 mb-2">Borrowed on {{ $borrowed->created_at->format('M d, Y') }}</p>
-                                    <a href="{{ asset('media/' . $borrowed->book->media_path) }}" target="_blank" 
+                                    <img src="{{ Storage::disk('s3')->url($borrowed->book->media_path) }}" target="_blank" 
                                        class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full hover:bg-blue-200 transition duration-200">
                                         {{ $borrowed->book->format === 'audio' ? 'Listen Now' : 'Read Now' }}
                                     </a>

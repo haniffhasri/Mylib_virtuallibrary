@@ -23,7 +23,7 @@
         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
             <!-- Book Cover -->
             <div class="h-48 overflow-hidden">
-                <img src="{{ asset('image/' . $borrowed->book->image_path) }}" alt="{{ $borrowed->book->book_title }}" class="w-full h-full object-cover">
+                <img src="{{ Storage::disk('s3')->url($borrowed->book->image_path) }}" alt="{{ $borrowed->book->book_title }}" class="w-full h-full object-cover">
             </div>
             
             <!-- Book Details -->
@@ -31,7 +31,7 @@
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $borrowed->book->book_title }}</h3>
                 
                 <!-- Action Button -->
-                <a href="{{ asset('media/' . $borrowed->book->media_path) }}" target="_blank" 
+                <img src="{{ Storage::disk('s3')->url($borrowed->book->media_path) }}" target="_blank" 
                    class="block w-full mt-4 px-4 py-2 bg-blue-600 text-white text-center rounded-md hover:bg-blue-700 transition duration-200">
                     {{ $borrowed->book->format === 'audio' ? 'Listen to Audiobook' : 'Read PDF' }}
                 </a>

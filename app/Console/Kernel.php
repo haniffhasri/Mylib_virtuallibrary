@@ -4,21 +4,47 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-
+use \App\Console\Commands\UpdateExpiredBorrows;
+use  Illuminate\Support\Facades\Log;
 class Kernel extends ConsoleKernel
 {
     protected $commands = [
-        \App\Console\Commands\UpdateExpiredBorrows::class, // Register your command here
+        UpdateExpiredBorrows::class, 
     ];
 
     protected function schedule(Schedule $schedule)
     {
-        // Schedule your command here
-        $schedule->command('borrows:update-expired')->daily();
-        $schedule->command('backup:run')->daily()->at('5:00');
-        $schedule->command('backup:clean')->daily()->at('5:00');
-        $schedule->command('backup:monitor')->daily()->at('5:00');
+        Log::info("Scheduler ran at " . now());
+
+        $schedule->command('app:update-expired-borrows')
+            ->everyMinute()
+            ->withoutOverlapping()
+            ->before(function () {
+                Log::info("Starting: app:update-expired-borrows at " . now());
+            })
+            ->after(function () {
+                Log::info("Finished: app:update-expired-borrows at " . now());
+            });
+
+        $schedule->command('backup:run')
+            ->everyMinute()
+            ->withoutOverlapping()
+            ->before(fn () => Log::info("Starting: backup:run"))
+            ->after(fn () => Log::info("Finished: backup:run"));
+
+        $schedule->command('backup:clean')
+            ->everyMinute()
+            ->withoutOverlapping()
+            ->before(fn () => Log::info("Starting: backup:clean"))
+            ->after(fn () => Log::info("Finished: backup:clean"));
+
+        $schedule->command('backup:monitor')
+            ->everyMinute()
+            ->withoutOverlapping()
+            ->before(fn () => Log::info("Starting: backup:monitor"))
+            ->after(fn () => Log::info("Finished: backup:monitor"));
     }
+
 
     protected function commands()
     {

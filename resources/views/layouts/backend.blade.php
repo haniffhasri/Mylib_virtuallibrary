@@ -148,7 +148,11 @@
 						<div class="relative ml-3" x-data="{ open: false }">
 							<div>
 								<button @click="open = !open" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out" id="user-menu">
-									<img class="h-8 w-8 rounded-full object-cover" src="{{ asset('profile_picture/' . Auth::user()->profile_picture) }}" alt="{{ Auth::user()->username }}">
+									@if ($user->profile_picture === 'default.jpg')
+										<img class="h-8 w-8 rounded-full object-cover" src="{{ asset('profile_picture/default.jpg') }}" alt="Default Profile">
+									@else
+										<img class="h-8 w-8 rounded-full object-cover" src="{{ Storage::disk('s3')->url($user->profile_picture) }}" alt="{{ Auth::user()->username }}">
+									@endif
 									<span class="ml-2 text-gray-700 font-medium hidden lg:inline">{{ Auth::user()->username }}</span>
 									<svg class="ml-1 h-4 w-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
 										<path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
