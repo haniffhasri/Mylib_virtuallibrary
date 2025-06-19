@@ -180,7 +180,7 @@
                                 <div class="flex-1 flex flex-column items-center pb-3">
                                     <h4 class="font-medium text-2xl text-gray-900">{{ $borrowed->book->book_title }}</h4>
                                     <p class="text-sm text-gray-500 mb-2">Borrowed on {{ $borrowed->created_at->format('M d, Y') }}</p>
-                                    <img src="{{ Storage::disk('s3')->url($borrowed->book->media_path) }}" target="_blank" 
+                                    <a href="{{ Storage::disk('s3')->url($borrowed->book->media_path) }}" target="_blank" 
                                        class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full hover:bg-blue-200 transition duration-200">
                                         {{ $borrowed->book->format === 'audio' ? 'Listen Now' : 'Read Now' }}
                                     </a>

@@ -147,7 +147,7 @@
                         </div>
                     @elseif (Auth::user()->usertype === 'user')
                         @if ($borrowedBookIds->contains($book->id))
-                            <a href="{{ asset('media/' . $book->media_path) }}" target="_blank" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+                            <a href="{{ Storage::disk('s3')->url($book->media_path) }}" target="_blank" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
                                 {{ $book->format === 'audio' ? 'Listen to Audiobook' : 'Read PDF' }}
                             </a>
                         @else

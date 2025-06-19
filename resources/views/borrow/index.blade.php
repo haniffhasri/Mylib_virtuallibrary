@@ -31,7 +31,7 @@
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $borrowed->book->book_title }}</h3>
                 
                 <!-- Action Button -->
-                <img src="{{ Storage::disk('s3')->url($borrowed->book->media_path) }}" target="_blank" 
+                <a href="{{ Storage::disk('s3')->url($borrowed->book->media_path) }}" target="_blank" 
                    class="block w-full mt-4 px-4 py-2 bg-blue-600 text-white text-center rounded-md hover:bg-blue-700 transition duration-200">
                     {{ $borrowed->book->format === 'audio' ? 'Listen to Audiobook' : 'Read PDF' }}
                 </a>
