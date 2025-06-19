@@ -122,7 +122,7 @@
                 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                     <!-- Book Image -->
                     <div class="h-48 overflow-hidden">
-                        <img src="{{ Storage::disk('s3')->url($book->image_path) }}" alt="{{ $book_item->book_title }}" class="w-full h-full object-cover">
+                        <img src="{{ Storage::disk('s3')->url($book_item->image_path) }}" alt="{{ $book_item->book_title }}" class="w-full h-full object-cover">
                     </div>
                     
                     <!-- Book Content -->
