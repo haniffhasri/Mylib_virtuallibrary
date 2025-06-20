@@ -43,7 +43,7 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-xs text-gray-500 mt-2"><span class="text-green-500 font-medium">+12%</span> from last month</p>
+            {{-- <p class="text-xs text-gray-500 mt-2"><span class="text-green-500 font-medium">+12%</span> from last month</p> --}}
         </div>
 
         <div class="bg-white rounded-xl shadow-sm p-4 border-l-4 border-green-500">
@@ -58,7 +58,7 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-xs text-gray-500 mt-2"><span class="text-green-500 font-medium">+8%</span> from last month</p>
+            {{-- <p class="text-xs text-gray-500 mt-2"><span class="text-green-500 font-medium">+8%</span> from last month</p> --}}
         </div>
 
         <div class="bg-white rounded-xl shadow-sm p-4 border-l-4 border-purple-500">
@@ -73,7 +73,7 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-xs text-gray-500 mt-2"><span class="text-green-500 font-medium">+15%</span> from last month</p>
+            {{-- <p class="text-xs text-gray-500 mt-2"><span class="text-green-500 font-medium">+15%</span> from last month</p> --}}
         </div>
 
         <div class="bg-white rounded-xl shadow-sm p-4 border-l-4 border-orange-500">
@@ -88,7 +88,7 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-xs text-gray-500 mt-2"><span class="text-green-500 font-medium">+22%</span> from last month</p>
+            {{-- <p class="text-xs text-gray-500 mt-2"><span class="text-green-500 font-medium">+22%</span> from last month</p> --}}
         </div>
     </div>
 
@@ -207,7 +207,7 @@
                         </div>
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <p class="text-sm font-medium text-gray-500">Avg. Activity</p>
-                            <p class="text-2xl font-semibold text-gray-800">3.2/day</p>
+                            <p class="text-2xl font-semibold text-gray-800">{{ $average_activity }}/day</p>
                         </div>
                     </div>
                 </div>
@@ -220,21 +220,6 @@
                     </div>
                     <div class="chart-container" style="height: 300px;">
                         <canvas id="topBorrowersChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- User Activity Over Time -->
-                <div class="bg-white rounded-xl shadow-sm p-6 lg:col-span-2">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">User Activity Over Time</h3>
-                        <div class="flex gap-2">
-                            <button class="text-xs px-3 py-1 bg-blue-50 text-blue-600 rounded-full">Daily</button>
-                            <button class="text-xs px-3 py-1 bg-gray-100 text-gray-600 rounded-full">Weekly</button>
-                            <button class="text-xs px-3 py-1 bg-gray-100 text-gray-600 rounded-full">Monthly</button>
-                        </div>
-                    </div>
-                    <div class="chart-container" style="height: 350px;">
-                        <canvas id="userActivityPatternsChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -266,24 +251,13 @@
                 </div>
 
                 <!-- Most Commented Books -->
-                <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="bg-white rounded-xl shadow-sm p-6 lg:col-span-2">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-semibold text-gray-800">Most Commented Books</h3>
                         <a href="{{ route('book.index') }}" class="text-sm text-blue-600 hover:text-blue-800">View all</a>
                     </div>
                     <div class="chart-container" style="height: 300px;">
                         <canvas id="mostCommentedBooksChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Book Categories Distribution -->
-                <div class="bg-white rounded-xl shadow-sm p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Book Categories</h3>
-                        <div class="text-sm text-gray-500">By popularity</div>
-                    </div>
-                    <div class="chart-container" style="height: 300px;">
-                        <canvas id="bookCategoriesChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -329,35 +303,22 @@
                 <!-- Forum Activity Over Time -->
                 <div class="bg-white rounded-xl shadow-sm p-6 lg:col-span-2">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Forum Activity Trend</h3>
-                        <div class="flex gap-2">
+                        <h3 class="text-lg font-semibold text-gray-800">Most Commented Thread</h3>
+                        {{-- <div class="flex gap-2">
                             <button class="text-xs px-3 py-1 bg-blue-50 text-blue-600 rounded-full">Daily</button>
                             <button class="text-xs px-3 py-1 bg-gray-100 text-gray-600 rounded-full">Weekly</button>
                             <button class="text-xs px-3 py-1 bg-gray-100 text-gray-600 rounded-full">Monthly</button>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="chart-container" style="height: 350px;">
-                        <canvas id="forumActivityTrendChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Top Forum Contributors -->
-                <div class="bg-white rounded-xl shadow-sm p-6 lg:col-span-2">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold text-gray-800">Top Contributors</h3>
-                        <a href="#" class="text-sm text-blue-600 hover:text-blue-800">View all</a>
-                    </div>
-                    <div class="chart-container" style="height: 300px;">
-                        <canvas id="topContributorsChart"></canvas>
+                        <canvas id="mostCommentedThreadsChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
 
-@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Tab functionality
@@ -793,6 +754,70 @@
             });
         }
 
+        // Most Commented Thread Chart
+        const threads = @json($most_commented_threads);
+
+        function wrapLabel(label, maxLength) {
+            const words = label.split(' ');
+            let line = '';
+            const lines = [];
+
+            words.forEach(word => {
+                if ((line + word).length > maxLength) {
+                    lines.push(line.trim());
+                    line = '';
+                }
+                line += word + ' ';
+            });
+
+            if (line.trim()) lines.push(line.trim());
+
+            return lines;
+        }
+
+        if (threads.length > 0) {
+            const labels = threads.map(b => wrapLabel(b.thread_title, 20));
+            const data = threads.map(b => b.all_comments_count);
+
+            new Chart(document.getElementById('mostCommentedThreadsChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Comments',
+                        data: data,
+                        backgroundColor: chartTheme.colors.green.light,
+                        borderColor: chartTheme.colors.green.dark,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    ...commonOptions,
+                    plugins: {
+                        ...commonOptions.plugins,
+                        tooltip: {
+                            ...chartTheme.tooltip,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.raw} comments`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         // Top Borrowers Chart
         const borrowers = @json($top_borrowers);
         const borrowerLabels = borrowers.map(b => b.user.name);
@@ -909,91 +934,6 @@
                 cutout: '70%'
             }
         });
-
-        // Forum Activity Trend Chart
-        new Chart(document.getElementById('forumActivityTrendChart'), {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [
-                    {
-                        label: 'New Threads',
-                        data: [12, 19, 15, 20, 18, 22],
-                        backgroundColor: chartTheme.colors.blue.bg,
-                        borderColor: chartTheme.colors.blue.dark,
-                        borderWidth: 2,
-                        pointBackgroundColor: chartTheme.colors.blue.dark,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                        tension: 0.3
-                    },
-                    {
-                        label: 'Comments',
-                        data: [45, 60, 55, 80, 75, 90],
-                        backgroundColor: chartTheme.colors.green.bg,
-                        borderColor: chartTheme.colors.green.dark,
-                        borderWidth: 2,
-                        pointBackgroundColor: chartTheme.colors.green.dark,
-                        pointRadius: 4,
-                        pointHoverRadius: 6,
-                        tension: 0.3
-                    }
-                ]
-            },
-            options: {
-                ...commonOptions,
-                plugins: {
-                    ...commonOptions.plugins,
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            usePointStyle: true,
-                            pointStyle: 'circle'
-                        }
-                    },
-                    tooltip: {
-                        ...chartTheme.tooltip,
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.dataset.label}: ${context.raw}`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Top Contributors Chart
-        new Chart(document.getElementById('topContributorsChart'), {
-            type: 'bar',
-            data: {
-                labels: ['User 1', 'User 2', 'User 3', 'User 4', 'User 5'],
-                datasets: [{
-                    label: 'Forum Contributions',
-                    data: [120, 90, 75, 60, 45],
-                    backgroundColor: chartTheme.colors.purple.light,
-                    borderColor: chartTheme.colors.purple.dark,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                ...commonOptions,
-                indexAxis: 'y',
-                plugins: {
-                    ...commonOptions.plugins,
-                    tooltip: {
-                        ...chartTheme.tooltip,
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.raw} contributions`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
     });
 </script>
-@endpush
+@endsection

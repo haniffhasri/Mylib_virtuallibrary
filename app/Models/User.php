@@ -22,6 +22,9 @@ class User extends Authenticatable
     public function borrow() {
         return $this->hasMany(Borrow::class);
     }
+    public function visitor() {
+        return $this->hasMany(Visitor::class);
+    }
     public function comments() {
         return $this->hasMany(Comment::class);
     }

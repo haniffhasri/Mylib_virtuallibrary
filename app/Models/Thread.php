@@ -22,4 +22,9 @@ class Thread extends Model
     {
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id')->with('replies.user');
     }
+
+    public function allComments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }

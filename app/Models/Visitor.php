@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Visitor extends Model
 {
-    protected $fillable = ['url'];
+    protected $fillable = ['user_id','url'];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

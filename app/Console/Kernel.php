@@ -27,19 +27,19 @@ class Kernel extends ConsoleKernel
             });
 
         $schedule->command('backup:run')
-            ->everyMinute()
+            ->daily()->at('5:00')
             ->withoutOverlapping()
             ->before(fn () => Log::info("Starting: backup:run"))
             ->after(fn () => Log::info("Finished: backup:run"));
 
         $schedule->command('backup:clean')
-            ->everyMinute()
+            ->daily()->at('5:00')
             ->withoutOverlapping()
             ->before(fn () => Log::info("Starting: backup:clean"))
             ->after(fn () => Log::info("Finished: backup:clean"));
 
         $schedule->command('backup:monitor')
-            ->everyMinute()
+            ->daily()->at('5:00')
             ->withoutOverlapping()
             ->before(fn () => Log::info("Starting: backup:monitor"))
             ->after(fn () => Log::info("Finished: backup:monitor"));

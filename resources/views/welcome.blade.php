@@ -42,7 +42,7 @@
         <div class="container">
           <div class="menu">
             <div class="logo">
-              <a href="/" style="top: -2rem; position: relative;"><img class="title-img element-fade-up" src="/image/logo-removebg-preview.png" alt="" /></a>
+              <a href="/" style="top: -2rem; position: relative;"><img class="title-img element-fade-up" src="/logo-removebg-preview.png" alt="" /></a>
             </div>
           </div>
           <div class="wrapper">
@@ -158,7 +158,7 @@
 
         <div class="column-img">
           <div class="image-frame">
-            <img src="/image/man-people-reading-a-book-vector.png" alt="Reading Illustration" />
+            <img src="/man-people-reading-a-book-vector-removebg-preview.png" alt="Reading Illustration" />
           </div>
         </div>
       </div>

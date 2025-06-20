@@ -37,7 +37,7 @@
                   <!-- Logo/Brand -->
                   <div class="flex-shrink-0 flex items-center">
                       <a href="{{ url('/') }}" class="text-xl font-bold transition-colors duration-200">
-                          <img class="title-img" src="/image/logo-removebg-preview.png" alt="" />
+                          <img class="title-img" src="/logo-removebg-preview.png" alt="" />
                       </a>
                   </div>
 
