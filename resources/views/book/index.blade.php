@@ -12,6 +12,16 @@
 
 @extends($layout)
 @section('content')
+    @if(session()->has('error'))
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded relative" role="alert">
+            <button type="button" class="absolute top-3 right-3 text-red-700 hover:text-red-900" onclick="this.parentElement.remove()">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            <p>{{ session()->get('error') }}</p>
+        </div>
+    @endif
     <div class="book-container-list">      
         <div class="flex justify-center gap-3 bg-white shadow-xl items-center p-3">
             <form action="{{ route('book.search') }}" method="GET" class="mb-0 w-full h-min">

@@ -135,7 +135,7 @@
                 @auth
                     @if ($layout == 'layouts.backend')
                         <div class="flex flex-wrap gap-3">
-                            <img src="{{ Storage::disk('s3')->url($book->media_path) }}" target="_blank" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
+                            <a href="{{ Storage::disk('s3')->url($book->media_path) }}" target="_blank" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200">
                                 {{ $book->format === 'audio' ? 'Listen to Audiobook' : 'Read PDF' }}
                             </a>
                             <a href="{{ route('book.edit', $book->id) }}" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-200">

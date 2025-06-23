@@ -40,13 +40,13 @@ class BorrowController extends Controller
                                     ->count();
 
         if ($activeBorrowCount >= 5) {
-            return redirect('/borrow')->with('error', 'You can only borrow up to 5 books at a time.');
+            return redirect('/book')->with('error', 'You can only borrow up to 5 books at a time.');
         }
 
         $book = Book::find($id);
 
         if (!$book) {
-            return redirect('/borrow')->with('error', 'Book not found.');
+            return redirect('/book')->with('error', 'Book not found.');
         }
 
         $borrow = new Borrow;

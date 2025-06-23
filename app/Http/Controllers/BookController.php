@@ -28,7 +28,7 @@ class BookController extends Controller
                 ->when($sort === 'oldest', function ($query) {
                     return $query->orderBy('created_at', 'asc');
                 })
-                ->paginate(10)
+                ->paginate(8)
                 ->withQueryString();
 
         $activeBorrowedBooks = collect(); 
